@@ -33,10 +33,12 @@
   `/src/app`, `/src/components`, `/src/lib`, `/src/types`.
 
 ## 7. STANDARD EXECUTION REPORT (MANDATORY)
-After every completed task, the assistant MUST end its reply using exactly this structure — no free-form closing summary:
+After every completed task, the assistant MUST end its reply using exactly this structure — no free-form closing summary.
+The **Prompt ID** line is mandatory and MUST appear first; use the ID provided in the user's prompt (or `N/A` if none was given).
 
 ```
-### Standard Execution Report
+## 📋 Execution Report / Relatório de Execução
+- **Prompt ID:** <ID provided in the user's prompt>
 - **Task:** <one-line description of the completed work>
 - **Files Modified:** <comma-separated paths>
 - **Changes:**
