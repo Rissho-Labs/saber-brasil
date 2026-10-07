@@ -2,7 +2,7 @@
 
 ## SPRINT 1: Environment Setup & Base Structure
 - [x] Initialize Next.js project (TypeScript, Tailwind CSS, App Router) on an LTS/stable release
-- [ ] Configure component library (Shadcn/ui and Lucide Icons)
+- [x] Configure component library (Shadcn/ui and Lucide Icons)
 - [ ] Create project folder structure (`/src/app`, `/src/components`, `/src/lib`, `/src/types`)
 - [ ] Implement initial Navbar with SABER Brasil name and slogan
 - [ ] Create TypeScript types file (`/src/types/index.ts`) reflecting the `ARCHITECTURE.md` schema
