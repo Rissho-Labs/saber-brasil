@@ -1,7 +1,7 @@
 # TASKS.md — Active Development Sprint
 
 ## SPRINT 1: Environment Setup & Base Structure
-- [ ] Initialize Next.js project (TypeScript, Tailwind CSS, App Router) on an LTS/stable release
+- [x] Initialize Next.js project (TypeScript, Tailwind CSS, App Router) on an LTS/stable release
 - [ ] Configure component library (Shadcn/ui and Lucide Icons)
 - [ ] Create project folder structure (`/src/app`, `/src/components`, `/src/lib`, `/src/types`)
 - [ ] Implement initial Navbar with SABER Brasil name and slogan
