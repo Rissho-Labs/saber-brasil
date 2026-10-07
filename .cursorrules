@@ -1,29 +1,48 @@
-# REGRAS SUPREMAS DE DESENVOLVIMENTO — SABER BRASIL
+# SUPREME DEVELOPMENT RULES — SABER BRASIL
 
-## 1. PRINCÍPIOS DE ECONOMIA E QUALIDADE DE CRÉDITO
-- Mantenha respostas curtas, diretas e estritamente focadas em código.
-- NUNCA re-leia arquivos inteiros da base de código desnecessariamente.
-- Consulte apenas o `TASKS.md` para entender a etapa ativa do desenvolvimento.
-- Toda modificação deve ser gradual ("Metodologia Lego"): um arquivo/componente por vez.
+## 1. CREDIT ECONOMY & RESPONSE QUALITY
+- Keep responses short, direct, and strictly code-focused.
+- NEVER re-read entire codebase files unnecessarily.
+- Consult only `TASKS.md` to identify the active development step.
+- Every change must be incremental ("Lego Methodology"): one file/component at a time.
 
-## 2. REGRAS DE DIAGNÓSTICO E DIAGNOSE DE ERROS (PROIBIDO "DORFLEX")
-- NUNCA aplique soluções superficiais ou contornos sem resolver a causa-raiz técnica.
-- Quando ocorrer um erro:
-  1. Solicite ou analise o log exato do terminal ou DevTools do navegador (Console / Network tab).
-  2. Identifique o arquivo e a linha exata de origem.
-  3. Explique a causa técnica em uma frase e aplique a correção definitiva na origem.
-- Se uma correção falhar por 2 vezes consecutivas, PARE a execução, solicite a reversão para o último commit estável (`git checkout`) e proponha uma arquitetura diferente.
+## 2. ERROR DIAGNOSIS RULES (NO "BAND-AID" FIXES)
+- NEVER apply superficial workarounds without resolving the technical root cause.
+- When an error occurs:
+  1. Request or analyze the exact terminal log or browser DevTools output (Console / Network tab).
+  2. Identify the exact source file and line.
+  3. State the technical cause in one sentence and apply the definitive fix at the origin.
+- If a fix fails twice consecutively, STOP execution, request revert to the last stable commit (`git checkout`), and propose a different architecture.
 
-## 3. ESTABILIDADE E VERSÕES DE PACOTES
-- Priorize SEMPRE edições e versões LTS e estáveis de todas as bibliotecas.
-- NÃO utilize pacotes 'bleeding-edge', versões 'beta' ou 'canary'.
-- NÃO proponha atualizações de grande porte (breaking changes) sem gerar um relatório prévio de impacto no projeto.
+## 3. PACKAGE STABILITY & VERSIONS
+- ALWAYS prioritize LTS and stable releases of all libraries.
+- Do NOT use bleeding-edge, beta, or canary packages.
+- Do NOT propose major (breaking) upgrades without a prior project impact report.
 
-## 4. CHECKPOINTS E FLUXO DE GIT
-- Após qualquer funcionalidade ser implementada e testada sem erros, instrua o usuário a executar um commit explicativo no Git:
-  `git add . && git commit -m "feat(modulo): mensagem objetiva"`
-- Em caso de quebra irreversível do ambiente local, instrua o uso imediato de restauração:
+## 4. CHECKPOINTS & GIT FLOW
+- After any feature is implemented and tested without errors, instruct the user to create an explanatory Git commit:
+  `git add . && git commit -m "feat(module): concise message"`
+- On irreversible local environment breakage, instruct immediate restore:
   `git reset --hard HEAD`
 
-## 5. MENTE DIGITAL E ATUALIZAÇÃO DE MEMÓRIA
-- Ao concluir qualquer tarefa descrita no `TASKS.md`, atualize o status do item para `[x]` e inclua um breve resumo em `LOG.md` se houver alguma decisão de arquitetura alterada.
+## 5. DIGITAL MEMORY UPDATES
+- On completing any task in `TASKS.md`, mark the item `[x]` and append a brief summary to `LOG.md` if any architecture decision changed.
+
+## 6. SOURCE DIRECTORY CONVENTIONS
+- All application source must follow Next.js App Router English paths:
+  `/src/app`, `/src/components`, `/src/lib`, `/src/types`.
+
+## 7. STANDARD EXECUTION REPORT (MANDATORY)
+After every completed task, the assistant MUST end its reply using exactly this structure — no free-form closing summary:
+
+```
+### Standard Execution Report
+- **Task:** <one-line description of the completed work>
+- **Files Modified:** <comma-separated paths>
+- **Changes:**
+  - <bullet: concrete change>
+- **Status:** DONE | BLOCKED | PARTIAL
+- **Next:** <next unchecked item from TASKS.md, or N/A>
+```
+
+Omit narrative wrap-up outside this block. If blocked, set Status to BLOCKED and state the blocker under Changes.
