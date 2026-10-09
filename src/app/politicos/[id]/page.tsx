@@ -2,7 +2,9 @@ import { notFound } from "next/navigation";
 import { ProfileHeader } from "@/components/politicos/profile-header";
 import { MetricsSummary } from "@/components/politicos/metrics-summary";
 import { EvaluationForm } from "@/components/politicos/evaluation-form";
+import { ProjectsList } from "@/components/politicos/projects-list";
 import { getPublicProfileById } from "@/lib/services/profiles";
+import { getProjectsByProfileId } from "@/lib/services/projects";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -15,6 +17,8 @@ export default async function PoliticianDetailPage({ params }: PageProps) {
   if (!profile) {
     notFound();
   }
+
+  const projects = await getProjectsByProfileId(profile.id);
 
   return (
     <main className="min-h-screen bg-background py-8">
@@ -31,6 +35,8 @@ export default async function PoliticianDetailPage({ params }: PageProps) {
           carismaRating={profile.carisma_rating}
           gestaoScore={profile.gestao_score}
         />
+
+        <ProjectsList projects={projects} />
 
         <EvaluationForm profileId={profile.id} />
       </div>
