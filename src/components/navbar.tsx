@@ -2,10 +2,10 @@ import Link from "next/link";
 import { Scale } from "lucide-react";
 
 const spheres = [
-  { label: "Political", emoji: "🏛️", href: "#political" },
-  { label: "Judiciary", emoji: "⚖️", href: "#judiciary" },
+  { label: "Política", emoji: "🏛️", href: "#political" },
+  { label: "Judiciário", emoji: "⚖️", href: "#judiciary" },
   { label: "Academia", emoji: "🎓", href: "#academia" },
-  { label: "Security", emoji: "🛡️", href: "#security" },
+  { label: "Segurança", emoji: "🛡️", href: "#security" },
 ] as const;
 
 export function Navbar() {
@@ -23,7 +23,7 @@ export function Navbar() {
             </span>
           </span>
         </Link>
-        <nav aria-label="Spheres" className="flex flex-wrap gap-2">
+        <nav aria-label="Esferas" className="flex flex-wrap gap-2">
           {spheres.map((sphere) => (
             <a
               key={sphere.href}
