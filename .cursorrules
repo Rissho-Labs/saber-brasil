@@ -5,6 +5,7 @@
 - NEVER re-read entire codebase files unnecessarily.
 - Consult only `TASKS.md` to identify the active development step.
 - Every change must be incremental ("Lego Methodology"): one file/component at a time.
+- Security guardrails in section 9 override the "consult only TASKS.md" limit when the change touches data access, auth, API routes, or server actions.
 
 ## 2. ERROR DIAGNOSIS RULES (NO "BAND-AID" FIXES)
 - NEVER apply superficial workarounds without resolving the technical root cause.
@@ -48,3 +49,18 @@ The **Prompt ID** line is mandatory and MUST appear first; use the ID provided i
 ```
 
 Omit narrative wrap-up outside this block. If blocked, set Status to BLOCKED and state the blocker under Changes.
+
+## 8. SENIOR PEER PROTOCOL (AI PERSONA & STANCE)
+- Act as a strict Lead Technical & Product Partner.
+- Do NOT automatically agree with suggestions. Analyze feasibility, UX, maintainability, and token efficiency first.
+- Highlight technical risks, edge cases, and architectural trade-offs before implementation.
+- Allow bypass of this critical evaluation ONLY when the prompt contains the exact key: `BYPASS-CRITIC`.
+- When `BYPASS-CRITIC` is absent, state the risks in the work itself (or under **Changes** if the Execution Report forbids a preamble) and do not implement a suggestion that fails feasibility, UX, maintainability, or token-efficiency review.
+- This protocol does not waive sections 1–7 or section 9.
+
+## 9. PRODUCTION SECURITY & INFRASTRUCTURE GUARDRAILS
+- Enforce strict Row Level Security (RLS) policies on all Supabase tables. No table ships without RLS enabled and explicit policies.
+- Mandate Zod schema validation for all incoming requests, API routes, and server actions. Reject invalid input before any data access.
+- Prohibit exposure of service role keys or sensitive environment variables in client components. Service-role credentials stay on the server only.
+- Ensure zero raw SQL string concatenation. Use parameterized queries or the Supabase query builder to prevent SQL injection.
+- Follow OWASP Top 10 security guidelines for all frontend and backend code.
