@@ -8,7 +8,7 @@
 - [x] Create TypeScript types file (`/src/types/index.ts`) reflecting the `ARCHITECTURE.md` schema
 
 ## SPRINT 2: Home Screen & 4-Sphere Modals
-- [ ] Create the 4 Home Page Modal components (Politics, Judiciary, Academia, Safety)
+- [x] Create the 4 Home Page Modal components (Politics, Judiciary, Academia, Safety)
 - [ ] Configure main search bar with sphere filters
 - [ ] Implement Profile Card component with colored borders (Green, Blue, Light Gray, Dark Gray)
 

@@ -2,6 +2,13 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+const sphereAnchors = [
+  { label: "Política", href: "#political" },
+  { label: "Judiciário", href: "#judiciary" },
+  { label: "Academia", href: "#academia" },
+  { label: "Segurança", href: "#security" },
+] as const;
+
 const quickFilters = ["Câmara", "Senado", "Melhor Avaliados", "São Paulo"];
 
 export function HeroSearch() {
@@ -31,6 +38,18 @@ export function HeroSearch() {
             Buscar
           </Button>
         </form>
+
+        <nav aria-label="Abrir esfera" className="flex flex-wrap items-center justify-center gap-2 pt-2">
+          {sphereAnchors.map((sphere) => (
+            <a
+              key={sphere.href}
+              href={sphere.href}
+              className="inline-flex items-center rounded-full border border-border bg-background px-3 py-1 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              {sphere.label}
+            </a>
+          ))}
+        </nav>
 
         {/* Filtros Rápido em Botões Acessíveis */}
         <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
