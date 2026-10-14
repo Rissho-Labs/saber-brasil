@@ -1,23 +1,95 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
+import { createClient } from "@/lib/supabase/server";
 import { saveUserEvaluation } from "@/lib/services/evaluations";
+import { CompetencyScores } from "@/types";
+
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+const STAR_SCORES = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5] as const;
+
+const starScoreSchema = z.union([
+  z.literal(STAR_SCORES[0]),
+  z.literal(STAR_SCORES[1]),
+  z.literal(STAR_SCORES[2]),
+  z.literal(STAR_SCORES[3]),
+  z.literal(STAR_SCORES[4]),
+  z.literal(STAR_SCORES[5]),
+  z.literal(STAR_SCORES[6]),
+  z.literal(STAR_SCORES[7]),
+  z.literal(STAR_SCORES[8]),
+]);
+
+const evaluationBodySchema = z.object({
+  profileId: z.string().regex(UUID_PATTERN),
+  scores: z.object({
+    posture: starScoreSchema,
+    decorum: starScoreSchema,
+    discursive_coherence: starScoreSchema,
+    articulation: starScoreSchema,
+    transparency: starScoreSchema,
+    accountability: starScoreSchema,
+    responsiveness: starScoreSchema,
+    ethical_conduct: starScoreSchema,
+    public_communication: starScoreSchema,
+    institutional_commitment: starScoreSchema,
+  }),
+});
+
+function toCompetencyScores(
+  scores: z.infer<typeof evaluationBodySchema>["scores"]
+): CompetencyScores {
+  const mapped: CompetencyScores = {
+    posture: scores.posture,
+    decorum: scores.decorum,
+    discursive_coherence: scores.discursive_coherence,
+    articulation: scores.articulation,
+    transparency: scores.transparency,
+    accountability: scores.accountability,
+    responsiveness: scores.responsiveness,
+    ethical_conduct: scores.ethical_conduct,
+    public_communication: scores.public_communication,
+    institutional_commitment: scores.institutional_commitment,
+  };
+  return mapped;
+}
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { profileId, scores } = body;
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.getUser();
 
-    if (!profileId || !scores) {
+    if (error || !data.user) {
+      return NextResponse.json({ error: "Autenticação obrigatória." }, { status: 401 });
+    }
+
+    let json: unknown;
+    try {
+      json = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Corpo JSON inválido." }, { status: 400 });
+    }
+
+    const parsed = evaluationBodySchema.safeParse(json);
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "Parâmetros 'profileId' e 'scores' são obrigatórios." },
+        { error: "Informe profileId e as 10 notas válidas." },
         { status: 400 }
       );
     }
 
-    const result = await saveUserEvaluation(profileId, scores);
-    return NextResponse.json(result, { status: 201 });
+    const result = await saveUserEvaluation(
+      supabase,
+      data.user.id,
+      parsed.data.profileId,
+      toCompetencyScores(parsed.data.scores)
+    );
+
+    return NextResponse.json(result, { status: result.updated ? 200 : 201 });
   } catch {
     return NextResponse.json(
-      { error: "Erro ao processar avaliação" },
+      { error: "Erro ao processar avaliação." },
       { status: 500 }
     );
   }

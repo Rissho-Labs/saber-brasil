@@ -87,9 +87,12 @@ CREATE POLICY "Leitura pública de perfis" ON public.public_profiles FOR SELECT 
 CREATE POLICY "Leitura pública de projetos" ON public.public_projects FOR SELECT USING (true);
 CREATE POLICY "Leitura pública de avaliações" ON public.user_evaluations FOR SELECT USING (true);
 
--- Submissão de avaliação por usuários
+-- Uma avaliação por cidadão autenticado e representante. Reenvio atualiza a linha.
 CREATE POLICY "Usuários criam suas próprias avaliações" ON public.user_evaluations
-  FOR INSERT WITH CHECK (true);
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Usuários atualizam suas próprias avaliações" ON public.user_evaluations
+  FOR UPDATE USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- 7. Dados Iniciais para Seeds (Mocks Oficiais no Banco)
 INSERT INTO public.public_profiles (id, name, sphere, "current_role", status, badge, carisma_rating, gestao_score)

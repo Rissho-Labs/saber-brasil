@@ -1,7 +1,9 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import {
   CompetencyCriterion,
   CompetencyScores,
@@ -96,11 +98,16 @@ function isEvaluationApiResponse(value: unknown): value is EvaluationApiResponse
 export function EvaluationModal({ profileId }: { profileId: string }) {
   const titleId = useId();
   const descriptionId = useId();
+  const loginTitleId = useId();
+  const loginDescriptionId = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const loginDialogRef = useRef<HTMLDialogElement>(null);
   const [scores, setScores] = useState<Partial<CompetencyScores>>({});
   const [openHints, setOpenHints] = useState<Partial<Record<CompetencyCriterion, boolean>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCheckingSession, setIsCheckingSession] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const loginHref = `/login?next=${encodeURIComponent(`/politicos/${profileId}`)}`;
 
   const ratedValues = CRITERIA.map((criterion) => scores[criterion.key]).filter(isStarScore);
   const average =
@@ -109,8 +116,25 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
       : ratedValues.reduce((total, value) => total + value, 0) / ratedValues.length;
   const complete = isCompleteScores(scores);
 
-  function openDialog() {
-    dialogRef.current?.showModal();
+  function openLoginPrompt() {
+    loginDialogRef.current?.showModal();
+  }
+
+  async function openDialog() {
+    setIsCheckingSession(true);
+    try {
+      const supabase = createBrowserSupabaseClient();
+      const { data, error } = await supabase.auth.getUser();
+      if (error || !data.user) {
+        openLoginPrompt();
+        return;
+      }
+      dialogRef.current?.showModal();
+    } catch {
+      openLoginPrompt();
+    } finally {
+      setIsCheckingSession(false);
+    }
   }
 
   function closeDialog() {
@@ -173,6 +197,12 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
       const body: unknown = await response.json();
       const data = isEvaluationApiResponse(body) ? body : {};
 
+      if (response.status === 401) {
+        dialogRef.current?.close();
+        openLoginPrompt();
+        return;
+      }
+
       if (response.ok) {
         setFeedback(data.message ?? "Avaliação registrada com sucesso.");
       } else {
@@ -193,8 +223,8 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
       <p className="text-sm text-muted-foreground">
         Abra o questionário para dar uma nota de 1 a 5 em cada competência.
       </p>
-      <Button type="button" onClick={openDialog}>
-        Avaliar representante
+      <Button type="button" onClick={openDialog} disabled={isCheckingSession}>
+        {isCheckingSession ? "Verificando sessão..." : "Avaliar representante"}
       </Button>
 
       <dialog
@@ -300,6 +330,30 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
             </Button>
           </div>
         </form>
+      </dialog>
+
+      <dialog
+        ref={loginDialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={loginTitleId}
+        aria-describedby={loginDescriptionId}
+        className="w-[min(100%-2rem,28rem)] rounded-xl border border-border bg-background p-6 text-foreground backdrop:bg-black/50"
+      >
+        <h2 id={loginTitleId} className="text-lg font-semibold">
+          Entre para avaliar
+        </h2>
+        <p id={loginDescriptionId} className="mt-2 text-sm text-muted-foreground">
+          Cada cidadão autenticado registra uma avaliação por representante. Entre para continuar.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Button asChild>
+            <Link href={loginHref}>Entrar</Link>
+          </Button>
+          <Button type="button" variant="outline" onClick={() => loginDialogRef.current?.close()}>
+            Fechar
+          </Button>
+        </div>
       </dialog>
     </section>
   );

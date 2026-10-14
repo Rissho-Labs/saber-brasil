@@ -146,3 +146,21 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** Added `GemTier` for the five agenda ranks in ARCHITECTURE.md §3.3 and a keyboard-focusable `GemBadge` with an SVG gem and tooltip. Highlights and search cards map the management index to a visual tier. Project cards map the higher institutional or citizen weight (1–5) to the same tiers. The schema does not persist a gem column.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`.
+
+### [2026-10-14] — `SPRINT3-STEP1-AUTH-PROTECTION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/lib/supabase/server.ts` (CREATED)
+  - `src/lib/supabase/browser.ts` (CREATED)
+  - `src/components/auth/login-form.tsx` (CREATED)
+  - `src/app/login/page.tsx` (CREATED)
+  - `supabase/evaluations-auth.sql` (CREATED)
+  - `src/app/api/avaliacoes/route.ts` (MODIFIED)
+  - `src/lib/services/evaluations.ts` (MODIFIED)
+  - `src/components/politicos/evaluation-modal.tsx` (MODIFIED)
+  - `supabase/schema.sql` (MODIFIED)
+  - `package.json` (MODIFIED)
+  - `package-lock.json` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `POST /api/avaliacoes` now reads the session with `createClient()` (`createServerClient` from `@supabase/ssr`) and returns 401 when `getUser()` has no user. Zod validates `profileId` and the 10 `CompetencyScores` before any write. An existing `(user_id, profile_id)` row is updated (200); the first row is inserted (201). The evaluation modal checks the browser session before `showModal()` and opens a login dialog that links to `/login?next=/politicos/[id]`. `@supabase/ssr` does not export a server `createClient`; the local helper wraps `createServerClient`. A repeat save stays an update because the unique constraint and carisma trigger already treat the citizen row as revisable. Risk: the live database still has `INSERT WITH CHECK (true)` and no UPDATE policy, so direct anon inserts remain possible and the update path fails until `supabase/evaluations-auth.sql` is executed in the Supabase SQL editor.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`. Unauthenticated POST returned 401. Signed-out “Avaliar representante” opened “Entre para avaliar” and the Entrar link reached `/login?next=/politicos/11111111-1111-1111-1111-111111111111`.
