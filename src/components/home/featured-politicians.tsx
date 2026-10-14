@@ -6,26 +6,23 @@ import { Star } from "lucide-react";
 
 const featuredMock = [
   {
-    id: "politico-1",
+    id: "11111111-1111-1111-1111-111111111111",
     name: "Mariana Silva",
     role: "Deputada Federal",
-    partyUF: "PL / SP",
     carismaRating: 4.8,
     gestaoScore: 92,
   },
   {
-    id: "politico-2",
+    id: "22222222-2222-2222-2222-222222222222",
     name: "Carlos Eduardo",
     role: "Senador",
-    partyUF: "PT / RJ",
     carismaRating: 4.5,
     gestaoScore: 88,
   },
   {
-    id: "politico-3",
+    id: "33333333-3333-3333-3333-333333333333",
     name: "Ana Beatriz",
     role: "Deputada Federal",
-    partyUF: "NOVO / MG",
     carismaRating: 4.7,
     gestaoScore: 95,
   },
@@ -63,7 +60,7 @@ export function FeaturedPoliticians() {
                     {politician.name}
                   </CardTitle>
                   <p className="text-xs text-muted-foreground">
-                    {politician.role} • {politician.partyUF}
+                    {politician.role}
                   </p>
                 </div>
               </CardHeader>

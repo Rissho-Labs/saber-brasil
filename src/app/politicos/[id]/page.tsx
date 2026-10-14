@@ -22,7 +22,7 @@ export default async function PoliticianDetailPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-background py-8">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <ProfileHeader
           name={profile.name}
           role={profile.current_role}

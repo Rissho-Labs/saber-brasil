@@ -2,10 +2,10 @@ import Link from "next/link";
 import { Scale } from "lucide-react";
 
 const spheres = [
-  { label: "Política", emoji: "🏛️", href: "#political" },
-  { label: "Judiciário", emoji: "⚖️", href: "#judiciary" },
-  { label: "Academia", emoji: "🎓", href: "#academia" },
-  { label: "Segurança", emoji: "🛡️", href: "#security" },
+  { label: "Política", emoji: "🏛️", href: "/#political" },
+  { label: "Judiciário", emoji: "⚖️", href: "/#judiciary" },
+  { label: "Academia", emoji: "🎓", href: "/#academia" },
+  { label: "Segurança", emoji: "🛡️", href: "/#security" },
 ] as const;
 
 export function Navbar() {

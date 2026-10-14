@@ -52,7 +52,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <main className="min-h-screen bg-background">
       <section className="border-b border-border bg-muted/40 px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl space-y-4">
+        <div className="mx-auto max-w-6xl space-y-4">
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Busca de representantes
           </h1>
@@ -104,7 +104,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         </div>
       </section>
 
-      <section aria-labelledby="search-results-heading" className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+      <section aria-labelledby="search-results-heading" className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <h2 id="search-results-heading" className="sr-only">
           Resultados da busca
         </h2>

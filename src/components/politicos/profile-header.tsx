@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { AlertBadge, ProfileStatus, SphereType } from "@/types";
 
 interface ProfileHeaderProps {
@@ -7,8 +8,14 @@ interface ProfileHeaderProps {
   sphere: SphereType;
   status: ProfileStatus;
   badge: AlertBadge;
-  partyUF?: string;
 }
+
+const SPHERE_BORDER: Record<SphereType, string> = {
+  [SphereType.POLITICA]: "border-green-600",
+  [SphereType.JUDICIARIO]: "border-blue-600",
+  [SphereType.ACADEMIA]: "border-zinc-300",
+  [SphereType.SEGURANCA]: "border-zinc-700",
+};
 
 export function ProfileHeader({
   name,
@@ -16,7 +23,6 @@ export function ProfileHeader({
   sphere,
   status,
   badge,
-  partyUF = "PL / SP",
 }: ProfileHeaderProps) {
   const getBadgeVariant = (b: AlertBadge) => {
     switch (b) {
@@ -31,7 +37,7 @@ export function ProfileHeader({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 p-6 bg-card border border-border rounded-xl shadow-xs">
+    <div className={cn("flex flex-col sm:flex-row items-start sm:items-center gap-6 p-6 bg-card border-2 border-border rounded-xl shadow-xs", SPHERE_BORDER[sphere])}>
       <div className="size-24 rounded-full bg-muted flex items-center justify-center text-3xl font-bold text-foreground shrink-0" aria-hidden="true">
         {name.charAt(0)}
       </div>
@@ -49,7 +55,7 @@ export function ProfileHeader({
         </div>
 
         <p className="text-sm text-muted-foreground">
-          {role ?? "Cargo não informado"} • {partyUF}
+          {role ?? "Cargo não informado"}
         </p>
 
         <div className="flex flex-wrap gap-2 pt-1">

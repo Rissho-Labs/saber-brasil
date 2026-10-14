@@ -164,3 +164,23 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `POST /api/avaliacoes` now reads the session with `createClient()` (`createServerClient` from `@supabase/ssr`) and returns 401 when `getUser()` has no user. Zod validates `profileId` and the 10 `CompetencyScores` before any write. An existing `(user_id, profile_id)` row is updated (200); the first row is inserted (201). The evaluation modal checks the browser session before `showModal()` and opens a login dialog that links to `/login?next=/politicos/[id]`. `@supabase/ssr` does not export a server `createClient`; the local helper wraps `createServerClient`. A repeat save stays an update because the unique constraint and carisma trigger already treat the citizen row as revisable. Risk: the live database still has `INSERT WITH CHECK (true)` and no UPDATE policy, so direct anon inserts remain possible and the update path fails until `supabase/evaluations-auth.sql` is executed in the Supabase SQL editor.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`. Unauthenticated POST returned 401. Signed-out “Avaliar representante” opened “Entre para avaliar” and the Entrar link reached `/login?next=/politicos/11111111-1111-1111-1111-111111111111`.
+
+### [2026-10-14] — `SPRINT3-STEP2-UI-UX-AUDIT-AND-POLISH`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/app/busca/loading.tsx` (CREATED)
+  - `src/app/politicos/[id]/loading.tsx` (CREATED)
+  - `src/app/politicos/[id]/not-found.tsx` (CREATED)
+  - `src/app/not-found.tsx` (CREATED)
+  - `src/components/navbar.tsx` (MODIFIED)
+  - `src/components/home/hero-search.tsx` (MODIFIED)
+  - `src/components/home/featured-politicians.tsx` (MODIFIED)
+  - `src/components/politicos/profile-header.tsx` (MODIFIED)
+  - `src/components/politicos/evaluation-modal.tsx` (MODIFIED)
+  - `src/components/ui/gem-badge.tsx` (MODIFIED)
+  - `src/app/page.tsx` (MODIFIED)
+  - `src/app/busca/page.tsx` (MODIFIED)
+  - `src/app/politicos/[id]/page.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Navbar sphere links now target `/#political`, `/#judiciary`, `/#academia`, and `/#security`, so they open the home tabs from any route. Highlight cards use the seed profile ids. The inert “Em alta” chips are name searches the current `name` filter can answer. There is no footer. Search and profile routes have skeletons, the empty search copy is unchanged, and unknown profiles or routes link back to search or home. Dialogs close on backdrop click; Escape remains the native dialog behavior; submit stays disabled until the form is complete or while login is pending. Page shells share `max-w-6xl` and `px-4 sm:px-6 lg:px-8`. Profile headers use the sphere border colors and no longer invent a party. Gem tooltips stay out of the layout until hover or focus, which removed a 9px phone overflow. Risk: a live successful sign-in was not executed because no Supabase user was available. Invalid credentials stay on `/login?next=/politicos/[id]`, and `LoginForm` returns with `router.push(nextPath)` after `signInWithPassword` succeeds.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`. Checked home, `/busca`, both seed profiles, missing profile, unknown route, login error, and widths 390, 768, and 1280 with no horizontal overflow.

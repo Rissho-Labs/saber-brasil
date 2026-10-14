@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,11 @@ const sphereAnchors = [
   { label: "Segurança", href: "#security" },
 ] as const;
 
-const quickFilters = ["Câmara", "Senado", "Melhor Avaliados", "São Paulo"];
+const quickFilters = [
+  { label: "Mariana Silva", href: "/busca?q=Mariana" },
+  { label: "Carlos Eduardo", href: "/busca?q=Carlos" },
+  { label: "Ana Beatriz", href: "/busca?q=Ana" },
+] as const;
 
 export function HeroSearch() {
   return (
@@ -55,14 +60,8 @@ export function HeroSearch() {
         <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
           <span className="text-xs text-muted-foreground">Em alta:</span>
           {quickFilters.map((filter) => (
-            <Button
-              key={filter}
-              variant="outline"
-              size="xs"
-              type="button"
-              className="rounded-full"
-            >
-              {filter}
+            <Button key={filter.href} variant="outline" size="xs" className="rounded-full" asChild>
+              <Link href={filter.href}>{filter.label}</Link>
             </Button>
           ))}
         </div>

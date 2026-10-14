@@ -233,6 +233,11 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) {
+            event.currentTarget.close();
+          }
+        }}
         className="w-[min(100%-2rem,44rem)] max-h-[90vh] overflow-y-auto rounded-xl border border-border bg-background p-6 text-foreground backdrop:bg-black/50"
       >
         <form onSubmit={onSubmit} className="space-y-5">
@@ -338,6 +343,11 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
         aria-modal="true"
         aria-labelledby={loginTitleId}
         aria-describedby={loginDescriptionId}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) {
+            event.currentTarget.close();
+          }
+        }}
         className="w-[min(100%-2rem,28rem)] rounded-xl border border-border bg-background p-6 text-foreground backdrop:bg-black/50"
       >
         <h2 id={loginTitleId} className="text-lg font-semibold">

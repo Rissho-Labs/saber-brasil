@@ -101,7 +101,7 @@ export function GemBadge({ tier, criteria }: GemBadgeProps) {
       <span
         id={tipId}
         role="tooltip"
-        className="absolute left-0 top-full z-20 mt-1 w-56 rounded-md border border-border bg-popover p-2 text-xs font-normal text-popover-foreground opacity-0 shadow-md transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
+        className="absolute left-0 top-full z-20 mt-1 hidden w-56 max-w-[calc(100vw-2rem)] rounded-md border border-border bg-popover p-2 text-xs font-normal text-popover-foreground shadow-md group-hover:block group-focus-within:block"
       >
         {explanation}
       </span>
