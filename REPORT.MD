@@ -1,93 +1,95 @@
-================================================================================
-                       SABER BRASIL — RELATÓRIO DE GOVERNANÇA
-             METODOLOGIA, ARQUITETURA E ROADMAP DE MELHORIAS
-================================================================================
+# Saber Brasil — Governance, Architecture & Execution Report
 
-Data do Relatório: Outubro de 2026
-Versão do Projeto: Sprint 2 (Em andamento)
-Tecnologias Core: Next.js 15 (App Router), TypeScript, Tailwind CSS, Supabase (PostgreSQL)
+> **Project Version:** Sprint 2 (In Progress)  
+> **Last Updated:** October 2026  
+> **Core Tech Stack:** Next.js 15 (App Router), TypeScript, Tailwind CSS, Supabase (PostgreSQL)
 
---------------------------------------------------------------------------------
-1. DIRETRIZES TÉCNICAS E FILOSOFIA DE DESENVOLVIMENTO
---------------------------------------------------------------------------------
-• Priorização de Versões LTS e Estabilidade: Utilização estrita de versões estáveis
-  e consolidadas do ecossistema React/Next.js. Proibição de bibliotecas em fase
-  experimental ("bleeding edge") sem estudo prévio de impacto e relatório de
-  breaking changes.
-• Desenvolvimento Cadenciado ("Ir aos Poucos"): Construção incremental orientada à
-  base de dados. Nenhuma interface é desenvolvida sem a definição prévia de seus
-  contratos de dados e persistência.
-• Tipagem Estrita (Zero 'any'): Alinhamento total das interfaces TypeScript ao
-  esquema PostgreSQL documentado em ARCHITECTURE.md.
-• Acessibilidade e Semântica Web: Uso de elementos HTML5 semânticos, rótulos ARIA
-  para leitores de tela e suporte nativo à navegação por teclado.
+---
 
---------------------------------------------------------------------------------
-2. PROTOCOLO DE CONDUÇÃO E USO DE I.A. ASSISTIDA (CURSOR / COMPOSER)
---------------------------------------------------------------------------------
-• Estruturação de Prompts: Todos os comandos para a ferramenta de I.A. devem conter
-  o contexto dos arquivos envolvidos (@ARCHITECTURE.md, @types, etc.) e requisitos
-  claros de implementação.
-• Rastreabilidade via Prompt ID: Obrigatoriedade de código único de identificação
-  em cada passo de execução (Ex: SPRINT2-STEP1-PROJECTS-SERVICE).
-• Relatório de Execução (Execution Report): Registro obrigatório após a execução de
-  cada tarefa contendo: Prompt ID, Task, Files Modified, Changes, Status e Next.
+## 1. Technical Philosophy & Core Directives
 
---------------------------------------------------------------------------------
-3. ARQUITETURA DE BANCO DE DADOS E REGRAS DE NEGÓCIO (SUPABASE)
---------------------------------------------------------------------------------
-• Tabelas Principais:
-  - public_profiles: Cadastro dos representantes (nome, esfera, cargo, status, badges).
-  - user_evaluations: Registro individual das notas atribuídas pelos cidadãos.
-  - public_projects: Projetos de lei e proposições vinculados aos representantes.
-• Métricas Principais:
-  - Carisma / Avaliação Subjetiva (1.0 a 5.0 estrelas): Calculado dinamicamente no
-    PostgreSQL via Trigger (tr_update_carisma_rating) e Função (PL/pgSQL) a partir
-    da média dos 10 critérios de competência.
-  - Índice de Gestão (0 a 100): Métrica técnica baseada em assiduidade e atuação.
-• 10 Critérios de Competência: Postura, Decoro, Coerência Discursiva, Articulação
-  Política, Transparência, Accountability, Responsividade, Conduta Ética,
-  Comunicação Pública e Compromisso Institucional.
+- **LTS & Stability Priority:** STRICT adherence to stable and consolidated LTS versions within the React / Next.js ecosystem. Experimental ("bleeding edge") packages are STRICTLY PROHIBITED without a prior impact analysis and breaking changes report.
+- **Database-First Incremental Delivery:** Features must be built incrementally. Data contracts and database schema must be fully defined before creating UI components.
+- **Strict Typing (Zero `any`):** TypeScript types/interfaces MUST strictly map 1:1 to the PostgreSQL schema documented in `@ARCHITECTURE.md`.
+- **Web Semantics & Accessibility:** Mandatory usage of semantic HTML5, ARIA labels for screen readers, and native keyboard navigation.
 
---------------------------------------------------------------------------------
-4. STATUS ATUAL DAS ENTREGAS (MINDSET E CONQUISTAS)
---------------------------------------------------------------------------------
-[X] Sprint 1: Configurações base, regras do Cursor, Tailwind v4 e arquitetura visual.
-[X] Sprint 2 (Parte 1): Tela Home (HeroSearch, KPIStats, Destaques, Votações).
-[X] Sprint 2 (Parte 2): Perfil do Político (/politicos/[id]), formulário dos 10
-    critérios e lista de projetos de lei integrada ao Supabase.
-[X] Banco de Dados: Script SQL completo, Enums, Triggers, RLS e Seeds executados.
+---
 
---------------------------------------------------------------------------------
-5. BRAINSTORMING, PONTOS DE ATENÇÃO E SUGESTÕES DE MELHORIA (ROADMAP)
---------------------------------------------------------------------------------
-Análise crítica do produto para garantir escalabilidade, credibilidade e segurança:
+## 2. AI Protocol & Execution Rules (Cursor / Composer)
 
-1. Autenticação e Antifraude em Avaliações Cidadãs (Proteção Cívica)
-   • Risco: Envio de requisições maliciosas via formulário dos 10 critérios por bots
-     ou perfis falsos, distorcendo o Carisma/Avaliação Subjetiva dos políticos.
-   • Sugestão de Melhoria: Integrar Supabase Auth / OAuth (Google/Gov.br) e validar
-     o user_id autenticado na API route antes de inserir no banco, assegurando a
-     regra de uma única avaliação por cidadão/político.
+- **Prompt Context:** Every prompt provided to AI agents MUST explicitly include relevant file context (e.g., `@ARCHITECTURE.md`, `@types`, etc.) and unambiguous requirements.
+- **Prompt ID Traceability:** All tasks and code generations MUST carry a unique identifier code (e.g., `SPRINT2-STEP1-PROJECTS-SERVICE`).
+- **Execution Report Requirement:** After completing any task, the AI MUST output/append an execution entry containing:
+  - `Prompt ID`
+  - `Task`
+  - `Files Modified / Created`
+  - `Changes Summary`
+  - `Status` & `Compilation Check`
 
-2. Consumo em Tempo Real de APIs Governamentais
-   • Risco: Dependência de inserções manuais de dados limita a atualização dos
-     projetos e assiduidade.
-   • Sugestão de Melhoria: Criar rotinas agendadas (Cron Jobs / Supabase Edge Functions)
-     para consumir a API de Dados Abertos da Câmara dos Deputados e do Senado Federal,
-     atualizando automaticamente gastos de cota, presença e novas matérias.
+---
 
-3. Estratégia de Caching e Performance Server-Side
-   • Risco: Sobrecarga de consultas ao banco de dados à medida que o volume de
-     acessos simultâneos nas páginas de representantes aumentar.
-   • Sugestão de Melhoria: Aplicar revalidate / fetch cache no Next.js App Router
-     para servir dados estáticos recarregados periodicamente ou invalidados
-     sob demanda quando houver nova submissão de avaliação.
+## 3. Database Architecture & Business Rules (Supabase)
 
-4. Modais e Filtros Dinâmicos por Esfera
-   • Risco: Links no Navbar (#political, #judiciary, #academia, #security) sem
-     feedback dinâmico imediato para o usuário na página inicial.
-   • Sugestão de Melhoria: Criar modais ou filtros ativos na Home que reorganizem a
-     busca e os destaques instantaneamente de acordo com a esfera selecionada.
+### Key Entities
+- `public_profiles`: Representative data (name, sphere, role, status, badges).
+- `user_evaluations`: Individual citizen evaluation ratings.
+- `public_projects`: Legislative projects and proposals linked to representatives.
 
-================================================================================
+### Key Metrics
+- **Carisma / Subjective Rating (1.0 to 5.0 Stars):** Dynamically calculated in PostgreSQL via trigger (`tr_update_carisma_rating`) and PL/pgSQL function based on the average of the 10 competency criteria.
+- **Índice de Gestão (0 to 100):** Objective metric calculated from attendance and legislative activity.
+
+### The 10 Competency Criteria
+1. *Postura*
+2. *Decoro*
+3. *Coerência Discursiva*
+4. *Articulação Política*
+5. *Transparência*
+6. *Accountability*
+7. *Responsividade*
+8. *Conduta Ética*
+9. *Comunicação Pública*
+10. *Compromisso Institucional*
+
+---
+
+## 4. Current Delivery Status
+
+- [x] **Sprint 1:** Base setup, Cursor rules, Tailwind v4, visual architecture.
+- [x] **Sprint 2 (Part 1):** Home Page (`HeroSearch`, `KPIStats`, Highlights, Voting).
+- [x] **Sprint 2 (Part 2):** Representative Profile (`/politicos/[id]`), 10-criteria evaluation form, Supabase-integrated project list.
+- [x] **Database:** SQL scripts, Enums, Triggers, RLS, and Seed data fully executed.
+
+---
+
+## 5. Architectural Roadmap & Risk Mitigation
+
+1. **Authentication & Anti-Fraud in Citizen Ratings (Civic Protection)**
+   - *Risk:* Bot/spam evaluation submissions skewing representative scores.
+   - *Action:* Integrate Supabase Auth / OAuth (Google / Gov.br) and validate authenticated `user_id` in API routes to enforce one evaluation per citizen/representative.
+
+2. **Real-time Government Open Data Sync**
+   - *Risk:* Manual data entry causes information lag.
+   - *Action:* Implement scheduled jobs (Cron Jobs / Supabase Edge Functions) to consume Open Data APIs from the Chamber of Deputies and Federal Senate.
+
+3. **Server-Side Caching & Performance**
+   - *Risk:* High database query load under concurrent user traffic.
+   - *Action:* Apply Next.js App Router `revalidate` / `fetch` cache strategies, with demand-driven cache invalidation on new evaluations.
+
+4. **Dynamic Sphere Filtering & Modals**
+   - *Risk:* Navbar links (`#political`, `#judiciary`, `#academia`, `#security`) without immediate dynamic feedback.
+   - *Action:* Create interactive modals/filters reorganizing search and highlights dynamically by selected sphere.
+
+---
+
+## 6. Execution History Log
+
+### [2026-10-14] — `SPRINT2-STEP4-SPHERES-MODALS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/sphere-modals.tsx` (CREATED)
+  - `src/components/home/hero-search.tsx` (MODIFIED)
+  - `src/app/page.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+- **Summary:** Implemented interactive tab/modal components for the 4 spheres (`POLITICA`, `JUDICIARIO`, `ACADEMIA`, `SEGURANCA`) featuring keyboard-accessible navigation, URL hash updating (`#political`, `#judiciary`, etc.), and direct search redirection (`/busca?sphere=<SPHERE>`).
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`.
