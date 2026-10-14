@@ -112,3 +112,13 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** Added a reusable `ProfileCard` typed to `PublicProfile`. Sphere borders are green (`POLITICA`), blue (`JUDICIARIO`), light gray (`ACADEMIA`), and dark gray (`SEGURANCA`), with a sphere badge, star rating, Índice de Gestão, and a keyboard-accessible link to `/politicos/[id]`. Search results now render this card. These border colors identify the sphere; `ARCHITECTURE.md` §4 uses the same palette for activity status.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`.
+
+### [2026-10-14] — `SPRINT2-STEP7-DUAL-SCORE-GRAPHIC`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/ui/dual-score-graphic.tsx` (CREATED)
+  - `src/components/politicos/metrics-summary.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Added `DualScoreGraphic` typed with `Pick<PublicProfile, "carisma_rating" | "gestao_score">`. Carisma shows a 0–5 star row and meter; Índice de Gestão shows a 0–100 meter. Subjective and objective scores stay in separate cards. The politician profile renders it through `MetricsSummary`. No chart library was added.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`.

@@ -13,7 +13,7 @@
 - [x] Implement Profile Card component with colored borders (Green, Blue, Light Gray, Dark Gray)
 
 ## SPRINT 3: Politician Profile & Dual Score
-- [ ] Build Dual Score graphic view (Subjective Rating + Management Index)
+- [x] Build Dual Score graphic view (Subjective Rating + Management Index)
 - [ ] Create 10-Question Questionnaire modal with pedagogical icons (`ℹ️`)
 - [ ] Create Gem visual component (Diamond, Platinum, Gold, Silver, Bronze) for Top 10 Agendas
 
