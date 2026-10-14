@@ -122,3 +122,14 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** Added `DualScoreGraphic` typed with `Pick<PublicProfile, "carisma_rating" | "gestao_score">`. Carisma shows a 0–5 star row and meter; Índice de Gestão shows a 0–100 meter. Subjective and objective scores stay in separate cards. The politician profile renders it through `MetricsSummary`. No chart library was added.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`.
+
+### [2026-10-14] — `SPRINT2-STEP8-QUESTIONNAIRE-MODAL`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/politicos/evaluation-modal.tsx` (CREATED)
+  - `src/app/politicos/[id]/page.tsx` (MODIFIED)
+  - `src/components/politicos/evaluation-form.tsx` (DELETED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The profile opens a native dialog with the 10 competency criteria from `CompetencyScores`. Each criterion has an ℹ️ explanation, a keyboard radiogroup of 1–5 stars, and a live average. Submit stays disabled until all 10 scores exist, then posts `{ profileId, scores }` to `/api/avaliacoes`. `showModal()` traps focus and Escape closes the dialog.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`.

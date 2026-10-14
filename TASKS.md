@@ -14,7 +14,7 @@
 
 ## SPRINT 3: Politician Profile & Dual Score
 - [x] Build Dual Score graphic view (Subjective Rating + Management Index)
-- [ ] Create 10-Question Questionnaire modal with pedagogical icons (`ℹ️`)
+- [x] Create 10-Question Questionnaire modal with pedagogical icons (`ℹ️`)
 - [ ] Create Gem visual component (Diamond, Platinum, Gold, Silver, Bronze) for Top 10 Agendas
 
 ---
