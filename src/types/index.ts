@@ -27,6 +27,18 @@ export enum AlertBadge {
   CONDENADO = "CONDENADO",
 }
 
+/**
+ * Visual rank for Top 10 agendas (ARCHITECTURE.md §3.3).
+ * Not a database column; assigned by execution relevance.
+ */
+export enum GemTier {
+  DIAMOND = "DIAMOND",
+  PLATINUM = "PLATINUM",
+  GOLD = "GOLD",
+  SILVER = "SILVER",
+  BRONZE = "BRONZE",
+}
+
 /** UUID string (gen_random_uuid / Auth user id). */
 export type UUID = string;
 

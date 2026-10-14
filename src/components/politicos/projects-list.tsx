@@ -6,11 +6,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { GemBadge, gemTierFromWeight } from "@/components/ui/gem-badge";
 import { PublicProject, WeightScore } from "@/types";
 import { ExternalLink } from "lucide-react";
 
 interface ProjectsListProps {
   projects: PublicProject[];
+}
+
+function highestWeight(project: PublicProject): WeightScore | null {
+  let highest: WeightScore | null = null;
+
+  for (const weight of [project.institutional_weight, project.citizen_weight]) {
+    if (weight !== null && (highest === null || weight > highest)) {
+      highest = weight;
+    }
+  }
+
+  return highest;
 }
 
 function formatWeight(weight: WeightScore | null): string {
@@ -41,7 +54,9 @@ export function ProjectsList({ projects }: ProjectsListProps) {
         </p>
       ) : (
         <ul className="space-y-4 list-none p-0 m-0">
-          {projects.map((project) => (
+          {projects.map((project) => {
+            const relevance = highestWeight(project);
+            return (
             <li key={project.id}>
               <article aria-labelledby={`project-title-${project.id}`}>
                 <Card className="border-border/80">
@@ -53,6 +68,12 @@ export function ProjectsList({ projects }: ProjectsListProps) {
                       >
                         {project.title}
                       </CardTitle>
+                      {relevance ? (
+                        <GemBadge
+                          tier={gemTierFromWeight(relevance)}
+                          criteria={`Relevância de execução ${relevance} de 5, pelo maior peso institucional ou cidadão.`}
+                        />
+                      ) : null}
                       {project.status ? (
                         <Badge variant="secondary">
                           <span className="sr-only">Situação do projeto: </span>
@@ -97,7 +118,8 @@ export function ProjectsList({ projects }: ProjectsListProps) {
                 </Card>
               </article>
             </li>
-          ))}
+            );
+          })}
         </ul>
       )}
     </section>

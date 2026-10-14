@@ -3,6 +3,7 @@ import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { GemBadge, gemTierFromGestaoScore } from "@/components/ui/gem-badge";
 import { PublicProfile, SphereType } from "@/types";
 
 const SPHERE_BORDER: Record<SphereType, string> = {
@@ -31,6 +32,7 @@ function finiteNumber(value: number, fallback: number): number {
 export function ProfileCard({ profile }: ProfileCardProps) {
   const rating = Math.min(5, Math.max(0, finiteNumber(profile.carisma_rating, 0)));
   const score = Math.min(100, Math.max(0, Math.trunc(finiteNumber(profile.gestao_score, 0))));
+  const gemTier = gemTierFromGestaoScore(score);
   const filledStars = Math.round(rating);
   const titleId = `profile-${profile.id}-name`;
 
@@ -51,7 +53,13 @@ export function ProfileCard({ profile }: ProfileCardProps) {
             <p className="text-xs text-muted-foreground">
               {profile.current_role ?? "Cargo não informado"}
             </p>
-            <Badge variant="outline">{SPHERE_LABEL[profile.sphere]}</Badge>
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="outline">{SPHERE_LABEL[profile.sphere]}</Badge>
+              <GemBadge
+                tier={gemTier}
+                criteria={`Faixa visual do Índice de Gestão: ${score} de 100. O esquema não persiste esta gema.`}
+              />
+            </div>
           </div>
         </CardHeader>
         <CardContent className="mt-auto space-y-4">

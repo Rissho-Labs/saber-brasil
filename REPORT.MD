@@ -133,3 +133,16 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** The profile opens a native dialog with the 10 competency criteria from `CompetencyScores`. Each criterion has an ℹ️ explanation, a keyboard radiogroup of 1–5 stars, and a live average. Submit stays disabled until all 10 scores exist, then posts `{ profileId, scores }` to `/api/avaliacoes`. `showModal()` traps focus and Escape closes the dialog.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`.
+
+### [2026-10-14] — `SPRINT2-STEP9-GEM-BADGES`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/ui/gem-badge.tsx` (CREATED)
+  - `src/types/index.ts` (MODIFIED)
+  - `src/components/ui/profile-card.tsx` (MODIFIED)
+  - `src/components/home/featured-politicians.tsx` (MODIFIED)
+  - `src/components/politicos/projects-list.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Added `GemTier` for the five agenda ranks in ARCHITECTURE.md §3.3 and a keyboard-focusable `GemBadge` with an SVG gem and tooltip. Highlights and search cards map the management index to a visual tier. Project cards map the higher institutional or citizen weight (1–5) to the same tiers. The schema does not persist a gem column.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`.

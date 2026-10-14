@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { GemBadge, gemTierFromGestaoScore } from "@/components/ui/gem-badge";
 import { Star } from "lucide-react";
 
 const featuredMock = [
@@ -46,7 +47,12 @@ export function FeaturedPoliticians() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {featuredMock.map((politician) => (
-          <Link key={politician.id} href={`/politicos/${politician.id}`} className="block group">
+          <div key={politician.id} className="flex h-full flex-col gap-2">
+            <GemBadge
+              tier={gemTierFromGestaoScore(politician.gestaoScore)}
+              criteria={`Destaque ilustrativo. Índice de Gestão ${politician.gestaoScore} de 100.`}
+            />
+            <Link href={`/politicos/${politician.id}`} className="block flex-1 group">
             <Card className="h-full transition-colors group-hover:border-foreground/30">
               <CardHeader className="flex flex-row items-center gap-4 space-y-0">
                 <div className="size-12 rounded-full bg-muted flex items-center justify-center text-lg font-bold" aria-hidden="true">
@@ -69,7 +75,8 @@ export function FeaturedPoliticians() {
                 <Badge variant="outline">Gestão: {politician.gestaoScore}/100</Badge>
               </CardContent>
             </Card>
-          </Link>
+            </Link>
+          </div>
         ))}
       </div>
     </section>
