@@ -10,7 +10,7 @@
 ## SPRINT 2: Home Screen & 4-Sphere Modals
 - [x] Create the 4 Home Page Modal components (Politics, Judiciary, Academia, Safety)
 - [x] Configure main search bar with sphere filters
-- [ ] Implement Profile Card component with colored borders (Green, Blue, Light Gray, Dark Gray)
+- [x] Implement Profile Card component with colored borders (Green, Blue, Light Gray, Dark Gray)
 
 ## SPRINT 3: Politician Profile & Dual Score
 - [ ] Build Dual Score graphic view (Subjective Rating + Management Index)

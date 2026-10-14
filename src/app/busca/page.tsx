@@ -1,11 +1,9 @@
-import Link from "next/link";
-import { Search, Star } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { ProfileCard } from "@/components/ui/profile-card";
 import { getPublicProfiles } from "@/lib/services/profiles";
-import { AlertBadge, PublicProfile, SphereType } from "@/types";
+import { SphereType } from "@/types";
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -40,74 +38,6 @@ function parseSphere(value: string): SphereType | undefined {
   }
 
   return undefined;
-}
-
-function formatRating(value: number): string {
-  const numeric = Number(value);
-  return Number.isFinite(numeric) ? numeric.toFixed(1) : "0.0";
-}
-
-function formatScore(value: number): string {
-  const numeric = Number(value);
-  return Number.isFinite(numeric) ? String(Math.trunc(numeric)) : "0";
-}
-
-function badgeVariant(badge: AlertBadge) {
-  if (badge === AlertBadge.CONDENADO || badge === AlertBadge.CASSADO) {
-    return "destructive" as const;
-  }
-
-  if (badge === AlertBadge.INVESTIGADO) {
-    return "secondary" as const;
-  }
-
-  return "outline" as const;
-}
-
-function ProfileResultCard({ profile }: { profile: PublicProfile }) {
-  return (
-    <li>
-      <Link
-        href={`/politicos/${profile.id}`}
-        className="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        <Card className="h-full border-border/80 transition-colors hover:border-foreground/30">
-          <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-            <div
-              className="flex size-12 shrink-0 items-center justify-center rounded-full bg-muted text-lg font-bold"
-              aria-hidden="true"
-            >
-              {profile.name.charAt(0)}
-            </div>
-            <div className="min-w-0 flex-1">
-              <CardTitle className="truncate text-base">{profile.name}</CardTitle>
-              <p className="text-xs text-muted-foreground">
-                {profile.current_role ?? "Cargo não informado"}
-              </p>
-            </div>
-          </CardHeader>
-          <CardContent className="flex flex-wrap items-center justify-between gap-2 pt-0 text-xs">
-            <Badge variant={badgeVariant(profile.badge)}>{profile.badge}</Badge>
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-1 font-medium text-amber-500">
-                <Star className="size-4 fill-amber-500" aria-hidden="true" />
-                <span>
-                  <span className="sr-only">Avaliação do público: </span>
-                  {formatRating(profile.carisma_rating)}
-                  <span className="sr-only"> de 5</span>
-                </span>
-              </span>
-              <span>
-                <span className="sr-only">Índice de gestão: </span>
-                Gestão {formatScore(profile.gestao_score)}
-                <span className="sr-only"> de 100</span>
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-      </Link>
-    </li>
-  );
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
@@ -185,7 +115,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         ) : (
           <ul className="grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2">
             {results.map((profile) => (
-              <ProfileResultCard key={profile.id} profile={profile} />
+              <li key={profile.id}>
+                <ProfileCard profile={profile} />
+              </li>
             ))}
           </ul>
         )}

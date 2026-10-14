@@ -93,3 +93,22 @@
   - `TASKS.md` (MODIFIED)
 - **Summary:** Implemented interactive tab/modal components for the 4 spheres (`POLITICA`, `JUDICIARIO`, `ACADEMIA`, `SEGURANCA`) featuring keyboard-accessible navigation, URL hash updating (`#political`, `#judiciary`, etc.), and direct search redirection (`/busca?sphere=<SPHERE>`).
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`.
+
+
+### [2026-10-14] — `SPRINT2-STEP5-SEARCH-PAGE`
+- **Status:** DONE
+- **Arquivos Criados / Modificados:**
+  - `src/app/busca/page.tsx` (CREATED)
+  - `TASKS.md` (MODIFIED)
+- **Resumo:** Criada a página `/busca` com suporte a filtros de texto (`q`) e esfera (`sphere`) via Server Component. Formulário preenchido automaticamente, integração com `getPublicProfiles`, tratamento de estado vazio ("Nenhum representante encontrado...") e cards vinculados a `/politicos/[id]`.
+- **Status da Compilação:** Validado sem erros via `tsc --noEmit`.
+
+### [2026-10-14] — `SPRINT2-STEP6-PROFILE-CARD`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/ui/profile-card.tsx` (CREATED)
+  - `src/app/busca/page.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Added a reusable `ProfileCard` typed to `PublicProfile`. Sphere borders are green (`POLITICA`), blue (`JUDICIARIO`), light gray (`ACADEMIA`), and dark gray (`SEGURANCA`), with a sphere badge, star rating, Índice de Gestão, and a keyboard-accessible link to `/politicos/[id]`. Search results now render this card. These border colors identify the sphere; `ARCHITECTURE.md` §4 uses the same palette for activity status.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`.
