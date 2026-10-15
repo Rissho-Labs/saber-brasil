@@ -220,3 +220,13 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `/login` and `/cadastro` start Google OAuth with `signInWithOAuth`. `redirectTo` is `/auth/callback?next=` and `safeNextPath` keeps the return path on the same origin, including `/politicos/[id]`. The callback validates the query with Zod, exchanges the code for the session cookie, and sends a missing or rejected code back to `/login?error=google` without dropping `next`. The button shows the Google mark and “Continuar com Google”, then “Redirecionando...” while disabled. “ou continue com e-mail” separates it from the email fields. A second click is ignored while the redirect is pending. Risk: the Supabase redirect allow list must include the deployed `/auth/callback` origin. A Google account was not completed; the browser reached the Google sign-in screen with the profile `next` path, and an external `next` value fell back to `/`.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`. Login and sign-up showed the button, divider, and email fields at 390px with no horizontal overflow. A callback without `code` redirected to `/login?next=/politicos/[id]&error=google`, and that page showed “Não foi possível continuar com o Google.”
+
+### [2026-10-15] — `SPRINT3-STEP5-FEATURED-DYNAMIC-CAROUSEL`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/featured-carousel.tsx` (CREATED)
+  - `src/components/home/featured-politicians.tsx` (MODIFIED)
+  - `src/lib/services/profiles.ts` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The home highlight block now loads up to 4 `public_profiles` per sphere, ordered by `gestao_score` and then `carisma_rating`. Zod drops any row that does not match the profile contract. Tabs switch `POLITICA`, `JUDICIARIO`, `ACADEMIA`, and `SEGURANCA`. Cards reuse `ProfileCard`, which already draws the sphere border, `GemBadge`, and both scores. The full `DualScoreGraphic` stays on the profile page because it is a headed section and would repeat the same heading inside every card. The left chevron is hidden at scroll position 0 and appears after a smooth scroll to the right. The right chevron disables when the last card is in view. “Ver mais” points to `/busca?sphere=<ESFERA>`. Risk: the current seed has 3 profiles per sphere, so the query asks for 4 and the UI shows the 3 that exist. A fourth profile appears automatically when it is stored.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`. Política showed Ana Beatriz (95), Mariana Silva (92), and Carlos Eduardo (88). After sliding right on a 390px width, the previous control became visible. Judiciário reset to the start and linked “Ver mais” to `/busca?sphere=JUDICIARIO`, which listed the three judiciary profiles.
