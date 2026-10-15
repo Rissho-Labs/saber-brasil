@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
@@ -11,6 +12,7 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const signupHref = `/cadastro?next=${encodeURIComponent(nextPath)}`;
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -74,6 +76,12 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
       <Button type="submit" disabled={pending}>
         {pending ? "Entrando..." : "Entrar"}
       </Button>
+      <p className="text-sm text-muted-foreground">
+        Ainda não tem conta?{" "}
+        <Link href={signupHref} className="font-medium text-primary underline-offset-4 hover:underline">
+          Criar conta
+        </Link>
+      </p>
     </form>
   );
 }

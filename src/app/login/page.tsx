@@ -1,11 +1,5 @@
 import { LoginForm } from "@/components/auth/login-form";
-
-function safeNextPath(value: string | undefined): string {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) {
-    return "/";
-  }
-  return value;
-}
+import { safeNextPath } from "@/lib/auth/safe-next-path";
 
 export default async function LoginPage({
   searchParams,

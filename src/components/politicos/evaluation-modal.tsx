@@ -108,6 +108,7 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
   const [isCheckingSession, setIsCheckingSession] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const loginHref = `/login?next=${encodeURIComponent(`/politicos/${profileId}`)}`;
+  const signupHref = `/cadastro?next=${encodeURIComponent(`/politicos/${profileId}`)}`;
 
   const ratedValues = CRITERIA.map((criterion) => scores[criterion.key]).filter(isStarScore);
   const average =
@@ -359,6 +360,9 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
         <div className="mt-4 flex flex-wrap gap-2">
           <Button asChild>
             <Link href={loginHref}>Entrar</Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link href={signupHref}>Criar conta</Link>
           </Button>
           <Button type="button" variant="outline" onClick={() => loginDialogRef.current?.close()}>
             Fechar

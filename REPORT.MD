@@ -192,3 +192,18 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** Added an idempotent seed with 3 profiles in each sphere (12 total, including the existing Política ids). Each profile has two projects. The higher institutional or citizen weight covers 1 through 5, which the UI maps to Bronze, Silver, Gold, Platinum, and Diamond. `gestao_score` is the stored §3.1 index (attendance 20%, TSE coherence 30%, cross impact 50%) from 37 to 95, so profile gems also cover all five tiers. Twenty-four evaluations use the 10 `CompetencyScores` keys; `tr_update_carisma_rating` is what writes `carisma_rating` (1.80–4.80). There is no avatar column and no `ProjectStatus` enum; project status stays the existing text values `EM_TRAMITACAO` and `APROVADO`. Names with `CASSADO` or `CONDENADO` are fictional. Risk: the script is not applied. Run it in the Supabase SQL editor as the database owner. The anon key cannot insert these rows.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`. Score averages checked at 4.8, 4.5, 4.7, 4.2, 3.5, 3.8, 4.4, 4.0, 2.5, 4.1, 2.8, and 1.8.
+
+### [2026-10-15] — `SPRINT3-STEP4-SIGNUP-OTP-FLOW`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/lib/auth/safe-next-path.ts` (CREATED)
+  - `src/components/auth/signup-form.tsx` (CREATED)
+  - `src/components/auth/otp-verification-form.tsx` (CREATED)
+  - `src/app/cadastro/page.tsx` (CREATED)
+  - `src/app/verificar-email/page.tsx` (CREATED)
+  - `src/app/login/page.tsx` (MODIFIED)
+  - `src/components/auth/login-form.tsx` (MODIFIED)
+  - `src/components/politicos/evaluation-modal.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `/cadastro` collects name, email, password, and confirmation. Zod rejects a short name, an invalid email, a password outside 8–72 characters, and a mismatched confirmation before `signUp`. The name is stored only as `full_name` user metadata. When Supabase returns no session, the app opens `/verificar-email` with one centered field (`text-3xl` / `text-4xl`, `font-mono`, `tracking-[0.5em]`), `inputMode="numeric"`, and `aria-label="Código de verificação de 6 dígitos"`. Non-digits are stripped and the value stops at 6. `verifyOtp` uses type `signup`; a bad or expired code stays on the page. Resend waits 60 seconds. A valid code calls `router.push(nextPath)`. If confirmations are off and `signUp` already returns a session, the OTP step is skipped. Risk: the Supabase signup email template must include `{{ .Token }}` and confirmations must be enabled, or the user receives a link instead of a 6-digit code. A real account was not created during the check.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`. Invalid signup fields showed the four messages. The OTP field kept `123456` from mixed input, rejected `123456` for an unknown address, and fit a 390px width with no horizontal overflow.
