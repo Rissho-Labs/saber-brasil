@@ -4,7 +4,7 @@ import { safeNextPath } from "@/lib/auth/safe-next-path";
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; error?: string }>;
 }) {
   const params = await searchParams;
 
@@ -14,7 +14,7 @@ export default async function LoginPage({
       <p className="mt-2 mb-6 text-sm text-muted-foreground">
         A avaliação cidadã exige uma conta. Cada pessoa envia uma avaliação por representante.
       </p>
-      <LoginForm nextPath={safeNextPath(params.next)} />
+      <LoginForm nextPath={safeNextPath(params.next)} oauthFailed={params.error === "google"} />
     </main>
   );
 }

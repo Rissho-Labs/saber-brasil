@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
+import { GoogleSignIn } from "@/components/auth/google-sign-in";
 import { Button } from "@/components/ui/button";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
@@ -56,6 +57,8 @@ export function SignupForm({ nextPath }: { nextPath: string }) {
   const [errors, setErrors] = useState<Partial<Record<SignupField, string>>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [googlePending, setGooglePending] = useState(false);
+  const busy = pending || googlePending;
   const loginHref = `/login?next=${encodeURIComponent(nextPath)}`;
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -107,7 +110,9 @@ export function SignupForm({ nextPath }: { nextPath: string }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4" noValidate>
+    <div className="space-y-4">
+      <GoogleSignIn nextPath={nextPath} disabled={pending} onPendingChange={setGooglePending} />
+      <form onSubmit={onSubmit} className="space-y-4" noValidate>
       <div className="space-y-1">
         <label htmlFor="signup-name" className="text-sm font-medium">
           Nome completo
@@ -203,7 +208,7 @@ export function SignupForm({ nextPath }: { nextPath: string }) {
           {formError}
         </p>
       ) : null}
-      <Button type="submit" disabled={pending}>
+      <Button type="submit" disabled={busy}>
         {pending ? "Criando conta..." : "Criar conta"}
       </Button>
       <p className="text-sm text-muted-foreground">
@@ -212,6 +217,7 @@ export function SignupForm({ nextPath }: { nextPath: string }) {
           Entrar
         </Link>
       </p>
-    </form>
+      </form>
+    </div>
   );
 }

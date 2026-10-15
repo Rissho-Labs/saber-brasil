@@ -3,15 +3,24 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { GoogleSignIn } from "@/components/auth/google-sign-in";
 import { Button } from "@/components/ui/button";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
-export function LoginForm({ nextPath }: { nextPath: string }) {
+export function LoginForm({
+  nextPath,
+  oauthFailed = false,
+}: {
+  nextPath: string;
+  oauthFailed?: boolean;
+}) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [googlePending, setGooglePending] = useState(false);
+  const busy = pending || googlePending;
   const signupHref = `/cadastro?next=${encodeURIComponent(nextPath)}`;
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -36,7 +45,14 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <div className="space-y-4">
+      <GoogleSignIn
+        nextPath={nextPath}
+        disabled={pending}
+        initialError={oauthFailed ? "Não foi possível continuar com o Google." : null}
+        onPendingChange={setGooglePending}
+      />
+      <form onSubmit={onSubmit} className="space-y-4">
       <div className="space-y-1">
         <label htmlFor="login-email" className="text-sm font-medium">
           E-mail
@@ -73,7 +89,7 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
           {error}
         </p>
       ) : null}
-      <Button type="submit" disabled={pending}>
+      <Button type="submit" disabled={busy}>
         {pending ? "Entrando..." : "Entrar"}
       </Button>
       <p className="text-sm text-muted-foreground">
@@ -82,6 +98,7 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
           Criar conta
         </Link>
       </p>
-    </form>
+      </form>
+    </div>
   );
 }

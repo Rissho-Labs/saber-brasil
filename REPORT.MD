@@ -207,3 +207,16 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `/cadastro` collects name, email, password, and confirmation. Zod rejects a short name, an invalid email, a password outside 8–72 characters, and a mismatched confirmation before `signUp`. The name is stored only as `full_name` user metadata. When Supabase returns no session, the app opens `/verificar-email` with one centered field (`text-3xl` / `text-4xl`, `font-mono`, `tracking-[0.5em]`), `inputMode="numeric"`, and `aria-label="Código de verificação de 6 dígitos"`. Non-digits are stripped and the value stops at 6. `verifyOtp` uses type `signup`; a bad or expired code stays on the page. Resend waits 60 seconds. A valid code calls `router.push(nextPath)`. If confirmations are off and `signUp` already returns a session, the OTP step is skipped. Risk: the Supabase signup email template must include `{{ .Token }}` and confirmations must be enabled, or the user receives a link instead of a 6-digit code. A real account was not created during the check.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`. Invalid signup fields showed the four messages. The OTP field kept `123456` from mixed input, rejected `123456` for an unknown address, and fit a 390px width with no horizontal overflow.
+
+### [2026-10-15] — `SPRINT3-STEP6-GOOGLE-OAUTH-LOGIN`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/lib/auth/social-login.ts` (CREATED)
+  - `src/components/auth/google-sign-in.tsx` (CREATED)
+  - `src/app/auth/callback/route.ts` (CREATED)
+  - `src/components/auth/login-form.tsx` (MODIFIED)
+  - `src/components/auth/signup-form.tsx` (MODIFIED)
+  - `src/app/login/page.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `/login` and `/cadastro` start Google OAuth with `signInWithOAuth`. `redirectTo` is `/auth/callback?next=` and `safeNextPath` keeps the return path on the same origin, including `/politicos/[id]`. The callback validates the query with Zod, exchanges the code for the session cookie, and sends a missing or rejected code back to `/login?error=google` without dropping `next`. The button shows the Google mark and “Continuar com Google”, then “Redirecionando...” while disabled. “ou continue com e-mail” separates it from the email fields. A second click is ignored while the redirect is pending. Risk: the Supabase redirect allow list must include the deployed `/auth/callback` origin. A Google account was not completed; the browser reached the Google sign-in screen with the profile `next` path, and an external `next` value fell back to `/`.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`. Login and sign-up showed the button, divider, and email fields at 390px with no horizontal overflow. A callback without `code` redirected to `/login?next=/politicos/[id]&error=google`, and that page showed “Não foi possível continuar com o Google.”
