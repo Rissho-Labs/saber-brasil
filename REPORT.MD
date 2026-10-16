@@ -259,3 +259,12 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** Email login, sign-up, and the evaluation form render a Turnstile widget from `NEXT_PUBLIC_TURNSTILE_SITE_KEY`. The secret stays in `TURNSTILE_SECRET_KEY` and is sent only from the server to `https://challenges.cloudflare.com/turnstile/v0/siteverify`. `POST /api/avaliacoes` checks the token with Zod after authentication and before the database write, and returns 400 when verification fails. Login and sign-up call the same check through a server action before `signInWithPassword` or `signUp`. When the keys are absent outside production, the widget says the check is off and the server allows the request. In production, a missing secret fails closed. A custom widget was used instead of a new package. Risk: “Continuar com Google” does not pass through Turnstile; Google’s own sign-in is the bot gate for that path. The live keys are not set, so this environment shows the disabled notice.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`. `/login` and `/cadastro` showed “Verificação anti-bot desativada neste ambiente.” An unauthenticated evaluation POST returned 401. With no secret, development verification returned ok and production returned “Verificação anti-bot indisponível.” An invalid token against siteverify returned “A verificação anti-bot falhou. Tente novamente.”
+
+### [2026-10-15] — `SPRINT3-STEP9-BUILD-VERIFICATION-AND-PRODUCTION-CHECK`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `.env.example` (CREATED)
+  - `.gitignore` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `.env.example` lists the variables the app reads: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, and `TURNSTILE_SECRET_KEY`. Google OAuth and Resend are documented as unused by this Next.js code: Google is configured in the Supabase Auth dashboard, and signup mail is sent by Supabase Auth. `.gitignore` ignored every `.env*` file, so `!.env.example` was added or the template could not be committed. `npm run build` completed with no ESLint, TypeScript, or route warning. `/politicos/[id]`, `/auth/callback`, and `/api/avaliacoes` are dynamic server routes. No hydration warning appeared in the build output, so no source change was required for one.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit` and `npm run build` (Next.js 15.5.27, 13 routes).
