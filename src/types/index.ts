@@ -19,6 +19,32 @@ export enum ProfileStatus {
   ENCERRADO = "ENCERRADO",
 }
 
+/**
+ * Representation shown in search and profile cards.
+ * Derived from profile_status. Omitted or unknown values fall back to EM_MANDATO.
+ * ATIVO -> EM_MANDATO, INATIVO|ENCERRADO -> EX_MANDATO, CANDIDATO -> CANDIDATO.
+ */
+export enum MandateStatus {
+  EM_MANDATO = "EM_MANDATO",
+  EX_MANDATO = "EX_MANDATO",
+  CANDIDATO = "CANDIDATO",
+}
+
+export function mandateStatusFromProfile(
+  status: ProfileStatus | null | undefined,
+): MandateStatus {
+  switch (status) {
+    case ProfileStatus.CANDIDATO:
+      return MandateStatus.CANDIDATO;
+    case ProfileStatus.INATIVO:
+    case ProfileStatus.ENCERRADO:
+      return MandateStatus.EX_MANDATO;
+    case ProfileStatus.ATIVO:
+    default:
+      return MandateStatus.EM_MANDATO;
+  }
+}
+
 /** PostgreSQL: alert_badge */
 export enum AlertBadge {
   NENHUM = "NENHUM",

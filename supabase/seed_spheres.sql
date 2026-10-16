@@ -4,6 +4,8 @@
 --
 -- public_profiles has no avatar column (ARCHITECTURE.md §7). The UI draws initials from name.
 -- public_projects.status is TEXT, not an enum. Values match the app: EM_TRAMITACAO, APROVADO.
+-- profile_status maps to MandateStatus in the app:
+-- ATIVO -> EM_MANDATO, CANDIDATO -> CANDIDATO, INATIVO|ENCERRADO -> EX_MANDATO.
 -- carisma_rating is written only by tr_update_carisma_rating (average of the 10 scores).
 -- gestao_score has no trigger. It stores the §3.1 index:
 --   round(attendance * 0.20 + tse_coherence * 0.30 + cross_impact * 0.50)

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { MandateBadge } from "@/components/ui/mandate-badge";
 import { cn } from "@/lib/utils";
 import { AlertBadge, ProfileStatus, SphereType } from "@/types";
 
@@ -62,9 +63,7 @@ export function ProfileHeader({
           <Badge variant="outline" className="text-xs">
             Esfera: {sphere}
           </Badge>
-          <Badge variant="secondary" className="text-xs">
-            Status: {status}
-          </Badge>
+          <MandateBadge status={status} />
         </div>
       </div>
     </div>

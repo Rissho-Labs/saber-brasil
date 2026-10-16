@@ -230,3 +230,18 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** The home highlight block now loads up to 4 `public_profiles` per sphere, ordered by `gestao_score` and then `carisma_rating`. Zod drops any row that does not match the profile contract. Tabs switch `POLITICA`, `JUDICIARIO`, `ACADEMIA`, and `SEGURANCA`. Cards reuse `ProfileCard`, which already draws the sphere border, `GemBadge`, and both scores. The full `DualScoreGraphic` stays on the profile page because it is a headed section and would repeat the same heading inside every card. The left chevron is hidden at scroll position 0 and appears after a smooth scroll to the right. The right chevron disables when the last card is in view. “Ver mais” points to `/busca?sphere=<ESFERA>`. Risk: the current seed has 3 profiles per sphere, so the query asks for 4 and the UI shows the 3 that exist. A fourth profile appears automatically when it is stored.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`. Política showed Ana Beatriz (95), Mariana Silva (92), and Carlos Eduardo (88). After sliding right on a 390px width, the previous control became visible. Judiciário reset to the start and linked “Ver mais” to `/busca?sphere=JUDICIARIO`, which listed the three judiciary profiles.
+
+### [2026-10-15] — `SPRINT3-STEP7-HISTORICAL-STATUS-FILTERS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/types/index.ts` (MODIFIED)
+  - `src/components/ui/mandate-badge.tsx` (CREATED)
+  - `src/components/busca/search-filters.tsx` (CREATED)
+  - `src/components/ui/profile-card.tsx` (MODIFIED)
+  - `src/components/politicos/profile-header.tsx` (MODIFIED)
+  - `src/app/busca/page.tsx` (MODIFIED)
+  - `supabase/schema.sql` (MODIFIED)
+  - `supabase/seed_spheres.sql` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `MandateStatus` is `EM_MANDATO`, `EX_MANDATO`, or `CANDIDATO`. It is derived from the stored `profile_status`: `ATIVO` becomes Em Exercício, `CANDIDATO` stays Candidato, and `INATIVO` or `ENCERRADO` become Ex-mandatário. A missing status falls back to Em Exercício. The Postgres enum was not replaced, because the live table and seed already use those four values and adding a second enum would break inserts. `/busca` validates `sphere` and `status` with Zod and keeps them in the query string. Cards and the profile header show a green, slate, or amber badge. Risk: a stored `ATIVO` with an alert badge such as `CASSADO` still appears as Em Exercício, because the mandate comes from `status`, not from the integrity badge.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`. `status=CANDIDATO` returned Camila Torres. Submitting Academia plus Ex-mandatários opened `/busca?sphere=ACADEMIA&status=EX_MANDATO` and showed Jorge Almeida. `status=EM_MANDATO` returned the eight active profiles and hid the candidate and the three former profiles. Jorge’s header reads Ex-mandatário and Mariana Silva’s reads Em Exercício. The search page fit a 390px width.

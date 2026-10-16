@@ -1,6 +1,9 @@
 -- 1. Criação dos tipos ENUM (espelhando src/types/index.ts)
 CREATE TYPE sphere_type AS ENUM ('POLITICA', 'JUDICIARIO', 'ACADEMIA', 'SEGURANCA');
 CREATE TYPE profile_status AS ENUM ('ATIVO', 'CANDIDATO', 'INATIVO', 'ENCERRADO');
+-- MandateStatus is derived in the app, not stored as a second enum:
+-- ATIVO -> EM_MANDATO, CANDIDATO -> CANDIDATO, INATIVO|ENCERRADO -> EX_MANDATO.
+-- A missing status falls back to EM_MANDATO.
 CREATE TYPE alert_badge AS ENUM ('NENHUM', 'INVESTIGADO', 'CASSADO', 'CONDENADO');
 
 -- 2. Tabela public_profiles (Perfis Públicos / Políticos)

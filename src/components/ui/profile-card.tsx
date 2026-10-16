@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { GemBadge, gemTierFromGestaoScore } from "@/components/ui/gem-badge";
+import { MandateBadge } from "@/components/ui/mandate-badge";
 import { PublicProfile, SphereType } from "@/types";
 
 const SPHERE_BORDER: Record<SphereType, string> = {
@@ -55,6 +56,7 @@ export function ProfileCard({ profile }: ProfileCardProps) {
             </p>
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="outline">{SPHERE_LABEL[profile.sphere]}</Badge>
+              <MandateBadge status={profile.status} />
               <GemBadge
                 tier={gemTier}
                 criteria={`Faixa visual do Índice de Gestão: ${score} de 100. O esquema não persiste esta gema.`}

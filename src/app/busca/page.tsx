@@ -1,23 +1,19 @@
-import { Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { z } from "zod";
+import { SearchFilters } from "@/components/busca/search-filters";
 import { ProfileCard } from "@/components/ui/profile-card";
 import { getPublicProfiles } from "@/lib/services/profiles";
-import { SphereType } from "@/types";
+import { MandateStatus, mandateStatusFromProfile, SphereType } from "@/types";
 
 interface SearchPageProps {
   searchParams: Promise<{
     q?: string | string[];
     sphere?: string | string[];
+    status?: string | string[];
   }>;
 }
 
-const SPHERE_OPTIONS: { value: SphereType; label: string }[] = [
-  { value: SphereType.POLITICA, label: "Política" },
-  { value: SphereType.JUDICIARIO, label: "Judiciário" },
-  { value: SphereType.ACADEMIA, label: "Academia" },
-  { value: SphereType.SEGURANCA, label: "Segurança" },
-];
+const sphereSchema = z.enum(SphereType);
+const mandateSchema = z.enum(MandateStatus);
 
 function firstParam(value: string | string[] | undefined): string {
   if (Array.isArray(value)) {
@@ -27,27 +23,25 @@ function firstParam(value: string | string[] | undefined): string {
   return value?.trim() ?? "";
 }
 
-function parseSphere(value: string): SphereType | undefined {
-  if (
-    value === SphereType.POLITICA ||
-    value === SphereType.JUDICIARIO ||
-    value === SphereType.ACADEMIA ||
-    value === SphereType.SEGURANCA
-  ) {
-    return value;
-  }
-
-  return undefined;
-}
-
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
-  const query = firstParam(params.q);
-  const sphere = parseSphere(firstParam(params.sphere));
+  const query = firstParam(params.q).slice(0, 120);
+  const sphereParsed = sphereSchema.safeParse(firstParam(params.sphere));
+  const statusParsed = mandateSchema.safeParse(firstParam(params.status));
+  const sphere = sphereParsed.success ? sphereParsed.data : undefined;
+  const status = statusParsed.success ? statusParsed.data : undefined;
   const profiles = await getPublicProfiles(query || undefined);
-  const results = sphere
-    ? profiles.filter((profile) => profile.sphere === sphere)
-    : profiles;
+  const results = profiles.filter((profile) => {
+    if (sphere && profile.sphere !== sphere) {
+      return false;
+    }
+
+    if (status && mandateStatusFromProfile(profile.status) !== status) {
+      return false;
+    }
+
+    return true;
+  });
 
   return (
     <main className="min-h-screen bg-background">
@@ -57,50 +51,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             Busca de representantes
           </h1>
           <p className="text-sm text-muted-foreground">
-            Filtre por nome e pela esfera institucional.
+            Filtre por nome, esfera institucional e situação do mandato.
           </p>
-          <form action="/busca" method="GET" className="grid gap-3 sm:grid-cols-[1fr_14rem_auto] sm:items-end">
-            <div className="space-y-1.5">
-              <label htmlFor="search-q" className="text-sm font-medium">
-                Nome
-              </label>
-              <div className="relative">
-                <Search
-                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-                  aria-hidden="true"
-                />
-                <Input
-                  id="search-q"
-                  type="search"
-                  name="q"
-                  defaultValue={query}
-                  placeholder="Busque por nome..."
-                  className="h-11 bg-background pl-9"
-                />
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <label htmlFor="search-sphere" className="text-sm font-medium">
-                Esfera
-              </label>
-              <select
-                id="search-sphere"
-                name="sphere"
-                defaultValue={sphere ?? ""}
-                className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <option value="">Todas as esferas</option>
-                {SPHERE_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <Button type="submit" className="h-11">
-              Buscar
-            </Button>
-          </form>
+          <SearchFilters query={query} sphere={sphere} status={status} />
         </div>
       </section>
 
