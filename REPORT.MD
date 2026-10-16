@@ -286,3 +286,14 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `/perfil` redirects anonymous visitors to `/login?next=/perfil`. A signed-in page shows name, email, sign-up date, and whether the account uses Google or email. Email accounts can change the password through a Zod-checked server action; Google accounts are told the password stays with Google. Both can sign out. The history loads that user’s `user_evaluations`, matches `public_profiles`, and lists carisma plus the ten scores. Edit reopens `EvaluationModal` with the saved scores. Delete asks for confirmation and calls `DELETE /api/avaliacoes/[id]`, which only removes the caller’s row. The navbar shows Entrar when signed out and Meu Perfil / Sair when signed in. Risk: the live database still has no DELETE policy and the carisma trigger ignores deletes until `supabase/evaluations-delete.sql` is run in the SQL editor. Without that, the API returns 404 and the public rating stays stale.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`. A request without cookies to `/perfil` returned 307 to `/login?next=/perfil`. The signed-in page showed the account fields, password change, sign-out, and an empty history. The navbar menu offered Meu Perfil and Sair. An unauthenticated DELETE returned 401. The page fit a 390px width. Edit and delete of a real row were not exercised because this account has no evaluations.
+
+### [2026-10-16] — `SPRINT4-STEP2-PROFILE-MODAL-AND-UUID-FIX`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/perfil/password-modal.tsx` (CREATED)
+  - `src/components/perfil/user-info.tsx` (MODIFIED)
+  - `src/lib/auth/account-actions.ts` (MODIFIED)
+  - `src/app/api/avaliacoes/route.ts` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Email accounts now see an “Alterar senha” button. It opens a centered native dialog with the current password, the new password, and the confirmation. Zod still requires 8–72 characters and a matching confirmation. The server checks the current password with `signInWithPassword` before `updateUser`. Success shows “Senha alterada.” Errors stay in the dialog. The profile “Sair” button was removed; sign-out stays in the navbar. `POST /api/avaliacoes` accepts any 8-4-4-4-12 hex id, including `11111111-1111-1111-1111-111111111111`. `z.string().uuid()` was not used because Zod’s RFC check rejects those seed ids. Risk: this browser had no session, so the dialog was not opened on a signed-in account. `/perfil` redirected to `/login?next=/perfil`.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit` and `npm run build`. The seed ids and a version-4 id matched the new pattern; `not-a-uuid` did not.
