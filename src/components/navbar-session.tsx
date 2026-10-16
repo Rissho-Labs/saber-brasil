@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { LogOut, User } from "lucide-react";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
 function firstName(label: string): string {
@@ -77,10 +78,10 @@ export function NavbarSession({
   }
 
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className="relative shrink-0">
       <button
         type="button"
-        className="inline-flex items-center gap-2.5 rounded-full border border-foreground/15 bg-muted/50 py-1 pl-3 pr-1 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="inline-flex items-center gap-2.5 rounded-xl border border-slate-200 bg-background py-1 pl-3 pr-1 text-sm font-medium text-foreground shadow-lg transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-slate-800 dark:hover:bg-slate-800"
         aria-expanded={open}
         aria-haspopup="menu"
         aria-label={`Conta de ${label}`}
@@ -106,23 +107,25 @@ export function NavbarSession({
       {open ? (
         <div
           role="menu"
-          className="absolute left-0 z-20 mt-2 w-44 rounded-lg border border-border bg-background p-1 shadow-md sm:left-auto sm:right-0"
+          className="absolute right-0 z-20 mt-2 w-48 space-y-1 rounded-xl border border-slate-200 bg-background p-1.5 shadow-lg dark:border-slate-800"
         >
           <Link
             href="/perfil"
             role="menuitem"
-            className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
             onClick={() => setOpen(false)}
           >
+            <User className="size-4 shrink-0" aria-hidden />
             Meu Perfil
           </Link>
           <button
             type="button"
             role="menuitem"
-            className="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-muted disabled:opacity-50"
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 disabled:opacity-50 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-50"
             disabled={pending}
             onClick={onSignOut}
           >
+            <LogOut className="size-4 shrink-0" aria-hidden />
             {pending ? "Saindo..." : "Sair"}
           </button>
         </div>

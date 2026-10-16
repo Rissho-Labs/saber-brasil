@@ -330,3 +330,20 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** The signed-in trigger is a rounded account control: first name on the left, a 36px circle on the right. Google `avatar_url` or `picture` (https only) fills the circle; a broken URL or a missing photo falls back to the uppercase first letter. Clicking toggles “Meu Perfil” and “Sair”; a click outside or Escape closes the menu. Below the `sm` breakpoint the menu aligns to the left edge of the button so it stays on screen. Risk: `public_profiles` has no avatar column, so the photo exists only in auth metadata.
 - **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run build`.
+
+### [2026-10-16] — `SPRINT4-STEP5-CLEAN-HEADER-LAYOUT`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/navbar.tsx` (MODIFIED)
+  - `src/components/navbar-session.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The header no longer renders the four sphere pills. The brand link stays on the left and the account menu on the right, in one row with `justify-between` and `px-4 sm:px-6 lg:px-8`. Sphere choices remain in the home hero and the search filter. The account menu now aligns to the right edge of the button on every width, because the button no longer wraps to the left. Risk: profile and representative pages have no header shortcut back to a sphere; the user returns home or uses search.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run build`.
+
+### [2026-10-16] — `SPRINT4-STEP5-NAVBAR-HEADER-HARMONIZATION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/navbar-session.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The account trigger and its menu now share `rounded-xl`, a slate border, the background surface, and `shadow-lg`. Menu items sit in `p-1.5 space-y-1`, with a user icon on “Meu Perfil” and a logout icon on “Sair”. The four sphere pills were already absent from the header; the brand stays left and the account control stays right. The avatar circle stays round inside the squared trigger. Risk: these slate classes are local to the account control, while the rest of the header still uses the theme tokens.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run build`.
