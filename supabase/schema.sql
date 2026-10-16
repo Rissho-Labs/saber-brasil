@@ -63,20 +63,23 @@ BEGIN
   ) / 10.0), 0.00)
   INTO avg_score
   FROM public.user_evaluations
-  WHERE profile_id = NEW.profile_id;
+  WHERE profile_id = COALESCE(NEW.profile_id, OLD.profile_id);
 
-  -- Atualiza o perfil público
   UPDATE public.public_profiles
   SET carisma_rating = avg_score
-  WHERE id = NEW.profile_id;
+  WHERE id = COALESCE(NEW.profile_id, OLD.profile_id);
+
+  IF TG_OP = 'DELETE' THEN
+    RETURN OLD;
+  END IF;
 
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger ativado após inserção ou atualização de avaliações
+DROP TRIGGER IF EXISTS tr_update_carisma_rating ON public.user_evaluations;
 CREATE TRIGGER tr_update_carisma_rating
-AFTER INSERT OR UPDATE ON public.user_evaluations
+AFTER INSERT OR UPDATE OR DELETE ON public.user_evaluations
 FOR EACH ROW
 EXECUTE FUNCTION update_profile_carisma_rating();
 
@@ -96,6 +99,9 @@ CREATE POLICY "Usuários criam suas próprias avaliações" ON public.user_evalu
 
 CREATE POLICY "Usuários atualizam suas próprias avaliações" ON public.user_evaluations
   FOR UPDATE USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Usuários excluem suas próprias avaliações" ON public.user_evaluations
+  FOR DELETE USING (auth.uid() = user_id);
 
 -- 7. Dados Iniciais para Seeds (Mocks Oficiais no Banco)
 INSERT INTO public.public_profiles (id, name, sphere, "current_role", status, badge, carisma_rating, gestao_score)

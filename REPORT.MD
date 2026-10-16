@@ -268,3 +268,21 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `.env.example` lists the variables the app reads: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, and `TURNSTILE_SECRET_KEY`. Google OAuth and Resend are documented as unused by this Next.js code: Google is configured in the Supabase Auth dashboard, and signup mail is sent by Supabase Auth. `.gitignore` ignored every `.env*` file, so `!.env.example` was added or the template could not be committed. `npm run build` completed with no ESLint, TypeScript, or route warning. `/politicos/[id]`, `/auth/callback`, and `/api/avaliacoes` are dynamic server routes. No hydration warning appeared in the build output, so no source change was required for one.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit` and `npm run build` (Next.js 15.5.27, 13 routes).
+
+### [2026-10-15] — `SPRINT4-STEP1-USER-PROFILE-AND-HISTORY`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/app/perfil/page.tsx` (CREATED)
+  - `src/components/perfil/user-info.tsx` (CREATED)
+  - `src/components/perfil/user-evaluations.tsx` (CREATED)
+  - `src/components/navbar-session.tsx` (CREATED)
+  - `src/app/api/avaliacoes/[id]/route.ts` (CREATED)
+  - `src/lib/services/user-history.ts` (CREATED)
+  - `src/lib/auth/account-actions.ts` (CREATED)
+  - `supabase/evaluations-delete.sql` (CREATED)
+  - `src/components/navbar.tsx` (MODIFIED)
+  - `src/components/politicos/evaluation-modal.tsx` (MODIFIED)
+  - `supabase/schema.sql` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `/perfil` redirects anonymous visitors to `/login?next=/perfil`. A signed-in page shows name, email, sign-up date, and whether the account uses Google or email. Email accounts can change the password through a Zod-checked server action; Google accounts are told the password stays with Google. Both can sign out. The history loads that user’s `user_evaluations`, matches `public_profiles`, and lists carisma plus the ten scores. Edit reopens `EvaluationModal` with the saved scores. Delete asks for confirmation and calls `DELETE /api/avaliacoes/[id]`, which only removes the caller’s row. The navbar shows Entrar when signed out and Meu Perfil / Sair when signed in. Risk: the live database still has no DELETE policy and the carisma trigger ignores deletes until `supabase/evaluations-delete.sql` is run in the SQL editor. Without that, the API returns 404 and the public rating stays stale.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`. A request without cookies to `/perfil` returned 307 to `/login?next=/perfil`. The signed-in page showed the account fields, password change, sign-out, and an empty history. The navbar menu offered Meu Perfil and Sair. An unauthenticated DELETE returned 401. The page fit a 390px width. Edit and delete of a real row were not exercised because this account has no evaluations.

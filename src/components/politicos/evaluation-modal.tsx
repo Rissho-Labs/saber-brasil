@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { TURNSTILE_SITE_KEY, TurnstileWidget, TurnstileWidgetHandle } from "@/components/ui/turnstile-widget";
@@ -96,7 +97,16 @@ function isEvaluationApiResponse(value: unknown): value is EvaluationApiResponse
   return messageOk && errorOk;
 }
 
-export function EvaluationModal({ profileId }: { profileId: string }) {
+export function EvaluationModal({
+  profileId,
+  initialScores,
+  triggerLabel = "Avaliar representante",
+}: {
+  profileId: string;
+  initialScores?: CompetencyScores;
+  triggerLabel?: string;
+}) {
+  const router = useRouter();
   const titleId = useId();
   const descriptionId = useId();
   const loginTitleId = useId();
@@ -104,7 +114,7 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const turnstileRef = useRef<TurnstileWidgetHandle>(null);
   const loginDialogRef = useRef<HTMLDialogElement>(null);
-  const [scores, setScores] = useState<Partial<CompetencyScores>>({});
+  const [scores, setScores] = useState<Partial<CompetencyScores>>(initialScores ?? {});
   const [openHints, setOpenHints] = useState<Partial<Record<CompetencyCriterion, boolean>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
@@ -215,6 +225,7 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
 
       if (response.ok) {
         setFeedback(data.message ?? "Avaliação registrada com sucesso.");
+        router.refresh();
       } else {
         setFeedback(data.error ?? "Erro ao salvar avaliação.");
       }
@@ -235,7 +246,7 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
         Abra o questionário para dar uma nota de 1 a 5 em cada competência.
       </p>
       <Button type="button" onClick={openDialog} disabled={isCheckingSession}>
-        {isCheckingSession ? "Verificando sessão..." : "Avaliar representante"}
+        {isCheckingSession ? "Verificando sessão..." : triggerLabel}
       </Button>
 
       <dialog
