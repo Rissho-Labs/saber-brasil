@@ -10,23 +10,39 @@ const spheres = [
   { label: "Segurança", emoji: "🛡️", href: "/#security" },
 ] as const;
 
-function sessionName(metadata: { full_name?: unknown } | undefined): string | null {
-  if (!metadata || typeof metadata.full_name !== "string") {
+function readMetadataString(metadata: unknown, key: string): string | null {
+  if (typeof metadata !== "object" || metadata === null || !(key in metadata)) {
     return null;
   }
-  const name = metadata.full_name.trim();
-  return name || null;
+
+  const value = Object.getOwnPropertyDescriptor(metadata, key)?.value;
+  return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
+function sessionName(metadata: unknown): string | null {
+  return readMetadataString(metadata, "full_name");
+}
+
+function sessionAvatar(metadata: unknown): string | null {
+  const avatar = readMetadataString(metadata, "avatar_url") ?? readMetadataString(metadata, "picture");
+  if (!avatar || !avatar.startsWith("https://")) {
+    return null;
+  }
+
+  return avatar;
 }
 
 export async function Navbar() {
   let email: string | null = null;
   let name: string | null = null;
+  let avatarUrl: string | null = null;
 
   try {
     const supabase = await createClient();
     const { data } = await supabase.auth.getUser();
     email = data.user?.email ?? null;
     name = sessionName(data.user?.user_metadata);
+    avatarUrl = sessionAvatar(data.user?.user_metadata);
   } catch {
     email = null;
   }
@@ -58,7 +74,7 @@ export async function Navbar() {
               </a>
             ))}
           </nav>
-          <NavbarSession name={name} email={email} />
+          <NavbarSession name={name} email={email} avatarUrl={avatarUrl} />
         </div>
       </div>
     </header>

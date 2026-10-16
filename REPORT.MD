@@ -321,3 +321,12 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** The button row under “Confirmar nova senha” now adds `pt-4` on top of the form’s `space-y-4`, so “Alterar senha” and “Fechar” sit farther from the last field. A plain `mt-*` class would lose to `space-y-4`.
 - **Compilation Status:** Class-only change.
+
+### [2026-10-16] — `SPRINT4-STEP4-NAVBAR-PROFILE-BUTTON-REDESIGN`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/navbar.tsx` (MODIFIED)
+  - `src/components/navbar-session.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The signed-in trigger is a rounded account control: first name on the left, a 36px circle on the right. Google `avatar_url` or `picture` (https only) fills the circle; a broken URL or a missing photo falls back to the uppercase first letter. Clicking toggles “Meu Perfil” and “Sair”; a click outside or Escape closes the menu. Below the `sm` breakpoint the menu aligns to the left edge of the button so it stays on screen. Risk: `public_profiles` has no avatar column, so the photo exists only in auth metadata.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run build`.
