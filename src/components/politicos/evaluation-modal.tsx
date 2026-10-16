@@ -3,6 +3,7 @@
 import { useId, useRef, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { TURNSTILE_SITE_KEY, TurnstileWidget, TurnstileWidgetHandle } from "@/components/ui/turnstile-widget";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import {
   CompetencyCriterion,
@@ -101,10 +102,12 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
   const loginTitleId = useId();
   const loginDescriptionId = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const turnstileRef = useRef<TurnstileWidgetHandle>(null);
   const loginDialogRef = useRef<HTMLDialogElement>(null);
   const [scores, setScores] = useState<Partial<CompetencyScores>>({});
   const [openHints, setOpenHints] = useState<Partial<Record<CompetencyCriterion, boolean>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [isCheckingSession, setIsCheckingSession] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const loginHref = `/login?next=${encodeURIComponent(`/politicos/${profileId}`)}`;
@@ -181,12 +184,18 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
       return;
     }
 
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setFeedback("Confirme a verificação anti-bot.");
+      return;
+    }
+
     setIsSubmitting(true);
     setFeedback(null);
 
-    const payload: { profileId: string; scores: CompetencyScores } = {
+    const payload: { profileId: string; scores: CompetencyScores; turnstileToken: string | null } = {
       profileId,
       scores,
+      turnstileToken,
     };
 
     try {
@@ -209,6 +218,7 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
       } else {
         setFeedback(data.error ?? "Erro ao salvar avaliação.");
       }
+      turnstileRef.current?.reset();
     } catch {
       setFeedback("Erro de conexão com o servidor.");
     } finally {
@@ -325,6 +335,7 @@ export function EvaluationModal({ profileId }: { profileId: string }) {
               ? "Média geral: aguardando a primeira nota."
               : `Média geral: ${average.toFixed(1)} de 5 (${ratedValues.length} de 10 critérios).`}
           </p>
+          <TurnstileWidget ref={turnstileRef} onToken={setTurnstileToken} />
           {feedback ? <p role="status" className="text-sm">{feedback}</p> : null}
 
           <div className="flex flex-wrap gap-2">

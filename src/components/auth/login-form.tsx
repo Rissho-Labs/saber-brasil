@@ -1,10 +1,12 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { GoogleSignIn } from "@/components/auth/google-sign-in";
 import { Button } from "@/components/ui/button";
+import { TURNSTILE_SITE_KEY, TurnstileWidget, TurnstileWidgetHandle } from "@/components/ui/turnstile-widget";
+import { assertTurnstile } from "@/lib/auth/turnstile-action";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
 export function LoginForm({
@@ -20,13 +22,28 @@ export function LoginForm({
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [googlePending, setGooglePending] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileWidgetHandle>(null);
   const busy = pending || googlePending;
   const signupHref = `/cadastro?next=${encodeURIComponent(nextPath)}`;
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setError("Confirme a verificação anti-bot.");
+      return;
+    }
+
     setPending(true);
     setError(null);
+
+    const turnstile = await assertTurnstile(turnstileToken);
+    if (!turnstile.ok) {
+      setPending(false);
+      setError(turnstile.error);
+      turnstileRef.current?.reset();
+      return;
+    }
 
     const supabase = createBrowserSupabaseClient();
     const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -37,6 +54,7 @@ export function LoginForm({
     if (signInError) {
       setPending(false);
       setError("E-mail ou senha inválidos.");
+      turnstileRef.current?.reset();
       return;
     }
 
@@ -84,6 +102,7 @@ export function LoginForm({
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
         />
       </div>
+      <TurnstileWidget ref={turnstileRef} onToken={setTurnstileToken} />
       {error ? (
         <p role="alert" className="text-sm text-destructive">
           {error}

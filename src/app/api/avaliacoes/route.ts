@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { requestClientIp, verifyTurnstileToken } from "@/lib/auth/verify-turnstile";
 import { createClient } from "@/lib/supabase/server";
 import { saveUserEvaluation } from "@/lib/services/evaluations";
 import { CompetencyScores } from "@/types";
@@ -35,6 +36,7 @@ const evaluationBodySchema = z.object({
     public_communication: starScoreSchema,
     institutional_commitment: starScoreSchema,
   }),
+  turnstileToken: z.string().trim().min(1).max(2048).nullable().optional(),
 });
 
 function toCompetencyScores(
@@ -77,6 +79,14 @@ export async function POST(request: Request) {
         { error: "Informe profileId e as 10 notas válidas." },
         { status: 400 }
       );
+    }
+
+    const turnstile = await verifyTurnstileToken(
+      parsed.data.turnstileToken ?? null,
+      requestClientIp(request),
+    );
+    if (!turnstile.ok) {
+      return NextResponse.json({ error: turnstile.error }, { status: 400 });
     }
 
     const result = await saveUserEvaluation(

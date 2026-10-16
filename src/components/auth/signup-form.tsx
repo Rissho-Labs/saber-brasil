@@ -1,11 +1,13 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { GoogleSignIn } from "@/components/auth/google-sign-in";
 import { Button } from "@/components/ui/button";
+import { TURNSTILE_SITE_KEY, TurnstileWidget, TurnstileWidgetHandle } from "@/components/ui/turnstile-widget";
+import { assertTurnstile } from "@/lib/auth/turnstile-action";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -58,6 +60,8 @@ export function SignupForm({ nextPath }: { nextPath: string }) {
   const [formError, setFormError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [googlePending, setGooglePending] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileWidgetHandle>(null);
   const busy = pending || googlePending;
   const loginHref = `/login?next=${encodeURIComponent(nextPath)}`;
 
@@ -77,8 +81,21 @@ export function SignupForm({ nextPath }: { nextPath: string }) {
       return;
     }
 
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setFormError("Confirme a verificação anti-bot.");
+      return;
+    }
+
     setErrors({});
     setPending(true);
+
+    const turnstile = await assertTurnstile(turnstileToken);
+    if (!turnstile.ok) {
+      setPending(false);
+      setFormError(turnstile.error);
+      turnstileRef.current?.reset();
+      return;
+    }
 
     const supabase = createBrowserSupabaseClient();
     const { data, error } = await supabase.auth.signUp({
@@ -91,6 +108,7 @@ export function SignupForm({ nextPath }: { nextPath: string }) {
 
     if (error || (data.user?.identities && data.user.identities.length === 0)) {
       setPending(false);
+      turnstileRef.current?.reset();
       setFormError(
         error?.message.toLowerCase().includes("password")
           ? "A senha não atende às regras da conta."
@@ -203,6 +221,7 @@ export function SignupForm({ nextPath }: { nextPath: string }) {
           </p>
         ) : null}
       </div>
+      <TurnstileWidget ref={turnstileRef} onToken={setTurnstileToken} />
       {formError ? (
         <p role="alert" className="text-sm text-destructive">
           {formError}

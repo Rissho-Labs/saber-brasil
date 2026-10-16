@@ -245,3 +245,17 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `MandateStatus` is `EM_MANDATO`, `EX_MANDATO`, or `CANDIDATO`. It is derived from the stored `profile_status`: `ATIVO` becomes Em Exercício, `CANDIDATO` stays Candidato, and `INATIVO` or `ENCERRADO` become Ex-mandatário. A missing status falls back to Em Exercício. The Postgres enum was not replaced, because the live table and seed already use those four values and adding a second enum would break inserts. `/busca` validates `sphere` and `status` with Zod and keeps them in the query string. Cards and the profile header show a green, slate, or amber badge. Risk: a stored `ATIVO` with an alert badge such as `CASSADO` still appears as Em Exercício, because the mandate comes from `status`, not from the integrity badge.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`. `status=CANDIDATO` returned Camila Torres. Submitting Academia plus Ex-mandatários opened `/busca?sphere=ACADEMIA&status=EX_MANDATO` and showed Jorge Almeida. `status=EM_MANDATO` returned the eight active profiles and hid the candidate and the three former profiles. Jorge’s header reads Ex-mandatário and Mariana Silva’s reads Em Exercício. The search page fit a 390px width.
+
+### [2026-10-15] — `SPRINT3-STEP8-ANTIBOT-TURNSTILE`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/lib/auth/verify-turnstile.ts` (CREATED)
+  - `src/lib/auth/turnstile-action.ts` (CREATED)
+  - `src/components/ui/turnstile-widget.tsx` (CREATED)
+  - `src/app/api/avaliacoes/route.ts` (MODIFIED)
+  - `src/components/politicos/evaluation-modal.tsx` (MODIFIED)
+  - `src/components/auth/login-form.tsx` (MODIFIED)
+  - `src/components/auth/signup-form.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Email login, sign-up, and the evaluation form render a Turnstile widget from `NEXT_PUBLIC_TURNSTILE_SITE_KEY`. The secret stays in `TURNSTILE_SECRET_KEY` and is sent only from the server to `https://challenges.cloudflare.com/turnstile/v0/siteverify`. `POST /api/avaliacoes` checks the token with Zod after authentication and before the database write, and returns 400 when verification fails. Login and sign-up call the same check through a server action before `signInWithPassword` or `signUp`. When the keys are absent outside production, the widget says the check is off and the server allows the request. In production, a missing secret fails closed. A custom widget was used instead of a new package. Risk: “Continuar com Google” does not pass through Turnstile; Google’s own sign-in is the bot gate for that path. The live keys are not set, so this environment shows the disabled notice.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`. `/login` and `/cadastro` showed “Verificação anti-bot desativada neste ambiente.” An unauthenticated evaluation POST returned 401. With no secret, development verification returned ok and production returned “Verificação anti-bot indisponível.” An invalid token against siteverify returned “A verificação anti-bot falhou. Tente novamente.”
