@@ -347,3 +347,28 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** The account trigger and its menu now share `rounded-xl`, a slate border, the background surface, and `shadow-lg`. Menu items sit in `p-1.5 space-y-1`, with a user icon on “Meu Perfil” and a logout icon on “Sair”. The four sphere pills were already absent from the header; the brand stays left and the account control stays right. The avatar circle stays round inside the squared trigger. Risk: these slate classes are local to the account control, while the rest of the header still uses the theme tokens.
 - **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run build`.
+
+### [2026-10-16] — `SPRINT4-STEP6-PROFILE-AVATAR-MANAGEMENT`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/perfil/avatar-manager.tsx` (CREATED)
+  - `src/lib/auth/avatar-actions.ts` (CREATED)
+  - `src/lib/auth/session-avatar.ts` (CREATED)
+  - `supabase/avatars-storage.sql` (CREATED)
+  - `src/components/perfil/user-info.tsx` (MODIFIED)
+  - `src/app/perfil/page.tsx` (MODIFIED)
+  - `src/components/navbar.tsx` (MODIFIED)
+  - `src/components/navbar-session.tsx` (MODIFIED)
+  - `next.config.ts` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The account card on `/perfil` shows the custom photo, the Google picture, or the initial. “Alterar foto” accepts PNG, JPEG, or WebP up to 2 MB, checks the file signature on the server, and stores the bytes in the `avatars` bucket. Only the https URL is written to `avatar_url`. A 2 MB image is not stored as base64 because auth metadata cannot hold it. “Remover foto” clears that URL and sets `avatar_removed`, so the letter fallback returns even when Google still has `picture`. With no photo the button is disabled and its title is “Função indisponível: você não possui uma foto cadastrada”. Saving shows a spinner and a status toast. The navbar listens for the new URL immediately. Risk: uploads fail until `supabase/avatars-storage.sql` is run in the SQL editor. Removing a photo was not clicked on the signed-in account.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run build`.
+
+### [2026-10-16] — `SPRINT4-STEP7-PROFILE-LAYOUT-REDISTRIBUTION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/perfil/user-info.tsx` (MODIFIED)
+  - `src/components/perfil/avatar-manager.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The account section is one card. From the `md` breakpoint the avatar column sits beside a 2×2 grid: Nome, E-mail, Data de Cadastro, Tipo de Acesso. “Alterar senha” sits under that grid with a top border. Below `md` the avatar stacks above the fields, and the grid stays two columns. The circle is 80px, and 96px from `md` up, including height so it stays round. Photo actions and the disabled remove tooltip are unchanged. A Google account still shows the Google note in that same slot instead of the password button.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run build`.

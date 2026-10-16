@@ -1,29 +1,8 @@
 import Link from "next/link";
 import { Scale } from "lucide-react";
 import { NavbarSession } from "@/components/navbar-session";
+import { sessionAvatarUrl, sessionName } from "@/lib/auth/session-avatar";
 import { createClient } from "@/lib/supabase/server";
-
-function readMetadataString(metadata: unknown, key: string): string | null {
-  if (typeof metadata !== "object" || metadata === null || !(key in metadata)) {
-    return null;
-  }
-
-  const value = Object.getOwnPropertyDescriptor(metadata, key)?.value;
-  return typeof value === "string" && value.trim() ? value.trim() : null;
-}
-
-function sessionName(metadata: unknown): string | null {
-  return readMetadataString(metadata, "full_name");
-}
-
-function sessionAvatar(metadata: unknown): string | null {
-  const avatar = readMetadataString(metadata, "avatar_url") ?? readMetadataString(metadata, "picture");
-  if (!avatar || !avatar.startsWith("https://")) {
-    return null;
-  }
-
-  return avatar;
-}
 
 export async function Navbar() {
   let email: string | null = null;
@@ -35,7 +14,7 @@ export async function Navbar() {
     const { data } = await supabase.auth.getUser();
     email = data.user?.email ?? null;
     name = sessionName(data.user?.user_metadata);
-    avatarUrl = sessionAvatar(data.user?.user_metadata);
+    avatarUrl = sessionAvatarUrl(data.user?.user_metadata);
   } catch {
     email = null;
   }

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogOut, User } from "lucide-react";
+import { AVATAR_CHANGE_EVENT } from "@/lib/auth/session-avatar";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
 function firstName(label: string): string {
@@ -25,6 +26,29 @@ export function NavbarSession({
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
+  const [currentAvatar, setCurrentAvatar] = useState(avatarUrl);
+
+  useEffect(() => {
+    setCurrentAvatar(avatarUrl);
+    setImageFailed(false);
+  }, [avatarUrl]);
+
+  useEffect(() => {
+    function onAvatar(event: Event) {
+      if (!(event instanceof CustomEvent)) {
+        return;
+      }
+
+      const next = event.detail;
+      if (typeof next === "string" || next === null) {
+        setCurrentAvatar(next);
+        setImageFailed(false);
+      }
+    }
+
+    window.addEventListener(AVATAR_CHANGE_EVENT, onAvatar);
+    return () => window.removeEventListener(AVATAR_CHANGE_EVENT, onAvatar);
+  }, []);
 
   useEffect(() => {
     if (!open) {
@@ -66,7 +90,7 @@ export function NavbarSession({
   const label = name && name !== "Nome não informado" ? name : email;
   const displayName = firstName(label);
   const initial = displayName.charAt(0).toUpperCase() || "?";
-  const showImage = Boolean(avatarUrl) && !imageFailed;
+  const showImage = Boolean(currentAvatar) && !imageFailed;
 
   async function onSignOut() {
     setPending(true);
@@ -93,7 +117,7 @@ export function NavbarSession({
             // OAuth avatar hosts are not a fixed image allow-list.
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={avatarUrl ?? undefined}
+              src={currentAvatar ?? undefined}
               alt=""
               referrerPolicy="no-referrer"
               className="size-9 rounded-full object-cover"

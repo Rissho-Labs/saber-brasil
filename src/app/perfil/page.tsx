@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { UserEvaluations } from "@/components/perfil/user-evaluations";
 import { UserInfo } from "@/components/perfil/user-info";
+import { sessionAvatarUrl } from "@/lib/auth/session-avatar";
 import { getUserEvaluationHistory } from "@/lib/services/user-history";
 import { createClient } from "@/lib/supabase/server";
 
@@ -37,6 +38,7 @@ export default async function ProfilePage() {
         email={data.user.email ?? "E-mail não informado"}
         createdAtLabel={createdAtLabel(data.user.created_at)}
         method={method}
+        avatarUrl={sessionAvatarUrl(data.user.user_metadata)}
       />
       <UserEvaluations items={history} />
     </main>
