@@ -297,3 +297,19 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** Email accounts now see an “Alterar senha” button. It opens a centered native dialog with the current password, the new password, and the confirmation. Zod still requires 8–72 characters and a matching confirmation. The server checks the current password with `signInWithPassword` before `updateUser`. Success shows “Senha alterada.” Errors stay in the dialog. The profile “Sair” button was removed; sign-out stays in the navbar. `POST /api/avaliacoes` accepts any 8-4-4-4-12 hex id, including `11111111-1111-1111-1111-111111111111`. `z.string().uuid()` was not used because Zod’s RFC check rejects those seed ids. Risk: this browser had no session, so the dialog was not opened on a signed-in account. `/perfil` redirected to `/login?next=/perfil`.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit` and `npm run build`. The seed ids and a version-4 id matched the new pattern; `not-a-uuid` did not.
+
+### [2026-10-16] — `SPRINT4-STEP3-CENTER-PASSWORD-MODAL`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/perfil/password-modal.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Tailwind’s reset removes the browser’s automatic dialog margin, so the password dialog sat at the top-left. The dialog is now the overlay: `fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm`. The form sits in a `w-full max-w-md` panel that scrolls inside the viewport. Backdrop click and Escape still close it, and `role="dialog"` plus `aria-modal="true"` stay in place. Risk: this browser has no signed-in session, so the open dialog was not measured on screen. `/perfil` redirected to `/login?next=/perfil`.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit` and `npm run build`.
+
+### [2026-10-16] — `SPRINT4-STEP3-PASSWORD-MODAL-CLOSED`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/perfil/password-modal.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The password dialog opened with the profile because Tailwind’s `flex` utility sets `display: flex` and overrides the browser rule that hides a closed `<dialog>`. The overlay now stays hidden unless it has the `open` attribute, which `showModal()` adds only after “Alterar senha” is clicked. Escape, backdrop click, and the centered panel are unchanged. Risk: this browser has no signed-in session, so the click was not repeated on `/perfil`.
+- **Compilation Status:** Validated with zero errors via `tsc --noEmit`.

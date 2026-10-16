@@ -66,8 +66,9 @@ export function PasswordModal({ onChanged }: { onChanged: (message: string) => v
             event.currentTarget.close();
           }
         }}
-        className="w-[min(100%-2rem,28rem)] rounded-xl border border-border bg-background p-6 text-foreground backdrop:bg-black/50"
+        className="fixed inset-0 z-50 m-0 flex h-dvh max-h-none w-full max-w-none items-center justify-center border-0 bg-black/50 p-4 text-foreground backdrop:bg-transparent backdrop-blur-sm [&:not([open])]:hidden"
       >
+        <div className="max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-xl border border-border bg-background p-6 shadow-lg">
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-1">
             <h2 id={titleId} className="text-lg font-semibold">
@@ -135,6 +136,7 @@ export function PasswordModal({ onChanged }: { onChanged: (message: string) => v
             </Button>
           </div>
         </form>
+        </div>
       </dialog>
     </>
   );
