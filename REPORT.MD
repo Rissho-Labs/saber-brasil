@@ -372,3 +372,18 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** The account section is one card. From the `md` breakpoint the avatar column sits beside a 2×2 grid: Nome, E-mail, Data de Cadastro, Tipo de Acesso. “Alterar senha” sits under that grid with a top border. Below `md` the avatar stacks above the fields, and the grid stays two columns. The circle is 80px, and 96px from `md` up, including height so it stays round. Photo actions and the disabled remove tooltip are unchanged. A Google account still shows the Google note in that same slot instead of the password button.
 - **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run build`.
+
+### [2026-10-16] — `SPRINT4-STEP8-PROFILE-POLISH-AND-ACCOUNT-LINKING`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/perfil/email-modal.tsx` (CREATED)
+  - `src/components/perfil/connected-accounts.tsx` (CREATED)
+  - `src/lib/auth/identity-actions.ts` (CREATED)
+  - `src/lib/auth/account-actions.ts` (MODIFIED)
+  - `src/components/perfil/avatar-manager.tsx` (MODIFIED)
+  - `src/components/perfil/user-info.tsx` (MODIFIED)
+  - `src/components/perfil/password-modal.tsx` (MODIFIED)
+  - `src/app/perfil/page.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The avatar column is centered over its buttons. Email accounts get matching outline buttons for “Alterar senha” and “Alterar e-mail”. The email dialog calls `updateUser({ email })` and tells the person to confirm the message sent to the new address. Supabase’s email-change flow is that confirmation, not the signup 6-digit screen. “Contas conectadas” shows Google as connected or not. Linking uses `linkIdentity` and returns through `/auth/callback`. Unlinking is refused when Google is the only identity, on the button and on the server. Risk: manual linking stays off until it is enabled in the Supabase dashboard, and the callback URL must stay on the redirect allow-list. The signed-in account already has email and Google, so “Desconectar” was enabled and was not clicked. No email change was sent.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run build`.

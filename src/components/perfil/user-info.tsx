@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AvatarManager } from "@/components/perfil/avatar-manager";
+import { EmailModal } from "@/components/perfil/email-modal";
 import { PasswordModal } from "@/components/perfil/password-modal";
 
 export function UserInfo({
@@ -48,11 +49,19 @@ export function UserInfo({
           <div className="mt-4 border-t border-slate-100 pt-4 dark:border-slate-800">
             {method === "email" ? (
               <div className="space-y-3">
-                <PasswordModal
-                  onChanged={(nextMessage) => {
-                    setMessage(nextMessage);
-                  }}
-                />
+                <div className="flex flex-wrap gap-2">
+                  <PasswordModal
+                    onChanged={(nextMessage) => {
+                      setMessage(nextMessage);
+                    }}
+                  />
+                  <EmailModal
+                    currentEmail={email}
+                    onChanged={(nextMessage) => {
+                      setMessage(nextMessage);
+                    }}
+                  />
+                </div>
                 {message ? (
                   <p role="status" className="text-sm text-muted-foreground">
                     {message}

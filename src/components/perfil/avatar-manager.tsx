@@ -106,7 +106,7 @@ export function AvatarManager({
   }
 
   return (
-    <div className="flex w-full shrink-0 flex-col items-start gap-3 md:w-auto">
+    <div className="flex w-full flex-col items-center justify-center gap-3 text-center md:w-auto">
       <span className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-foreground/10 text-xl font-semibold ring-1 ring-foreground/10 md:h-24 md:w-24">
         {hasPhoto && !imageFailed ? (
           // OAuth and storage hosts are not a fixed image allow-list.
@@ -122,7 +122,7 @@ export function AvatarManager({
           <span aria-hidden="true">{initial}</span>
         )}
       </span>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap justify-center gap-2">
         <input
           ref={inputRef}
           type="file"

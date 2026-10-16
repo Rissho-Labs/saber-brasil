@@ -58,3 +58,42 @@ export async function changePassword(
 
   return { ok: true };
 }
+
+const changeEmailSchema = z.string().trim().email().max(254);
+
+export async function changeEmail(
+  email: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const parsed = changeEmailSchema.safeParse(email);
+  if (!parsed.success) {
+    return { ok: false, error: "Informe um e-mail válido." };
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data.user) {
+    return { ok: false, error: "Entre novamente para alterar o e-mail." };
+  }
+
+  const providers = (data.user.identities ?? []).map((identity) => identity.provider);
+  const hasEmailIdentity = providers.includes("email");
+  const googleOnly = providers.includes("google") && !hasEmailIdentity;
+  if (googleOnly) {
+    return { ok: false, error: "Contas que entram só com Google alteram o e-mail no Google." };
+  }
+
+  if (data.user.email?.toLowerCase() === parsed.data.toLowerCase()) {
+    return { ok: false, error: "Esse já é o e-mail desta conta." };
+  }
+
+  const { error: updateError } = await supabase.auth.updateUser({ email: parsed.data });
+  if (updateError) {
+    const message = updateError.message.toLowerCase();
+    if (message.includes("already") || message.includes("registered") || message.includes("exists")) {
+      return { ok: false, error: "Esse e-mail já está em uso." };
+    }
+    return { ok: false, error: "Não foi possível enviar a confirmação." };
+  }
+
+  return { ok: true };
+}

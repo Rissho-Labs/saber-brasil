@@ -51,7 +51,7 @@ export function PasswordModal({ onChanged }: { onChanged: (message: string) => v
 
   return (
     <>
-      <Button type="button" onClick={openDialog}>
+      <Button type="button" variant="outline" onClick={openDialog}>
         Alterar senha
       </Button>
       <dialog
