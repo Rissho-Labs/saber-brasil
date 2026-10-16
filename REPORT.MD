@@ -313,3 +313,11 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** The password dialog opened with the profile because Tailwind’s `flex` utility sets `display: flex` and overrides the browser rule that hides a closed `<dialog>`. The overlay now stays hidden unless it has the `open` attribute, which `showModal()` adds only after “Alterar senha” is clicked. Escape, backdrop click, and the centered panel are unchanged. Risk: this browser has no signed-in session, so the click was not repeated on `/perfil`.
 - **Compilation Status:** Validated with zero errors via `tsc --noEmit`.
+
+### [2026-10-16] — `SPRINT4-STEP3-PASSWORD-MODAL-SPACING`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/perfil/password-modal.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The button row under “Confirmar nova senha” now adds `pt-4` on top of the form’s `space-y-4`, so “Alterar senha” and “Fechar” sit farther from the last field. A plain `mt-*` class would lose to `space-y-4`.
+- **Compilation Status:** Class-only change.

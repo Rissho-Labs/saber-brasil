@@ -127,7 +127,7 @@ export function PasswordModal({ onChanged }: { onChanged: (message: string) => v
               {error}
             </p>
           ) : null}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 pt-4">
             <Button type="submit" disabled={pending}>
               {pending ? "Salvando..." : "Alterar senha"}
             </Button>
