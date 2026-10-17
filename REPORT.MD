@@ -387,3 +387,45 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** The avatar column is centered over its buttons. Email accounts get matching outline buttons for “Alterar senha” and “Alterar e-mail”. The email dialog calls `updateUser({ email })` and tells the person to confirm the message sent to the new address. Supabase’s email-change flow is that confirmation, not the signup 6-digit screen. “Contas conectadas” shows Google as connected or not. Linking uses `linkIdentity` and returns through `/auth/callback`. Unlinking is refused when Google is the only identity, on the button and on the server. Risk: manual linking stays off until it is enabled in the Supabase dashboard, and the callback URL must stay on the redirect allow-list. The signed-in account already has email and Google, so “Desconectar” was enabled and was not clicked. No email change was sent.
 - **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run build`.
+
+### [2026-10-17] — `INFRA-STEP1-VITEST-SETUP`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `vitest.config.ts` (CREATED)
+  - `src/tests/smoke.test.ts` (CREATED)
+  - `package.json` (MODIFIED)
+  - `package-lock.json` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Vitest `4.1.12` is installed as a devDependency. `5.0.5` was rejected: it requires `@types/node` `^22` and `npm install` stopped with `ERESOLVE` against this repo’s `@types/node` `^20`. `4.1.12` is the latest stable line that still accepts Node 20 types and runs on the local Node `22.15.1`. `vitest.config.ts` maps `@` to `./src` and includes `src/**/*.test.ts` and `src/**/*.spec.ts` in the Node environment. Scripts are `test` (`vitest run`) and `test:watch` (`vitest`). The smoke test asserts a truthy value and imports `safeNextPath` through `@/`, so the alias is exercised. Risk: Vite warns that a future native config loader will not load this ESM `vitest.config.ts` while `package.json` stays CommonJS. The suite passes with the current loader. Setting `"type": "module"` was not done because that changes the whole Next.js package.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 1 file and 1 test.
+
+### [2026-10-17] — `INFRA-STEP2-ZOD-EVALUATION-SCHEMA`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/schemas/politicalEvaluation.schema.ts` (CREATED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `politicalEvaluationSchema` is a `z.strictObject`: `politicianId` is trimmed text of 1–64 characters, `rating` is an integer from 1 to 5, `category` is `transparencia | projetos | gestao | geral`, `comment` is optional and when present is trimmed text of 10–1000 characters, and `isAnonymous` defaults to `false`. `PoliticalEvaluation` is `z.infer` of that schema. Trim runs before the length checks, so a whitespace-only id fails. Unknown keys such as `role` fail. Numeric strings and half-star ratings fail. Risk: `user_evaluations` stores ten competency scores on `profile_id`, not this single rating, category, comment, or anonymity flag. This schema is not wired to `POST /api/avaliacoes`. HTML encoding stays at render time; no sanitizer package was added.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. A direct parse trimmed the id and comment, defaulted `isAnonymous` to false, and rejected an extra `role`, a blank id, a `4.5` rating, and a string rating.
+
+### [2026-10-17] — `INFRA-STEP3-ZOD-SCHEMA-UNIT-TESTS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/schemas/politicalEvaluation.schema.test.ts` (CREATED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The schema tests import `politicalEvaluationSchema` through `@/`. They accept a full payload (trimmed id and comment, explicit `isAnonymous: true`) and a minimal payload (`isAnonymous` defaults to `false`). They reject ratings `0`, `6`, and `4.5`, blank or whitespace-only ids, comments under 10 or over 1000 characters after trim, a category outside `transparencia | projetos | gestao | geral`, and an extra `role`. Comments of exactly 10 and 1000 characters after trim pass. `TASKS.md` had no Vertical Slice line, so that item was added already checked. Risk: these tests cover the isolated DTO, not the ten-score `POST /api/avaliacoes` body.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 2 files and 13 tests, including `smoke.test.ts` and `politicalEvaluation.schema.test.ts`.
+
+### [2026-10-17] — `INFRA-CHECKPOINT-SLICE-VERTICAL`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `vitest.config.ts` (CREATED)
+  - `src/tests/smoke.test.ts` (CREATED)
+  - `src/schemas/politicalEvaluation.schema.ts` (CREATED)
+  - `src/schemas/politicalEvaluation.schema.test.ts` (CREATED)
+  - `package.json` (MODIFIED)
+  - `package-lock.json` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The vertical slice is checkpointed. `npx tsc --noEmit` exited 0 and `npm run test` passed 2 files and 13 tests. `REPORT.MD` already records the Vitest setup, the strict evaluation schema, and the unit-test results. `TASKS.md` marks “Vertical Slice setup and validation” as completed. Those files, plus `vitest.config.ts`, `src/tests/`, `src/schemas/`, `package.json`, and `package-lock.json`, are committed as `feat(infra): complete vertical slice with vitest and strict zod evaluation schema`. Risk: the schema still does not match the ten-score `user_evaluations` payload, and Vite still warns that a future native loader will not read the ESM config while `package.json` stays CommonJS.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 2 files and 13 tests.
