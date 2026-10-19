@@ -17,6 +17,23 @@
 - [x] Create 10-Question Questionnaire modal with pedagogical icons (`ℹ️`)
 - [x] Create Gem visual component (Diamond, Platinum, Gold, Silver, Bronze) for Top 10 Agendas
 
+## SPRINT 4: Auth session guard
+- [x] Session guard: `requireAuthSession` returns a sanitized user id or throws `UNAUTHORIZED`
+- [x] Backend authorization: POST `/api/avaliacoes` saves an evaluation only after that guard
+
+## SPRINT 5: API integration tests
+- [x] Vitest coverage for POST `/api/avaliacoes`: 401 missing session, 400 invalid payload, 201 insert, 200 update
+
+## SPRINT 6: Politician evaluation modal
+- [x] Politician Evaluation Modal UI: dialog with the politician header and ten scores validated by `politicalEvaluationSchema`
+- [x] Politician Evaluation Modal integration: mount on the profile page and submit to POST `/api/avaliacoes`
+
+## SPRINT 7: Profile metrics recalculation
+- [x] Automated profile metrics recalculation: `recalculate_profile_scores` updates `carisma_rating` and POST `/api/avaliacoes` calls it after a successful save
+
+## SPRINT 8: Global search page
+- [x] Option B (Global Search Page): `/busca` syncs `q` and `categoria`, with profile matches and the illustrative votings and publications catalog
+
 ## Vertical Slice setup and validation
 - [x] Vertical Slice setup and validation
 

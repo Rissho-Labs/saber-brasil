@@ -1,47 +1,12 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
 import { requestClientIp, verifyTurnstileToken } from "@/lib/auth/verify-turnstile";
+import { requireAuthSession, UnauthorizedError } from "@/lib/auth/session-guard";
 import { createClient } from "@/lib/supabase/server";
 import { saveUserEvaluation } from "@/lib/services/evaluations";
+import { politicalEvaluationSchema, type PoliticalEvaluation } from "@/schemas/politicalEvaluation.schema";
 import { CompetencyScores } from "@/types";
 
-const UUID_PATTERN =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-const STAR_SCORES = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5] as const;
-
-const starScoreSchema = z.union([
-  z.literal(STAR_SCORES[0]),
-  z.literal(STAR_SCORES[1]),
-  z.literal(STAR_SCORES[2]),
-  z.literal(STAR_SCORES[3]),
-  z.literal(STAR_SCORES[4]),
-  z.literal(STAR_SCORES[5]),
-  z.literal(STAR_SCORES[6]),
-  z.literal(STAR_SCORES[7]),
-  z.literal(STAR_SCORES[8]),
-]);
-
-const evaluationBodySchema = z.object({
-  profileId: z.string().regex(UUID_PATTERN),
-  scores: z.object({
-    posture: starScoreSchema,
-    decorum: starScoreSchema,
-    discursive_coherence: starScoreSchema,
-    articulation: starScoreSchema,
-    transparency: starScoreSchema,
-    accountability: starScoreSchema,
-    responsiveness: starScoreSchema,
-    ethical_conduct: starScoreSchema,
-    public_communication: starScoreSchema,
-    institutional_commitment: starScoreSchema,
-  }),
-  turnstileToken: z.string().trim().min(1).max(2048).nullable().optional(),
-});
-
-function toCompetencyScores(
-  scores: z.infer<typeof evaluationBodySchema>["scores"]
-): CompetencyScores {
+function toCompetencyScores(scores: PoliticalEvaluation["scores"]): CompetencyScores {
   const mapped: CompetencyScores = {
     posture: scores.posture,
     decorum: scores.decorum,
@@ -62,8 +27,14 @@ export async function POST(request: Request) {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
 
-    if (error || !data.user) {
-      return NextResponse.json({ error: "Autenticação obrigatória." }, { status: 401 });
+    let auth;
+    try {
+      auth = requireAuthSession(error ? null : data);
+    } catch (guardError) {
+      if (guardError instanceof UnauthorizedError) {
+        return NextResponse.json({ error: "Autenticação obrigatória." }, { status: 401 });
+      }
+      throw guardError;
     }
 
     let json: unknown;
@@ -73,7 +44,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Corpo JSON inválido." }, { status: 400 });
     }
 
-    const parsed = evaluationBodySchema.safeParse(json);
+    const parsed = politicalEvaluationSchema.safeParse(json);
     if (!parsed.success) {
       return NextResponse.json(
         { error: "Informe profileId e as 10 notas válidas." },
@@ -91,10 +62,28 @@ export async function POST(request: Request) {
 
     const result = await saveUserEvaluation(
       supabase,
-      data.user.id,
+      auth.userId,
       parsed.data.profileId,
       toCompetencyScores(parsed.data.scores)
     );
+
+    try {
+      const { error: scoreError } = await supabase.rpc("recalculate_profile_scores", {
+        target_profile_id: parsed.data.profileId,
+      });
+      if (scoreError) {
+        console.error("recalculate_profile_scores failed", {
+          profileId: parsed.data.profileId,
+          code: scoreError.code,
+          message: scoreError.message,
+        });
+      }
+    } catch (scoreError) {
+      console.error("recalculate_profile_scores failed", {
+        profileId: parsed.data.profileId,
+        message: scoreError instanceof Error ? scoreError.message : "unknown",
+      });
+    }
 
     return NextResponse.json(result, { status: result.updated ? 200 : 201 });
   } catch {

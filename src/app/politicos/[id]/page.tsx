@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { ProfileHeader } from "@/components/politicos/profile-header";
 import { MetricsSummary } from "@/components/politicos/metrics-summary";
-import { EvaluationModal } from "@/components/politicos/evaluation-modal";
+import { EvaluationPanel } from "@/components/evaluations/evaluation-panel";
 import { ProjectsList } from "@/components/politicos/projects-list";
 import { getPublicProfileById } from "@/lib/services/profiles";
 import { getProjectsByProfileId } from "@/lib/services/projects";
@@ -38,7 +38,14 @@ export default async function PoliticianDetailPage({ params }: PageProps) {
 
         <ProjectsList projects={projects} />
 
-        <EvaluationModal profileId={profile.id} />
+        <EvaluationPanel
+          politician={{
+            id: profile.id,
+            name: profile.name,
+            role: profile.current_role,
+            photoUrl: null,
+          }}
+        />
       </div>
     </main>
   );

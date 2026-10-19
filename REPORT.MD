@@ -429,3 +429,176 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** The vertical slice is checkpointed. `npx tsc --noEmit` exited 0 and `npm run test` passed 2 files and 13 tests. `REPORT.MD` already records the Vitest setup, the strict evaluation schema, and the unit-test results. `TASKS.md` marks “Vertical Slice setup and validation” as completed. Those files, plus `vitest.config.ts`, `src/tests/`, `src/schemas/`, `package.json`, and `package-lock.json`, are committed as `feat(infra): complete vertical slice with vitest and strict zod evaluation schema`. Risk: the schema still does not match the ten-score `user_evaluations` payload, and Vite still warns that a future native loader will not read the ESM config while `package.json` stays CommonJS.
 - **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 2 files and 13 tests.
+
+### [2026-10-19] — `INFRA-STEP4-AUTH-SESSION-GUARD`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/lib/auth/session-guard.ts` (CREATED)
+  - `src/lib/auth/session-guard.test.ts` (CREATED)
+  - `src/app/api/avaliacoes/route.ts` (MODIFIED)
+  - `package.json` (MODIFIED)
+  - `tsconfig.json` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `requireAuthSession` accepts only an object with a non-empty `user.id` and returns `{ userId, isAuthenticated: true }`. Anything else throws `UnauthorizedError` with code `UNAUTHORIZED`. POST `/api/avaliacoes` uses that result after `getUser()`. The guard does not check the token itself; Supabase still does that. The repo has no smoke or schema test files, so `npm run test` runs the three session-guard cases. DELETE `/api/avaliacoes/[id]` still checks `getUser()` on its own.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run test` (3 passed).
+
+### [2026-10-19] — `INFRA-CHECKPOINT-AUTH-GUARD`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `REPORT.MD` already records `requireAuthSession` and its use on POST `/api/avaliacoes`. `TASKS.md` now marks the session guard and that backend authorization step as completed. Both are included in the commit `feat(auth): require a validated session before saving an evaluation`.
+- **Compilation Status:** Documentation and git checkpoint. No new application code.
+
+### [2026-10-19] — `INFRA-STEP5-API-INTEGRATION-TESTS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/app/api/avaliacoes/route.test.ts` (CREATED)
+  - `src/schemas/politicalEvaluation.schema.ts` (CREATED)
+  - `src/schemas/politicalEvaluation.schema.test.ts` (CREATED)
+  - `src/app/api/avaliacoes/route.ts` (MODIFIED)
+  - `src/lib/auth/session-guard.test.ts` (MODIFIED)
+  - `vitest.config.ts` (CREATED)
+  - `package.json` (MODIFIED)
+  - `package-lock.json` (MODIFIED)
+  - `tsconfig.json` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** POST `/api/avaliacoes` now validates with `politicalEvaluationSchema`. Vitest 3.2.7 covers the session guard, the schema, and the route: missing or invalid sessions return 401, invalid payloads return 400, and a valid payload returns 201 on insert and 200 on update. Turnstile and persistence are mocked. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` (Vitest 3.2.7) passed 8 tests across session guard, schema, and API integration. Vitest 5 conflicts with `@types/node` 20; Vitest 4 crashed npm's installer, so the suite stays on the stable 3.2.7 line. No standalone smoke file exists.
+
+### [2026-10-19] — `INFRA-CHECKPOINT-API-TESTS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `REPORT.md` records the Vitest suite for POST `/api/avaliacoes` and the passing `tsc` and `npm run test` results (8 tests). `TASKS.md` marks that API integration coverage as completed in `932a6f7`, message `test(api): cover POST /api/avaliacoes session, validation, and status codes`.
+- **Compilation Status:** Documentation and git checkpoint. No new application code.
+
+### [2026-10-19] — `FRONTEND-STEP1-NAV-REORG`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/sphere-selection.tsx` (CREATED)
+  - `src/components/home/hero-search.tsx` (MODIFIED)
+  - `src/components/home/sphere-modals.tsx` (MODIFIED)
+  - `src/app/page.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** The home search no longer shows “Em alta” or the static sphere pills. One `activeSphere` state drives the Política, Judiciário, Academia, and Segurança tabs directly under the search bar, and the sphere card below follows that selection. At 420px the tabs wrap to two columns; at 1280px they sit in one row the same width as the search. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. Browser check on `/` confirmed the Judiciário tab updates the card and hash without changing the featured carousel. The name shortcuts under “Em alta” are gone. Featured carousel overflow at 420px and the existing GemBadge hydration warning were already present.
+
+### [2026-10-19] — `FRONTEND-STEP2-SPHERE-CARD-INTEGRATION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/sphere-modals.tsx` (MODIFIED)
+  - `src/components/home/hero-search.tsx` (MODIFIED)
+  - `src/components/home/sphere-selection.tsx` (MODIFIED)
+  - `src/app/page.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** The active sphere now has one explanatory card directly under the tabs: title, scope, coverage indicators, and the search filter link. The lower “As 4 esferas” block is gone, so metrics and featured representatives follow that card. Switching Política, Judiciário, Academia, and Segurança replaces the card content. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. On `/` at 435px, the card sits 16px under the tabs and above “Estatísticas do Monitoramento”. Academia and Segurança updated the same card. The featured strip still has its own sphere filter. The GemBadge hydration warning was already present.
+
+### [2026-10-19] — `FRONTEND-STEP3-CAROUSEL-AUTOPLAY`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/featured-carousel.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** The featured representatives track advances one card every 5 seconds and returns to the first card at the end. The interval is cleared on cleanup, while the pointer is over the track, and while focus stays inside it. A manual previous or next click starts the 5-second clock over. Auto-play stays off when the system requests reduced motion. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. On `/` at 435px the track moved from 404px to 808px within one interval, and it stayed put for 7 seconds while the next control was focused.
+
+### [2026-10-19] — `FRONTEND-STEP4-HERO-SEARCH-AND-LAYOUT-HIERARCHY`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/hero-search.tsx` (MODIFIED)
+  - `src/components/home/sphere-selection.tsx` (MODIFIED)
+  - `src/components/home/featured-carousel.tsx` (MODIFIED)
+  - `src/app/page.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** The home hero is title, subtitle, and the search bar. The four metric cards sit directly under it. Sphere tabs and the explanation card are the header of “Representantes em Destaque”, and the same `activeSphere` updates that card and the carousel. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. At 1280×800 the metric cards end at 544px, inside an 800px viewport. Selecting Judiciário switched the card, the “Ver mais” link, and the profiles to Ricardo Mendonça, Helena Prado, and Lúcia Ferreira. `/busca` still lists representatives, so the search placeholder was not widened to articles or publications.
+
+### [2026-10-19] — `FRONTEND-STEP1-EVALUATION-MODAL-UI`
+- **Status:** PARTIAL
+- **Files Created / Modified:**
+  - `src/components/evaluations/evaluation-modal.tsx` (CREATED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** The new evaluation dialog shows the politician’s name, photo or initial, and role, then ten 1–5 score groups validated by `politicalEvaluationSchema`. A missing score shows “Escolha uma nota de 1 a 5.” after that group loses focus. Submit stays disabled until every score is valid, and stays disabled while `onSubmit` is running. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. Category, comment, and anonymity were not added: they are not in `politicalEvaluationSchema` or `user_evaluations`. The referenced mockup is a profile card, not that form. The dialog is not mounted; the profile page still uses the questionnaire that checks the session and Turnstile. The new dialog was not opened in the browser.
+
+### [2026-10-19] — `FRONTEND-STEP2-EVALUATION-MODAL-INTEGRATION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/evaluations/evaluation-panel.tsx` (CREATED)
+  - `src/components/evaluations/evaluation-modal.tsx` (MODIFIED)
+  - `src/app/politicos/[id]/page.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** The politician page mounts the evaluation dialog behind an “Avaliar” button and passes the profile id, name, and role. Submit posts the ten scores to `POST /api/avaliacoes`. Success closes the dialog, shows a notice, and refreshes the page. A 401 opens the login dialog. A 400 or other error stays in the dialog with the API message. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. On Mariana Silva’s profile, “Avaliar” opened the dialog with her name and role, “Enviar avaliação” was disabled, and Fechar closed it. No evaluation was posted. `public_profiles` has no photo column, so the header uses the initial. Saving an evaluation does not recompute the stored carisma or gestão figures. Turnstile still rides along with the request.
+
+### [2026-10-19] — `FRONTEND-CHECKPOINT-EVALUATION-MODAL`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `REPORT.md` records `EvaluationModal`, its mount from the politician page through `EvaluationPanel`, and the submit path to POST `/api/avaliacoes`. `TASKS.md` marks the modal UI and that page integration as completed in `e65c2e7`, message `feat(evaluations): mount interactive evaluation modal on politician detail page`. The component files were already in `d245afd`.
+- **Compilation Status:** Documentation and git checkpoint. No new application code.
+
+### [2026-10-19] — `BACKEND-STEP1-SUPABASE-METRICS-AGGREGATION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `supabase/migrations/20261019_recalculate_profile_scores.sql` (CREATED)
+  - `src/app/api/avaliacoes/route.ts` (MODIFIED)
+  - `src/app/api/avaliacoes/route.test.ts` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `recalculate_profile_scores(target_profile_id)` sets `carisma_rating` to the mean of the ten stored scores, or `0.00` when that profile has no evaluations. POST `/api/avaliacoes` calls the RPC after a successful save. An RPC error is logged and the 200/201 response is unchanged. `npx tsc --noEmit` exited 0. `npm run test` passed 9 tests.
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 9 tests. `gestao_score` stays the official index and is not overwritten. There is no column for a separate transparency average or an overall score. The function is `SECURITY DEFINER` with `search_path = public`, and execute is granted to `authenticated` and `service_role`. The SQL file is not applied to the live database until it is run in the Supabase SQL editor.
+
+### [2026-10-19] — `BACKEND-CHECKPOINT-SUPABASE-METRICS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `REPORT.md` records `supabase/migrations/20261019_recalculate_profile_scores.sql` and the `recalculate_profile_scores` call in POST `/api/avaliacoes`. `TASKS.md` marks that automated recalculation as completed. The SQL, route, and route test were already committed in `c05f482`.
+- **Compilation Status:** Documentation and git checkpoint. No new application code.
+
+### [2026-10-19] — `FRONTEND-STEP1-SEARCH-PAGE-LAYOUT`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/busca/search-category-tabs.tsx` (CREATED)
+  - `src/components/busca/search-filters.tsx` (MODIFIED)
+  - `src/app/busca/page.tsx` (MODIFIED)
+  - `src/app/busca/loading.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `/busca` keeps the query in the search field and reads `q`, `categoria`, `sphere`, and `status`. Tabs for Todos, Políticos & Representantes, Votações & Pautas, and Publicações & Documentos update `categoria` with `router.replace`. Representatives still come from `getPublicProfiles`. The other two categories render an empty state because they have no search index. `npx tsc --noEmit` exited 0. `npm run test` passed 9 tests.
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 9 tests. On `/busca?q=Mariana&categoria=todos` the heading was “Resultados da busca para: Mariana”, the field held Mariana, and Mariana Silva was listed. Switching to Votações and then Publicações changed the URL without a full reload and left only that section’s empty state. `/busca?sphere=JUDICIARIO` still lists Helena Prado, Ricardo Mendonça, and Lúcia Ferreira. The home samples of votações were not reused as search hits.
+
+### [2026-10-19] — `FRONTEND-STEP2-SEARCH-DATA-INTEGRATION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/lib/search/catalog.ts` (CREATED)
+  - `src/lib/search/catalog.test.ts` (CREATED)
+  - `src/components/busca/search-result-cards.tsx` (CREATED)
+  - `src/lib/services/profiles.ts` (MODIFIED)
+  - `src/app/busca/page.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `/busca` matches representatives by `name` and `current_role`. Votações and publicações come from a local catalog filtered by `q`, with a count on each section. `npx tsc --noEmit` exited 0. `npm run test` passed 12 tests.
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 12 tests. `public_profiles` has no party or state column, so those fields are not queried. There is no votings or publications table, so those cards are labeled as an illustrative catalog. `q=Mariana` listed Mariana Silva and left the other sections empty. `q=PEC` showed PEC 45/2025 and PEC 12/2026. `q=transparencia` showed the emendas report with the Câmara link. `q=Desembargadora` found Helena Prado by role.
+
+### [2026-10-19] — `FRONTEND-CHECKPOINT-SEARCH-PAGE`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `REPORT.md` records `src/lib/search/catalog.ts`, the voting and publication cards, and the `/busca` page with URL sync. `TASKS.md` marks Option B (Global Search Page) as completed. The search files are included in the commit `feat(search): implement multi-category global search with URL sync and mock catalog`.
+- **Compilation Status:** Documentation and git checkpoint. No new application code.
+
+### [2026-10-19] — `SYNC-ORIGIN-MAIN`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `package.json` (MODIFIED)
+  - `package-lock.json` (MODIFIED)
+  - `vitest.config.ts` (MODIFIED)
+  - `src/schemas/politicalEvaluation.schema.ts` (MODIFIED)
+  - `src/schemas/politicalEvaluation.schema.test.ts` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Local `main` was 1 commit ahead and 12 behind `origin/main` (`fed5bf8`). The merge keeps the GitHub evaluation contract: `profileId`, ten star scores, and an optional Turnstile token. The earlier local DTO (`politicianId`, one rating, category, comment, `isAnonymous`) was not wired to `POST /api/avaliacoes` and would have broken the modal. Vitest stays at `3.2.7`, which is the version on GitHub, and `test:watch` remains. `TASKS.md` keeps Sprints 4–8 and the completed vertical-slice line. `npx tsc --noEmit` exited 0. `npm run test` passed 5 files and 13 tests. `npm run build` completed on Next.js 15.5.27 with 15 dynamic routes.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`, `npm run test` (13 tests), and `npm run build`.

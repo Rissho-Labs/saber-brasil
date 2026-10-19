@@ -1,114 +1,34 @@
 import { describe, expect, it } from "vitest";
-import {
-  politicalEvaluationCategories,
-  politicalEvaluationSchema,
-} from "@/schemas/politicalEvaluation.schema";
+import { politicalEvaluationSchema } from "./politicalEvaluation.schema";
 
-const base = {
-  politicianId: "profile-1",
-  rating: 3,
-  category: "geral" as const,
-};
+const profileId = "11111111-1111-1111-1111-111111111111";
+
+const scores = {
+  posture: 4,
+  decorum: 4,
+  discursive_coherence: 4,
+  articulation: 4,
+  transparency: 4,
+  accountability: 4,
+  responsiveness: 4,
+  ethical_conduct: 4,
+  public_communication: 4,
+  institutional_commitment: 4,
+} as const;
 
 describe("politicalEvaluationSchema", () => {
-  describe("valid payloads", () => {
-    it("accepts a complete payload and trims text", () => {
-      const parsed = politicalEvaluationSchema.parse({
-        politicianId: "  profile-1  ",
-        rating: 5,
-        category: "transparencia",
-        comment: "  comentario valido  ",
-        isAnonymous: true,
-      });
-
-      expect(parsed).toEqual({
-        politicianId: "profile-1",
-        rating: 5,
-        category: "transparencia",
-        comment: "comentario valido",
-        isAnonymous: true,
-      });
-    });
-
-    it("accepts a minimal payload and defaults isAnonymous to false", () => {
-      const parsed = politicalEvaluationSchema.parse({
-        politicianId: "profile-1",
-        rating: 1,
-        category: "projetos",
-      });
-
-      expect(parsed).toEqual({
-        politicianId: "profile-1",
-        rating: 1,
-        category: "projetos",
-        isAnonymous: false,
-      });
-      expect(parsed.comment).toBeUndefined();
-    });
+  it("accepts a complete evaluation", () => {
+    const parsed = politicalEvaluationSchema.safeParse({ profileId, scores });
+    expect(parsed.success).toBe(true);
   });
 
-  describe("rating boundaries", () => {
-    it.each([0, 6, 4.5])("rejects rating %s", (rating) => {
-      const result = politicalEvaluationSchema.safeParse({ ...base, rating });
-
-      expect(result.success).toBe(false);
-    });
-  });
-
-  describe("sanitization and length", () => {
-    it.each(["", "   "])("rejects politicianId %j", (politicianId) => {
-      const result = politicalEvaluationSchema.safeParse({ ...base, politicianId });
-
-      expect(result.success).toBe(false);
-    });
-
-    it("rejects comments shorter than 10 or longer than 1000 after trim", () => {
-      const short = ` ${"123456789"} `;
-      const long = ` ${"a".repeat(1001)} `;
-
-      expect(politicalEvaluationSchema.safeParse({ ...base, comment: short }).success).toBe(false);
-      expect(politicalEvaluationSchema.safeParse({ ...base, comment: long }).success).toBe(false);
-    });
-
-    it("accepts comments of 10 and 1000 characters after trim", () => {
-      const ten = politicalEvaluationSchema.parse({
-        ...base,
-        comment: ` ${"a".repeat(10)} `,
-      });
-      const thousand = politicalEvaluationSchema.parse({
-        ...base,
-        comment: ` ${"b".repeat(1000)} `,
-      });
-
-      expect(ten.comment).toHaveLength(10);
-      expect(thousand.comment).toHaveLength(1000);
-    });
-  });
-
-  describe("category enum", () => {
-    it("accepts every allowed category", () => {
-      for (const category of politicalEvaluationCategories) {
-        const result = politicalEvaluationSchema.safeParse({ ...base, category });
-
-        expect(result.success).toBe(true);
-      }
-    });
-
-    it("rejects a category outside the allowlist", () => {
-      const result = politicalEvaluationSchema.safeParse({ ...base, category: "admin" });
-
-      expect(result.success).toBe(false);
-    });
-  });
-
-  describe("strict object", () => {
-    it("rejects an injected extra field", () => {
-      const result = politicalEvaluationSchema.safeParse({
-        ...base,
-        role: "admin",
-      });
-
-      expect(result.success).toBe(false);
-    });
+  it("rejects a missing profile and a score outside 1–5", () => {
+    expect(politicalEvaluationSchema.safeParse({ scores }).success).toBe(false);
+    expect(
+      politicalEvaluationSchema.safeParse({
+        profileId,
+        scores: { ...scores, posture: 6 },
+      }).success,
+    ).toBe(false);
   });
 });
