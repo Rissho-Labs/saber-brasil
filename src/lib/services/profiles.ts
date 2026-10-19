@@ -50,7 +50,13 @@ export async function getPublicProfiles(query?: string): Promise<PublicProfile[]
     let request = supabase.from("public_profiles").select("*");
 
     if (query) {
-      request = request.ilike("name", `%${query}%`);
+      const token = query.replace(/[%_\\"]/g, "").trim();
+      if (!token) {
+        return [];
+      }
+
+      const pattern = `%${token}%`;
+      request = request.or(`name.ilike."${pattern}",current_role.ilike."${pattern}"`);
     }
 
     const { data, error } = await request;

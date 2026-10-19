@@ -516,3 +516,34 @@
   - `REPORT.md` (MODIFIED)
 - **Summary:** `REPORT.md` records `supabase/migrations/20261019_recalculate_profile_scores.sql` and the `recalculate_profile_scores` call in POST `/api/avaliacoes`. `TASKS.md` marks that automated recalculation as completed. The SQL, route, and route test were already committed in `c05f482`.
 - **Compilation Status:** Documentation and git checkpoint. No new application code.
+
+### [2026-10-19] — `FRONTEND-STEP1-SEARCH-PAGE-LAYOUT`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/busca/search-category-tabs.tsx` (CREATED)
+  - `src/components/busca/search-filters.tsx` (MODIFIED)
+  - `src/app/busca/page.tsx` (MODIFIED)
+  - `src/app/busca/loading.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `/busca` keeps the query in the search field and reads `q`, `categoria`, `sphere`, and `status`. Tabs for Todos, Políticos & Representantes, Votações & Pautas, and Publicações & Documentos update `categoria` with `router.replace`. Representatives still come from `getPublicProfiles`. The other two categories render an empty state because they have no search index. `npx tsc --noEmit` exited 0. `npm run test` passed 9 tests.
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 9 tests. On `/busca?q=Mariana&categoria=todos` the heading was “Resultados da busca para: Mariana”, the field held Mariana, and Mariana Silva was listed. Switching to Votações and then Publicações changed the URL without a full reload and left only that section’s empty state. `/busca?sphere=JUDICIARIO` still lists Helena Prado, Ricardo Mendonça, and Lúcia Ferreira. The home samples of votações were not reused as search hits.
+
+### [2026-10-19] — `FRONTEND-STEP2-SEARCH-DATA-INTEGRATION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/lib/search/catalog.ts` (CREATED)
+  - `src/lib/search/catalog.test.ts` (CREATED)
+  - `src/components/busca/search-result-cards.tsx` (CREATED)
+  - `src/lib/services/profiles.ts` (MODIFIED)
+  - `src/app/busca/page.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `/busca` matches representatives by `name` and `current_role`. Votações and publicações come from a local catalog filtered by `q`, with a count on each section. `npx tsc --noEmit` exited 0. `npm run test` passed 12 tests.
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 12 tests. `public_profiles` has no party or state column, so those fields are not queried. There is no votings or publications table, so those cards are labeled as an illustrative catalog. `q=Mariana` listed Mariana Silva and left the other sections empty. `q=PEC` showed PEC 45/2025 and PEC 12/2026. `q=transparencia` showed the emendas report with the Câmara link. `q=Desembargadora` found Helena Prado by role.
+
+### [2026-10-19] — `FRONTEND-CHECKPOINT-SEARCH-PAGE`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `REPORT.md` records `src/lib/search/catalog.ts`, the voting and publication cards, and the `/busca` page with URL sync. `TASKS.md` marks Option B (Global Search Page) as completed. The search files are included in the commit `feat(search): implement multi-category global search with URL sync and mock catalog`.
+- **Compilation Status:** Documentation and git checkpoint. No new application code.

@@ -31,5 +31,8 @@
 ## SPRINT 7: Profile metrics recalculation
 - [x] Automated profile metrics recalculation: `recalculate_profile_scores` updates `carisma_rating` and POST `/api/avaliacoes` calls it after a successful save
 
+## SPRINT 8: Global search page
+- [x] Option B (Global Search Page): `/busca` syncs `q` and `categoria`, with profile matches and the illustrative votings and publications catalog
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

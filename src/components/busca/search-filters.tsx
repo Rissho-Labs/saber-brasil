@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SearchCategory } from "@/components/busca/search-category-tabs";
 import { MandateStatus, SphereType } from "@/types";
 
 const SPHERE_OPTIONS: { value: SphereType; label: string }[] = [
@@ -20,10 +21,12 @@ export function SearchFilters({
   query,
   sphere,
   status,
+  category,
 }: {
   query: string;
   sphere?: SphereType;
   status?: MandateStatus;
+  category: SearchCategory;
 }) {
   return (
     <form
@@ -86,6 +89,7 @@ export function SearchFilters({
           ))}
         </select>
       </div>
+      <input type="hidden" name="categoria" value={category} />
       <Button type="submit" className="h-11">
         Buscar
       </Button>
