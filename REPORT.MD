@@ -490,3 +490,11 @@
   - `REPORT.md` (MODIFIED)
 - **Summary:** The politician page mounts the evaluation dialog behind an “Avaliar” button and passes the profile id, name, and role. Submit posts the ten scores to `POST /api/avaliacoes`. Success closes the dialog, shows a notice, and refreshes the page. A 401 opens the login dialog. A 400 or other error stays in the dialog with the API message. `npx tsc --noEmit` and `npm run test` passed (8 tests).
 - **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. On Mariana Silva’s profile, “Avaliar” opened the dialog with her name and role, “Enviar avaliação” was disabled, and Fechar closed it. No evaluation was posted. `public_profiles` has no photo column, so the header uses the initial. Saving an evaluation does not recompute the stored carisma or gestão figures. Turnstile still rides along with the request.
+
+### [2026-10-19] — `FRONTEND-CHECKPOINT-EVALUATION-MODAL`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `REPORT.md` records `EvaluationModal`, its mount from the politician page through `EvaluationPanel`, and the submit path to POST `/api/avaliacoes`. `TASKS.md` marks the modal UI and that page integration as completed in `e65c2e7`, message `feat(evaluations): mount interactive evaluation modal on politician detail page`. The component files were already in `d245afd`.
+- **Compilation Status:** Documentation and git checkpoint. No new application code.
