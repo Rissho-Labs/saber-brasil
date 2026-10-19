@@ -10,10 +10,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { sphereSlugForType } from "@/lib/esferas/catalog";
 
 export function SphereCard() {
   const { activeSphere } = useSphereSelection();
   const active = HOME_SPHERES.find((sphere) => sphere.type === activeSphere) ?? HOME_SPHERES[0];
+  const sphereHref = `/esferas/${sphereSlugForType(active.type)}`;
 
   return (
     <div
@@ -40,14 +42,20 @@ export function SphereCard() {
               ))}
             </ul>
           </div>
-          <p>
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
+            <Link
+              href={sphereHref}
+              className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+            >
+              Ver detalhes da esfera
+            </Link>
             <Link
               href={`/busca?sphere=${active.type}`}
-              className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+              className="text-sm font-medium text-muted-foreground underline-offset-4 hover:underline"
             >
               Filtrar busca em {active.label}
             </Link>
-          </p>
+          </div>
         </CardContent>
       </Card>
       <p className="sr-only" aria-live="polite">

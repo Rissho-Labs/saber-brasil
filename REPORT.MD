@@ -697,3 +697,32 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `REPORT.MD` records `/indicadores`, `indicator-card.tsx`, `indicator-compare.tsx`, and `catalog.ts`. `TASKS.md` marks Public Indicators Hub and Source Contrast as completed. Those files, plus the catalog test, the navbar link, and the home “Veja mais” link, are committed as `feat(indicadores): add public indicators hub with source contrast`.
 - **Compilation Status:** Documentation and git checkpoint. The typecheck and the 18 tests were already green in `FRONTEND-STEP1-PUBLIC-INDICATORS-HUB`.
+
+### [2026-10-19] — `FRONTEND-STEP1-DEDICATED-SPHERE-PAGES`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/app/esferas/[slug]/page.tsx` (CREATED)
+  - `src/lib/esferas/catalog.ts` (CREATED)
+  - `src/lib/esferas/catalog.test.ts` (CREATED)
+  - `src/lib/search/catalog.ts` (MODIFIED)
+  - `src/components/home/sphere-modals.tsx` (MODIFIED)
+  - `src/components/home/featured-carousel.tsx` (MODIFIED)
+  - `src/components/busca/search-filters.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `/esferas/[slug]` covers `politica`, `judiciario`, `academia`, and `seguranca`. An unknown slug returns 404. Each page shows the title, emoji badge, institutional description, and coverage list. Representatives come from `public_profiles` filtered by sphere and link to `/politicos/[id]`. Legislative catalog rows now carry a `sphere`; Política lists them and the other spheres show an empty tramitação state. Política highlights assiduidade and execução orçamentária; Segurança highlights queimadas and desmatamento. The home SphereCard and the featured “Ver detalhes da esfera” open `/esferas/[slug]`. Search filters keep the sphere select for `/busca` and add links to each sphere page. Risk: votings and indicators remain illustrative catalogs, not live House or INPE feeds.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 20 tests. `/esferas/politica` listed three political profiles, five tramitações, and two indicators. `/esferas/seguranca` listed security profiles, no tramitações, and queimadas/desmatamento. `/esferas/admin` returned 404.
+
+### [2026-10-19] — `FRONTEND-CHECKPOINT-DEDICATED-SPHERE-PAGES`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/app/esferas/[slug]/page.tsx` (CREATED)
+  - `src/lib/esferas/catalog.ts` (CREATED)
+  - `src/lib/esferas/catalog.test.ts` (CREATED)
+  - `src/lib/search/catalog.ts` (MODIFIED)
+  - `src/components/home/sphere-modals.tsx` (MODIFIED)
+  - `src/components/home/featured-carousel.tsx` (MODIFIED)
+  - `src/components/busca/search-filters.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `REPORT.MD` records `/esferas/[slug]`, `src/lib/esferas/catalog.ts`, and the updates to `sphere-modals.tsx` and search filters. `TASKS.md` marks Dedicated Sphere Pages (/esferas/[slug]) as completed. Those files are committed as `feat(esferas): add dedicated institutional sphere pages`.
+- **Compilation Status:** Documentation and git checkpoint. The typecheck and the 20 tests were already green in `FRONTEND-STEP1-DEDICATED-SPHERE-PAGES`.

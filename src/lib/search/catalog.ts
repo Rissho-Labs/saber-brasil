@@ -1,3 +1,5 @@
+import { SphereType } from "@/types";
+
 export const VOTING_STATUSES = [
   "Em Pauta",
   "Em Discussão",
@@ -49,6 +51,7 @@ export interface VotingSearchItem {
   status: VotingStatus;
   date: string;
   author: string;
+  sphere: SphereType;
   currentStage: LegislativeStage;
   stageDates: readonly [string | null, string | null, string | null, string | null];
   votes: VoteTally | null;
@@ -96,6 +99,7 @@ const VOTINGS: readonly VotingSearchItem[] = [
     status: "Em Pauta",
     date: "2026-10-08",
     author: "Dep. Ana Lima",
+    sphere: SphereType.POLITICA,
     currentStage: 1,
     stageDates: ["2026-10-08", null, null, null],
     votes: null,
@@ -111,6 +115,7 @@ const VOTINGS: readonly VotingSearchItem[] = [
     status: "Em Discussão",
     date: "2026-09-18",
     author: "Sen. Paulo Nunes",
+    sphere: SphereType.POLITICA,
     currentStage: 2,
     stageDates: ["2026-08-12", "2026-09-18", null, null],
     votes: null,
@@ -126,6 +131,7 @@ const VOTINGS: readonly VotingSearchItem[] = [
     status: "Em Votação",
     date: "2026-10-15",
     author: "Sen. Clara Monteiro",
+    sphere: SphereType.POLITICA,
     currentStage: 3,
     stageDates: ["2026-06-02", "2026-08-19", "2026-10-15", null],
     votes: { favor: 46, against: 22, abstentions: 5 },
@@ -145,6 +151,7 @@ const VOTINGS: readonly VotingSearchItem[] = [
     status: "Aprovadas",
     date: "2026-10-07",
     author: "Dep. Carlos Mendes",
+    sphere: SphereType.POLITICA,
     currentStage: 4,
     stageDates: ["2026-03-11", "2026-06-20", "2026-09-02", "2026-10-07"],
     votes: { favor: 312, against: 148, abstentions: 17 },
@@ -164,6 +171,7 @@ const VOTINGS: readonly VotingSearchItem[] = [
     status: "Revogadas",
     date: "2026-05-21",
     author: "Dep. Rita Gomes",
+    sphere: SphereType.POLITICA,
     currentStage: 4,
     stageDates: ["2025-11-04", "2026-02-16", "2026-04-09", "2026-05-21"],
     votes: { favor: 98, against: 241, abstentions: 11 },

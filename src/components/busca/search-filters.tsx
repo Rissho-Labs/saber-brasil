@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SearchCategory } from "@/components/busca/search-category-tabs";
+import { SPHERE_PAGES } from "@/lib/esferas/catalog";
 import { MandateStatus, SphereType } from "@/types";
 
 const SPHERE_OPTIONS: { value: SphereType; label: string }[] = [
@@ -29,6 +31,7 @@ export function SearchFilters({
   category: SearchCategory;
 }) {
   return (
+    <div className="space-y-3">
     <form
       action="/busca"
       method="GET"
@@ -94,5 +97,21 @@ export function SearchFilters({
         Buscar
       </Button>
     </form>
+    <nav aria-label="Páginas das esferas" className="flex flex-wrap gap-x-4 gap-y-2">
+      {SPHERE_PAGES.map((item) => (
+        <Link
+          key={item.slug}
+          href={`/esferas/${item.slug}`}
+          className={
+            sphere === item.type
+              ? "text-sm font-medium text-primary underline-offset-4 hover:underline"
+              : "text-sm text-muted-foreground underline-offset-4 hover:underline"
+          }
+        >
+          Ver detalhes da esfera {item.label}
+        </Link>
+      ))}
+    </nav>
+    </div>
   );
 }

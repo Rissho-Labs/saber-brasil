@@ -8,6 +8,7 @@ import { ProfileCard } from "@/components/ui/profile-card";
 import { SphereCard } from "@/components/home/sphere-modals";
 import { SphereTabs, useSphereSelection } from "@/components/home/sphere-selection";
 import { FeaturedProfilesBySphere } from "@/lib/services/profiles";
+import { sphereSlugForType } from "@/lib/esferas/catalog";
 import { SphereType } from "@/types";
 
 const AUTOPLAY_MS = 5000;
@@ -183,7 +184,7 @@ export function FeaturedCarousel({
           </p>
         </div>
         <Button asChild>
-          <Link href={`/busca?sphere=${activeSphere}`}>Ver mais</Link>
+          <Link href={`/esferas/${sphereSlugForType(activeSphere)}`}>Ver detalhes da esfera</Link>
         </Button>
       </div>
 

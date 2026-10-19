@@ -46,5 +46,8 @@
 ## SPRINT 11: Public Indicators Hub and Source Contrast
 - [x] Public Indicators Hub and Source Contrast
 
+## SPRINT 12: Dedicated Sphere Pages (/esferas/[slug])
+- [x] Dedicated Sphere Pages (/esferas/[slug])
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.
