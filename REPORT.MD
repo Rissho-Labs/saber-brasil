@@ -770,3 +770,24 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `REPORT.MD` records `score-gauge.tsx`, `topic-badges.tsx`, and the `dual-score-graphic.tsx` / `profile-header.tsx` updates from the profile visual refine. `TASKS.md` marks Profile Visual Refinement as completed. Application and docs are committed as `feat(politicos): add semicircular score gauge, topic badges, and status alerts`.
 - **Compilation Status:** Documentation and git checkpoint. The typecheck and the 20 tests were already green in `FRONTEND-STEP2-PROFILE-VISUAL-REFINE`.
+
+### [2026-10-19] — `FRONTEND-STEP3-VOTING-CROSS-PRIORITY`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/votacoes/priority-bar.tsx` (CREATED)
+  - `src/components/votacoes/voting-card.tsx` (MODIFIED)
+  - `src/lib/search/catalog.ts` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Voting cards on `/votacoes` show a Cross-Priority Index with dual 1–5 meters for Peso Institucional and Peso Cidadão, plus contextual labels (baixa/moderada/alta). When citizen weight ≥ 4 and institutional weight ≤ 2, an amber “Alto Índice de Divergência” alert appears in the card header. Catalog items carry optional `institutionalWeight` / `citizenWeight`; sample bills include divergence cases (PL 1234/2026, PL 88/2024) and aligned cases. Risk: weights remain illustrative mock data, not live parliament or community signals.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 20 tests.
+
+### [2026-10-19] — `FRONTEND-CHECKPOINT-VOTING-CROSS-PRIORITY`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/votacoes/priority-bar.tsx` (CREATED)
+  - `src/components/votacoes/voting-card.tsx` (MODIFIED)
+  - `src/lib/search/catalog.ts` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `REPORT.MD` records `priority-bar.tsx`, voting card header integration, and optional `institutionalWeight` / `citizenWeight` on the search catalog. `TASKS.md` marks Cross-Priority Index & Divergence Alert as completed. Application and docs are committed as `feat(votacoes): add cross-priority index and divergence alert to voting cards`.
+- **Compilation Status:** Documentation and git checkpoint. The typecheck and the 20 tests were already green in `FRONTEND-STEP3-VOTING-CROSS-PRIORITY`.

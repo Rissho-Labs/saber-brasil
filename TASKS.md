@@ -55,5 +55,8 @@
 ## SPRINT 14: Profile Visual Refinement
 - [x] Profile Visual Refinement
 
+## SPRINT 15: Cross-Priority Index & Divergence Alert
+- [x] Cross-Priority Index & Divergence Alert
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

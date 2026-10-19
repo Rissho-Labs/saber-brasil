@@ -43,6 +43,8 @@ export interface ProfileVotingPosition {
   vote: CastVote;
 }
 
+export type PriorityWeight = 1 | 2 | 3 | 4 | 5;
+
 export interface VotingSearchItem {
   id: string;
   code: string;
@@ -58,6 +60,10 @@ export interface VotingSearchItem {
   participants: readonly VotingParticipant[];
   sessionUrl: string;
   sessionHouse: "TV Câmara" | "TV Senado";
+  /** Illustrative parliament priority (1–5). Optional until live sources exist. */
+  institutionalWeight?: PriorityWeight;
+  /** Illustrative community priority (1–5). Optional until live sources exist. */
+  citizenWeight?: PriorityWeight;
 }
 
 export interface PublicationSearchItem {
@@ -106,6 +112,8 @@ const VOTINGS: readonly VotingSearchItem[] = [
     participants: [],
     sessionUrl: TV_CAMARA,
     sessionHouse: "TV Câmara",
+    institutionalWeight: 2,
+    citizenWeight: 5,
   },
   {
     id: "voting-pec-12-2026",
@@ -122,6 +130,8 @@ const VOTINGS: readonly VotingSearchItem[] = [
     participants: [],
     sessionUrl: TV_SENADO,
     sessionHouse: "TV Senado",
+    institutionalWeight: 4,
+    citizenWeight: 4,
   },
   {
     id: "voting-pec-3-2026",
@@ -142,6 +152,8 @@ const VOTINGS: readonly VotingSearchItem[] = [
     ],
     sessionUrl: TV_SENADO,
     sessionHouse: "TV Senado",
+    institutionalWeight: 3,
+    citizenWeight: 3,
   },
   {
     id: "voting-pec-45-2025",
@@ -162,6 +174,8 @@ const VOTINGS: readonly VotingSearchItem[] = [
     ],
     sessionUrl: TV_CAMARA,
     sessionHouse: "TV Câmara",
+    institutionalWeight: 5,
+    citizenWeight: 2,
   },
   {
     id: "voting-pl-88-2024",
@@ -182,6 +196,8 @@ const VOTINGS: readonly VotingSearchItem[] = [
     ],
     sessionUrl: TV_CAMARA,
     sessionHouse: "TV Câmara",
+    institutionalWeight: 1,
+    citizenWeight: 4,
   },
 ];
 

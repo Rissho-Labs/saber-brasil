@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { VotingSearchItem, VoteTally } from "@/lib/search/catalog";
+import { DivergenceAlert, PriorityBar } from "@/components/votacoes/priority-bar";
 import { ProgressTimeline } from "@/components/votacoes/progress-timeline";
 import { VoterDisclosure } from "@/components/votacoes/voter-disclosure";
 
@@ -63,6 +64,11 @@ function VoteBreakdown({ votes }: { votes: VoteTally | null }) {
 }
 
 export function VotingCard({ item }: { item: VotingSearchItem }) {
+  const institutionalWeight = item.institutionalWeight;
+  const citizenWeight = item.citizenWeight;
+  const hasPriorityWeights =
+    institutionalWeight !== undefined && citizenWeight !== undefined;
+
   return (
     <Card>
       <CardHeader className="gap-2 p-4 pb-2">
@@ -71,6 +77,18 @@ export function VotingCard({ item }: { item: VotingSearchItem }) {
           <Badge>{item.status}</Badge>
         </div>
         <p className="text-sm font-medium text-foreground">{item.title}</p>
+        {hasPriorityWeights ? (
+          <div className="space-y-2 pt-1">
+            <DivergenceAlert
+              institutionalWeight={institutionalWeight}
+              citizenWeight={citizenWeight}
+            />
+            <PriorityBar
+              institutionalWeight={institutionalWeight}
+              citizenWeight={citizenWeight}
+            />
+          </div>
+        ) : null}
       </CardHeader>
       <CardContent className="space-y-4 p-4 pt-0">
         <p className="text-sm text-muted-foreground">{item.description}</p>
