@@ -735,3 +735,13 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** The home hero uses a deep navy mesh with green and gold wash blobs plus SVG waves. Motion runs only when `prefers-reduced-motion` is not set to reduce. The search shell has backdrop blur, a light border, and an emerald focus ring. Under the form, chips for Política, Judiciário, Academia, and Segurança open `/esferas/[slug]`. Headline and support copy stay white or light slate for contrast on the navy field. Risk: the mesh is CSS/SVG only; it does not play `VIDEO_HOME_v3.mp4`, so the motion is an approximation of that reference.
 - **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 20 tests. The home hero showed SABER Brasil, the search field, and the four sphere chips. `/esferas/politica` opened from the Política route. At 390px body scroll width matched the viewport.
+
+### [2026-10-19] — `FRONTEND-CHECKPOINT-HERO-VISUAL`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/hero-search.tsx` (MODIFIED)
+  - `src/app/globals.css` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `REPORT.MD` records the animated navy mesh background and the four sphere chips. `TASKS.md` marks Hero Section Visual Refinement as completed. The application files were already on `main` as `8599b2e` (`feat(home): refine hero mesh background and sphere chips`). This checkpoint only adds the task mark and the report entry so the docs catch up without rewriting that commit.
+- **Compilation Status:** Documentation and git checkpoint. The typecheck and the 20 tests were already green in `FRONTEND-STEP1-HERO-VISUAL-REFINE`.
