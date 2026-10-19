@@ -21,5 +21,8 @@
 - [x] Session guard: `requireAuthSession` returns a sanitized user id or throws `UNAUTHORIZED`
 - [x] Backend authorization: POST `/api/avaliacoes` saves an evaluation only after that guard
 
+## SPRINT 5: API integration tests
+- [x] Vitest coverage for POST `/api/avaliacoes`: 401 missing session, 400 invalid payload, 201 insert, 200 update
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

@@ -1,16 +1,14 @@
-import assert from "node:assert/strict";
-import { describe, it } from "node:test";
-import { requireAuthSession, UnauthorizedError } from "./session-guard.ts";
+import { describe, expect, it } from "vitest";
+import { requireAuthSession, UnauthorizedError } from "./session-guard";
 
 function expectUnauthorized(session: unknown) {
-  assert.throws(
-    () => requireAuthSession(session),
-    (error: unknown) => {
-      assert.ok(error instanceof UnauthorizedError);
-      assert.equal(error.code, "UNAUTHORIZED");
-      return true;
-    },
-  );
+  expect(() => requireAuthSession(session)).toThrow(UnauthorizedError);
+
+  try {
+    requireAuthSession(session);
+  } catch (error) {
+    expect(error).toMatchObject({ code: "UNAUTHORIZED" });
+  }
 }
 
 describe("requireAuthSession", () => {
@@ -23,7 +21,7 @@ describe("requireAuthSession", () => {
       },
     });
 
-    assert.deepEqual(result, {
+    expect(result).toEqual({
       userId: "11111111-1111-1111-1111-111111111111",
       isAuthenticated: true,
     });
