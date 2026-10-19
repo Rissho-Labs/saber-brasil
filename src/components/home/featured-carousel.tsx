@@ -5,17 +5,12 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileCard } from "@/components/ui/profile-card";
+import { SphereCard } from "@/components/home/sphere-modals";
+import { SphereTabs, useSphereSelection } from "@/components/home/sphere-selection";
 import { FeaturedProfilesBySphere } from "@/lib/services/profiles";
 import { SphereType } from "@/types";
 
 const AUTOPLAY_MS = 5000;
-
-const SPHERES: { type: SphereType; label: string; emoji: string }[] = [
-  { type: SphereType.POLITICA, label: "Política", emoji: "🏛️" },
-  { type: SphereType.JUDICIARIO, label: "Judiciário", emoji: "⚖️" },
-  { type: SphereType.ACADEMIA, label: "Academia", emoji: "🎓" },
-  { type: SphereType.SEGURANCA, label: "Segurança", emoji: "🛡️" },
-];
 
 function FeaturedTrack({ profiles }: { profiles: FeaturedProfilesBySphere[SphereType] }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -173,9 +168,8 @@ export function FeaturedCarousel({
   profilesBySphere: FeaturedProfilesBySphere;
 }) {
   const baseId = useId();
-  const [sphere, setSphere] = useState<SphereType>(SphereType.POLITICA);
-  const active = SPHERES.find((item) => item.type === sphere) ?? SPHERES[0];
-  const profiles = profilesBySphere[active.type];
+  const { activeSphere } = useSphereSelection();
+  const profiles = profilesBySphere[activeSphere];
 
   return (
     <section aria-labelledby={`${baseId}-heading`} className="space-y-4">
@@ -189,45 +183,16 @@ export function FeaturedCarousel({
           </p>
         </div>
         <Button asChild>
-          <Link href={`/busca?sphere=${active.type}`}>Ver mais</Link>
+          <Link href={`/busca?sphere=${activeSphere}`}>Ver mais</Link>
         </Button>
       </div>
 
-      <div role="tablist" aria-label="Esfera dos destaques" className="flex flex-wrap gap-2">
-        {SPHERES.map((item) => {
-          const selected = item.type === active.type;
-          return (
-            <button
-              key={item.type}
-              type="button"
-              role="tab"
-              id={`${baseId}-tab-${item.type}`}
-              aria-selected={selected}
-              aria-controls={`${baseId}-panel`}
-              tabIndex={selected ? 0 : -1}
-              className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                selected
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-background text-foreground hover:bg-muted"
-              }`}
-              onClick={() => setSphere(item.type)}
-            >
-              <span aria-hidden="true">{item.emoji}</span>
-              {item.label}
-            </button>
-          );
-        })}
+      <div className="space-y-4">
+        <SphereTabs />
+        <SphereCard />
       </div>
 
-      <div
-        role="tabpanel"
-        id={`${baseId}-panel`}
-        aria-labelledby={`${baseId}-tab-${active.type}`}
-        tabIndex={0}
-        className="rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        <FeaturedTrack key={active.type} profiles={profiles} />
-      </div>
+      <FeaturedTrack key={activeSphere} profiles={profiles} />
     </section>
   );
 }

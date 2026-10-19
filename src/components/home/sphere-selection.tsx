@@ -151,7 +151,7 @@ export function SphereTabs() {
     <div
       role="tablist"
       aria-label="Esferas de cobertura"
-      className="mx-auto grid w-full max-w-2xl grid-cols-2 gap-1 rounded-xl border border-border bg-background p-1 shadow-sm sm:grid-cols-4"
+      className="grid w-full grid-cols-2 gap-1 rounded-xl border border-border bg-background p-1 shadow-sm sm:grid-cols-4"
       onKeyDown={onTabListKeyDown}
     >
       {HOME_SPHERES.map((sphere, index) => {

@@ -461,3 +461,32 @@
   - `REPORT.md` (MODIFIED)
 - **Summary:** The featured representatives track advances one card every 5 seconds and returns to the first card at the end. The interval is cleared on cleanup, while the pointer is over the track, and while focus stays inside it. A manual previous or next click starts the 5-second clock over. Auto-play stays off when the system requests reduced motion. `npx tsc --noEmit` and `npm run test` passed (8 tests).
 - **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. On `/` at 435px the track moved from 404px to 808px within one interval, and it stayed put for 7 seconds while the next control was focused.
+
+### [2026-10-19] — `FRONTEND-STEP4-HERO-SEARCH-AND-LAYOUT-HIERARCHY`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/hero-search.tsx` (MODIFIED)
+  - `src/components/home/sphere-selection.tsx` (MODIFIED)
+  - `src/components/home/featured-carousel.tsx` (MODIFIED)
+  - `src/app/page.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** The home hero is title, subtitle, and the search bar. The four metric cards sit directly under it. Sphere tabs and the explanation card are the header of “Representantes em Destaque”, and the same `activeSphere` updates that card and the carousel. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. At 1280×800 the metric cards end at 544px, inside an 800px viewport. Selecting Judiciário switched the card, the “Ver mais” link, and the profiles to Ricardo Mendonça, Helena Prado, and Lúcia Ferreira. `/busca` still lists representatives, so the search placeholder was not widened to articles or publications.
+
+### [2026-10-19] — `FRONTEND-STEP1-EVALUATION-MODAL-UI`
+- **Status:** PARTIAL
+- **Files Created / Modified:**
+  - `src/components/evaluations/evaluation-modal.tsx` (CREATED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** The new evaluation dialog shows the politician’s name, photo or initial, and role, then ten 1–5 score groups validated by `politicalEvaluationSchema`. A missing score shows “Escolha uma nota de 1 a 5.” after that group loses focus. Submit stays disabled until every score is valid, and stays disabled while `onSubmit` is running. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. Category, comment, and anonymity were not added: they are not in `politicalEvaluationSchema` or `user_evaluations`. The referenced mockup is a profile card, not that form. The dialog is not mounted; the profile page still uses the questionnaire that checks the session and Turnstile. The new dialog was not opened in the browser.
+
+### [2026-10-19] — `FRONTEND-STEP2-EVALUATION-MODAL-INTEGRATION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/evaluations/evaluation-panel.tsx` (CREATED)
+  - `src/components/evaluations/evaluation-modal.tsx` (MODIFIED)
+  - `src/app/politicos/[id]/page.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** The politician page mounts the evaluation dialog behind an “Avaliar” button and passes the profile id, name, and role. Submit posts the ten scores to `POST /api/avaliacoes`. Success closes the dialog, shows a notice, and refreshes the page. A 401 opens the login dialog. A 400 or other error stays in the dialog with the API message. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. On Mariana Silva’s profile, “Avaliar” opened the dialog with her name and role, “Enviar avaliação” was disabled, and Fechar closed it. No evaluation was posted. `public_profiles` has no photo column, so the header uses the initial. Saving an evaluation does not recompute the stored carisma or gestão figures. Turnstile still rides along with the request.

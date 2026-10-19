@@ -10,7 +10,7 @@ export default function HomePage() {
       <main className="min-h-screen bg-background">
         <HeroSearch />
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+        <div className="mx-auto max-w-6xl space-y-12 px-4 pb-10 pt-8 sm:px-6 lg:px-8">
           <KPIStats />
 
           <FeaturedPoliticians />
