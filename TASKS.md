@@ -24,5 +24,9 @@
 ## SPRINT 5: API integration tests
 - [x] Vitest coverage for POST `/api/avaliacoes`: 401 missing session, 400 invalid payload, 201 insert, 200 update
 
+## SPRINT 6: Politician evaluation modal
+- [x] Politician Evaluation Modal UI: dialog with the politician header and ten scores validated by `politicalEvaluationSchema`
+- [x] Politician Evaluation Modal integration: mount on the profile page and submit to POST `/api/avaliacoes`
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.
