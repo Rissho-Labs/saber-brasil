@@ -1,5 +1,4 @@
 import { HeroSearch } from "@/components/home/hero-search";
-import { SphereModals } from "@/components/home/sphere-modals";
 import { SphereSelectionProvider } from "@/components/home/sphere-selection";
 import { KPIStats } from "@/components/home/kpi-stats";
 import { FeaturedPoliticians } from "@/components/home/featured-politicians";
@@ -12,8 +11,6 @@ export default function HomePage() {
         <HeroSearch />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
-          <SphereModals />
-
           <KPIStats />
 
           <FeaturedPoliticians />

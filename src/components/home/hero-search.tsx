@@ -1,5 +1,6 @@
 import { Search } from "lucide-react";
 import { SphereTabs } from "@/components/home/sphere-selection";
+import { SphereCard } from "@/components/home/sphere-modals";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -31,7 +32,10 @@ export function HeroSearch() {
           </Button>
         </form>
 
-        <SphereTabs />
+        <div className="mx-auto w-full max-w-2xl space-y-4">
+          <SphereTabs />
+          <SphereCard />
+        </div>
       </div>
     </section>
   );

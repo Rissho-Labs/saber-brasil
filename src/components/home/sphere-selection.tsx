@@ -88,9 +88,6 @@ export function SphereSelectionProvider({ children }: { children: ReactNode }) {
       }
 
       setActiveSphere(match.type);
-      window.requestAnimationFrame(() => {
-        document.getElementById(match.anchor)?.scrollIntoView({ block: "nearest" });
-      });
     }
 
     syncFromHash();

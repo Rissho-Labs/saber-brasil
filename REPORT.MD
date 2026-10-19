@@ -442,3 +442,14 @@
   - `REPORT.md` (MODIFIED)
 - **Summary:** The home search no longer shows “Em alta” or the static sphere pills. One `activeSphere` state drives the Política, Judiciário, Academia, and Segurança tabs directly under the search bar, and the sphere card below follows that selection. At 420px the tabs wrap to two columns; at 1280px they sit in one row the same width as the search. `npx tsc --noEmit` and `npm run test` passed (8 tests).
 - **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. Browser check on `/` confirmed the Judiciário tab updates the card and hash without changing the featured carousel. The name shortcuts under “Em alta” are gone. Featured carousel overflow at 420px and the existing GemBadge hydration warning were already present.
+
+### [2026-10-19] — `FRONTEND-STEP2-SPHERE-CARD-INTEGRATION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/sphere-modals.tsx` (MODIFIED)
+  - `src/components/home/hero-search.tsx` (MODIFIED)
+  - `src/components/home/sphere-selection.tsx` (MODIFIED)
+  - `src/app/page.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** The active sphere now has one explanatory card directly under the tabs: title, scope, coverage indicators, and the search filter link. The lower “As 4 esferas” block is gone, so metrics and featured representatives follow that card. Switching Política, Judiciário, Academia, and Segurança replaces the card content. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. On `/` at 435px, the card sits 16px under the tabs and above “Estatísticas do Monitoramento”. Academia and Segurança updated the same card. The featured strip still has its own sphere filter. The GemBadge hydration warning was already present.
