@@ -407,3 +407,27 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `REPORT.MD` already records `requireAuthSession` and its use on POST `/api/avaliacoes`. `TASKS.md` now marks the session guard and that backend authorization step as completed. Both are included in the commit `feat(auth): require a validated session before saving an evaluation`.
 - **Compilation Status:** Documentation and git checkpoint. No new application code.
+
+### [2026-10-19] — `INFRA-STEP5-API-INTEGRATION-TESTS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/app/api/avaliacoes/route.test.ts` (CREATED)
+  - `src/schemas/politicalEvaluation.schema.ts` (CREATED)
+  - `src/schemas/politicalEvaluation.schema.test.ts` (CREATED)
+  - `src/app/api/avaliacoes/route.ts` (MODIFIED)
+  - `src/lib/auth/session-guard.test.ts` (MODIFIED)
+  - `vitest.config.ts` (CREATED)
+  - `package.json` (MODIFIED)
+  - `package-lock.json` (MODIFIED)
+  - `tsconfig.json` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** POST `/api/avaliacoes` now validates with `politicalEvaluationSchema`. Vitest 3.2.7 covers the session guard, the schema, and the route: missing or invalid sessions return 401, invalid payloads return 400, and a valid payload returns 201 on insert and 200 on update. Turnstile and persistence are mocked. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` (Vitest 3.2.7) passed 8 tests across session guard, schema, and API integration. Vitest 5 conflicts with `@types/node` 20; Vitest 4 crashed npm's installer, so the suite stays on the stable 3.2.7 line. No standalone smoke file exists.
+
+### [2026-10-19] — `INFRA-CHECKPOINT-API-TESTS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `REPORT.md` records the Vitest suite for POST `/api/avaliacoes` and the passing `tsc` and `npm run test` results (8 tests). `TASKS.md` marks that API integration coverage as completed in `932a6f7`, message `test(api): cover POST /api/avaliacoes session, validation, and status codes`.
+- **Compilation Status:** Documentation and git checkpoint. No new application code.
