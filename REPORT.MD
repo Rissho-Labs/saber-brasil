@@ -431,3 +431,14 @@
   - `REPORT.md` (MODIFIED)
 - **Summary:** `REPORT.md` records the Vitest suite for POST `/api/avaliacoes` and the passing `tsc` and `npm run test` results (8 tests). `TASKS.md` marks that API integration coverage as completed in `932a6f7`, message `test(api): cover POST /api/avaliacoes session, validation, and status codes`.
 - **Compilation Status:** Documentation and git checkpoint. No new application code.
+
+### [2026-10-19] — `FRONTEND-STEP1-NAV-REORG`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/sphere-selection.tsx` (CREATED)
+  - `src/components/home/hero-search.tsx` (MODIFIED)
+  - `src/components/home/sphere-modals.tsx` (MODIFIED)
+  - `src/app/page.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** The home search no longer shows “Em alta” or the static sphere pills. One `activeSphere` state drives the Política, Judiciário, Academia, and Segurança tabs directly under the search bar, and the sphere card below follows that selection. At 420px the tabs wrap to two columns; at 1280px they sit in one row the same width as the search. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. Browser check on `/` confirmed the Judiciário tab updates the card and hash without changing the featured carousel. The name shortcuts under “Em alta” are gone. Featured carousel overflow at 420px and the existing GemBadge hydration warning were already present.

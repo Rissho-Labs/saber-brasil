@@ -1,20 +1,7 @@
-import Link from "next/link";
 import { Search } from "lucide-react";
+import { SphereTabs } from "@/components/home/sphere-selection";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
-const sphereAnchors = [
-  { label: "Política", href: "#political" },
-  { label: "Judiciário", href: "#judiciary" },
-  { label: "Academia", href: "#academia" },
-  { label: "Segurança", href: "#security" },
-] as const;
-
-const quickFilters = [
-  { label: "Mariana Silva", href: "/busca?q=Mariana" },
-  { label: "Carlos Eduardo", href: "/busca?q=Carlos" },
-  { label: "Ana Beatriz", href: "/busca?q=Ana" },
-] as const;
 
 export function HeroSearch() {
   return (
@@ -44,27 +31,7 @@ export function HeroSearch() {
           </Button>
         </form>
 
-        <nav aria-label="Abrir esfera" className="flex flex-wrap items-center justify-center gap-2 pt-2">
-          {sphereAnchors.map((sphere) => (
-            <a
-              key={sphere.href}
-              href={sphere.href}
-              className="inline-flex items-center rounded-full border border-border bg-background px-3 py-1 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              {sphere.label}
-            </a>
-          ))}
-        </nav>
-
-        {/* Filtros Rápido em Botões Acessíveis */}
-        <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
-          <span className="text-xs text-muted-foreground">Em alta:</span>
-          {quickFilters.map((filter) => (
-            <Button key={filter.href} variant="outline" size="xs" className="rounded-full" asChild>
-              <Link href={filter.href}>{filter.label}</Link>
-            </Button>
-          ))}
-        </div>
+        <SphereTabs />
       </div>
     </section>
   );
