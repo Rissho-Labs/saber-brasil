@@ -33,7 +33,12 @@ export async function Navbar() {
             </span>
           </span>
         </Link>
-        <NavbarSession name={name} email={email} avatarUrl={avatarUrl} />
+        <div className="flex items-center gap-3">
+          <Link href="/votacoes" className="text-sm font-medium text-foreground hover:underline">
+            Votações
+          </Link>
+          <NavbarSession name={name} email={email} avatarUrl={avatarUrl} />
+        </div>
       </div>
     </header>
   );

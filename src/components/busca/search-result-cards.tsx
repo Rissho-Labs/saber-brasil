@@ -11,10 +11,15 @@ function formatDate(isoDate: string): string {
   return `${day}/${month}/${year}`;
 }
 
-const VOTING_BADGE: Record<VotingSearchItem["status"], "default" | "secondary" | "outline"> = {
-  Aprovado: "default",
-  "Em pauta": "secondary",
-  "Em tramitação": "outline",
+const VOTING_BADGE: Record<
+  VotingSearchItem["status"],
+  "default" | "secondary" | "outline" | "destructive"
+> = {
+  "Em Pauta": "secondary",
+  "Em Discussão": "outline",
+  "Em Votação": "secondary",
+  Aprovadas: "default",
+  Revogadas: "destructive",
 };
 
 export function VotingResultCard({ item }: { item: VotingSearchItem }) {

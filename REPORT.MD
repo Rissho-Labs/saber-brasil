@@ -602,3 +602,33 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** Local `main` was 1 commit ahead and 12 behind `origin/main` (`fed5bf8`). The merge keeps the GitHub evaluation contract: `profileId`, ten star scores, and an optional Turnstile token. The earlier local DTO (`politicianId`, one rating, category, comment, `isAnonymous`) was not wired to `POST /api/avaliacoes` and would have broken the modal. Vitest stays at `3.2.7`, which is the version on GitHub, and `test:watch` remains. `TASKS.md` keeps Sprints 4–8 and the completed vertical-slice line. `npx tsc --noEmit` exited 0. `npm run test` passed 5 files and 13 tests. `npm run build` completed on Next.js 15.5.27 with 15 dynamic routes.
 - **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`, `npm run test` (13 tests), and `npm run build`.
+
+### [2026-10-19] — `FRONTEND-STEP1-NEWS-VOTINGS-HUB`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/app/votacoes/page.tsx` (CREATED)
+  - `src/components/votacoes/progress-timeline.tsx` (CREATED)
+  - `src/components/votacoes/voting-card.tsx` (CREATED)
+  - `src/lib/search/catalog.ts` (MODIFIED)
+  - `src/lib/search/catalog.test.ts` (MODIFIED)
+  - `src/components/busca/search-result-cards.tsx` (MODIFIED)
+  - `src/components/navbar.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `/votacoes` lists the same illustrative catalog used by `/busca`, now with five items and the statuses Em Pauta, Em Discussão, Em Votação, Aprovadas, and Revogadas. The status query is checked with Zod; an unknown value shows every item. Each card shows the code, title, summary, rapporteur, a four-step timeline with the current stage and dates, and a favor/against/abstention bar when a tally exists. Items still in committee or floor debate say the vote has not started. Session links go to `https://www.camara.leg.br/tv` or `https://www.senado.leg.br/tv`. The navbar links to Votações. Risk: the tallies and dates are catalog data, not a live Câmara or Senado feed. `PEC 45/2019` was not used; the existing illustrative code remains `PEC 45/2025`.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 5 files and 14 tests. `/votacoes` listed 5 tramitações. `?status=Aprovadas` kept PEC 45/2025 with 312 votes a favor. `?status=Em Votação` kept PEC 3/2026. `?status=admin` kept Todas and the 5 items. `/busca?categoria=votacoes&q=pec 45` still listed PEC 45/2025. At 390px the page scroll width matched the viewport.
+
+### [2026-10-19] — `FRONTEND-CHECKPOINT-NEWS-VOTINGS-HUB`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/app/votacoes/page.tsx` (CREATED)
+  - `src/components/votacoes/progress-timeline.tsx` (CREATED)
+  - `src/components/votacoes/voting-card.tsx` (CREATED)
+  - `src/lib/search/catalog.ts` (MODIFIED)
+  - `src/lib/search/catalog.test.ts` (MODIFIED)
+  - `src/components/busca/search-result-cards.tsx` (MODIFIED)
+  - `src/components/navbar.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `REPORT.MD` records `/votacoes`, `progress-timeline.tsx`, and `voting-card.tsx`. `TASKS.md` marks Legislative Hub & Voting Timeline as completed. Those files, plus the catalog, the search card, and the navbar link, are committed as `feat(votacoes): add legislative hub with timeline and vote breakdown`.
+- **Compilation Status:** Documentation and git checkpoint. The typecheck and the 14 tests were already green in `FRONTEND-STEP1-NEWS-VOTINGS-HUB`.

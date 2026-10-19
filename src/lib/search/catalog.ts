@@ -1,10 +1,41 @@
+export const VOTING_STATUSES = [
+  "Em Pauta",
+  "Em Discussão",
+  "Em Votação",
+  "Aprovadas",
+  "Revogadas",
+] as const;
+
+export type VotingStatus = (typeof VOTING_STATUSES)[number];
+
+export const LEGISLATIVE_STAGES = [
+  "Apresentação / Comissão",
+  "Em Discussão no Plenário",
+  "Em Votação",
+  "Sanção / Promulgação / Vetado",
+] as const;
+
+export type LegislativeStage = 1 | 2 | 3 | 4;
+
+export interface VoteTally {
+  favor: number;
+  against: number;
+  abstentions: number;
+}
+
 export interface VotingSearchItem {
   id: string;
   code: string;
   title: string;
   description: string;
-  status: "Em pauta" | "Aprovado" | "Em tramitação";
+  status: VotingStatus;
   date: string;
+  author: string;
+  currentStage: LegislativeStage;
+  stageDates: readonly [string | null, string | null, string | null, string | null];
+  votes: VoteTally | null;
+  sessionUrl: string;
+  sessionHouse: "TV Câmara" | "TV Senado";
 }
 
 export interface PublicationSearchItem {
@@ -17,30 +48,79 @@ export interface PublicationSearchItem {
   sourceLabel: string;
 }
 
+const TV_CAMARA = "https://www.camara.leg.br/tv";
+const TV_SENADO = "https://www.senado.leg.br/tv";
+
 const VOTINGS: readonly VotingSearchItem[] = [
   {
     id: "voting-pl-1234-2026",
     code: "PL 1234/2026",
     title: "Reforma tributária nos serviços",
     description: "Altera a tributação de serviços e define a regra de transição.",
-    status: "Em pauta",
+    status: "Em Pauta",
     date: "2026-10-08",
-  },
-  {
-    id: "voting-pec-45-2025",
-    code: "PEC 45/2025",
-    title: "Incentivos para energias renováveis",
-    description: "Inclui incentivos para geração renovável no texto constitucional.",
-    status: "Aprovado",
-    date: "2026-10-07",
+    author: "Dep. Ana Lima",
+    currentStage: 1,
+    stageDates: ["2026-10-08", null, null, null],
+    votes: null,
+    sessionUrl: TV_CAMARA,
+    sessionHouse: "TV Câmara",
   },
   {
     id: "voting-pec-12-2026",
     code: "PEC 12/2026",
     title: "Dados abertos de votações nominais",
     description: "Torna obrigatória a publicação aberta do voto nominal.",
-    status: "Em tramitação",
+    status: "Em Discussão",
     date: "2026-09-18",
+    author: "Sen. Paulo Nunes",
+    currentStage: 2,
+    stageDates: ["2026-08-12", "2026-09-18", null, null],
+    votes: null,
+    sessionUrl: TV_SENADO,
+    sessionHouse: "TV Senado",
+  },
+  {
+    id: "voting-pec-3-2026",
+    code: "PEC 3/2026",
+    title: "Marco da transparência das sessões",
+    description: "Exige a publicação do placar nominal no mesmo dia da sessão.",
+    status: "Em Votação",
+    date: "2026-10-15",
+    author: "Sen. Clara Monteiro",
+    currentStage: 3,
+    stageDates: ["2026-06-02", "2026-08-19", "2026-10-15", null],
+    votes: { favor: 46, against: 22, abstentions: 5 },
+    sessionUrl: TV_SENADO,
+    sessionHouse: "TV Senado",
+  },
+  {
+    id: "voting-pec-45-2025",
+    code: "PEC 45/2025",
+    title: "Incentivos para energias renováveis",
+    description: "Inclui incentivos para geração renovável no texto constitucional.",
+    status: "Aprovadas",
+    date: "2026-10-07",
+    author: "Dep. Carlos Mendes",
+    currentStage: 4,
+    stageDates: ["2026-03-11", "2026-06-20", "2026-09-02", "2026-10-07"],
+    votes: { favor: 312, against: 148, abstentions: 17 },
+    sessionUrl: TV_CAMARA,
+    sessionHouse: "TV Câmara",
+  },
+  {
+    id: "voting-pl-88-2024",
+    code: "PL 88/2024",
+    title: "Revogação do sigilo de relatórios de comissão",
+    description: "Revoga a regra que adiava a publicação dos relatórios de comissão.",
+    status: "Revogadas",
+    date: "2026-05-21",
+    author: "Dep. Rita Gomes",
+    currentStage: 4,
+    stageDates: ["2025-11-04", "2026-02-16", "2026-04-09", "2026-05-21"],
+    votes: { favor: 98, against: 241, abstentions: 11 },
+    sessionUrl: TV_CAMARA,
+    sessionHouse: "TV Câmara",
   },
 ];
 
@@ -89,8 +169,16 @@ function matches(query: string, fields: readonly string[]): boolean {
 
 export function searchVotings(query: string): VotingSearchItem[] {
   return VOTINGS.filter((item) =>
-    matches(query, [item.code, item.title, item.description, item.status]),
+    matches(query, [item.code, item.title, item.description, item.status, item.author]),
   );
+}
+
+export function filterVotingsByStatus(status: VotingStatus | undefined): VotingSearchItem[] {
+  if (!status) {
+    return [...VOTINGS];
+  }
+
+  return VOTINGS.filter((item) => item.status === status);
 }
 
 export function searchPublications(query: string): PublicationSearchItem[] {

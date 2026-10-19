@@ -37,5 +37,8 @@
 ## Vertical Slice setup and validation
 - [x] Vertical Slice setup and validation
 
+## SPRINT 9: Legislative Hub & Voting Timeline
+- [x] Legislative Hub & Voting Timeline
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.
