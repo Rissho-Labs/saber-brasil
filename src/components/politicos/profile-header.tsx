@@ -1,3 +1,4 @@
+import { ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { MandateBadge } from "@/components/ui/mandate-badge";
 import { cn } from "@/lib/utils";
@@ -18,6 +19,12 @@ const SPHERE_BORDER: Record<SphereType, string> = {
   [SphereType.SEGURANCA]: "border-zinc-700",
 };
 
+const ALERT_LABEL: Record<Exclude<AlertBadge, AlertBadge.NENHUM>, string> = {
+  [AlertBadge.INVESTIGADO]: "Sob Investigação",
+  [AlertBadge.CONDENADO]: "Condenado",
+  [AlertBadge.CASSADO]: "Cassado",
+};
+
 export function ProfileHeader({
   name,
   role,
@@ -25,39 +32,53 @@ export function ProfileHeader({
   status,
   badge,
 }: ProfileHeaderProps) {
-  const getBadgeVariant = (b: AlertBadge) => {
-    switch (b) {
-      case AlertBadge.CONDENADO:
-      case AlertBadge.CASSADO:
-        return "destructive" as const;
-      case AlertBadge.INVESTIGADO:
-        return "secondary" as const;
-      default:
-        return "outline" as const;
-    }
-  };
+  const showActive = status === ProfileStatus.ATIVO && badge === AlertBadge.NENHUM;
+  const alertLabel = badge === AlertBadge.NENHUM ? null : ALERT_LABEL[badge];
 
   return (
-    <div className={cn("flex flex-col sm:flex-row items-start sm:items-center gap-6 p-6 bg-card border-2 border-border rounded-xl shadow-xs", SPHERE_BORDER[sphere])}>
-      <div className="size-24 rounded-full bg-muted flex items-center justify-center text-3xl font-bold text-foreground shrink-0" aria-hidden="true">
+    <div
+      className={cn(
+        "flex flex-col items-start gap-6 rounded-xl border-2 border-border bg-card p-6 shadow-xs sm:flex-row sm:items-center",
+        SPHERE_BORDER[sphere],
+      )}
+    >
+      <div
+        className="flex size-24 shrink-0 items-center justify-center rounded-full bg-muted text-3xl font-bold text-foreground"
+        aria-hidden="true"
+      >
         {name.charAt(0)}
       </div>
 
-      <div className="space-y-2 flex-1 min-w-0">
+      <div className="min-w-0 flex-1 space-y-2">
         <div className="flex flex-wrap items-center gap-2">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground truncate">
-            {name}
-          </h1>
-          {badge !== AlertBadge.NENHUM && (
-            <Badge variant={getBadgeVariant(badge)} className="uppercase text-[10px]">
-              {badge}
+          <h1 className="truncate text-2xl font-bold tracking-tight text-foreground">{name}</h1>
+          {showActive ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-600/30 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-800">
+              <span className="size-1.5 rounded-full bg-emerald-600" aria-hidden="true" />
+              Em Atividade
+            </span>
+          ) : null}
+          {alertLabel && badge === AlertBadge.INVESTIGADO ? (
+            <a
+              href="https://www.gov.br/transparencia/pt-br"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/50 bg-amber-50 px-2.5 py-0.5 text-[11px] font-semibold text-amber-950 hover:bg-amber-100"
+            >
+              <span className="size-1.5 rounded-full bg-amber-500" aria-hidden="true" />
+              {alertLabel}
+              <ExternalLink className="size-3" aria-hidden="true" />
+              <span className="sr-only"> (abre fontes públicas em nova aba)</span>
+            </a>
+          ) : null}
+          {alertLabel && badge !== AlertBadge.INVESTIGADO ? (
+            <Badge variant="destructive" className="text-[10px] uppercase">
+              {alertLabel}
             </Badge>
-          )}
+          ) : null}
         </div>
 
-        <p className="text-sm text-muted-foreground">
-          {role ?? "Cargo não informado"}
-        </p>
+        <p className="text-sm text-muted-foreground">{role ?? "Cargo não informado"}</p>
 
         <div className="flex flex-wrap gap-2 pt-1">
           <Badge variant="outline" className="text-xs">

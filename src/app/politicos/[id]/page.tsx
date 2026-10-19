@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ProfileHeader } from "@/components/politicos/profile-header";
 import { MetricsSummary } from "@/components/politicos/metrics-summary";
+import { TopicBadges } from "@/components/politicos/topic-badges";
 import { EvaluationPanel } from "@/components/evaluations/evaluation-panel";
 import { ProjectsList } from "@/components/politicos/projects-list";
 import { VotingPositions } from "@/components/politicos/voting-positions";
@@ -36,6 +37,8 @@ export default async function PoliticianDetailPage({ params }: PageProps) {
           carismaRating={profile.carisma_rating}
           gestaoScore={profile.gestao_score}
         />
+
+        <TopicBadges />
 
         <ProjectsList projects={projects} />
 

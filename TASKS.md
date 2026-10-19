@@ -52,5 +52,8 @@
 ## SPRINT 13: Hero Section Visual Refinement
 - [x] Hero Section Visual Refinement
 
+## SPRINT 14: Profile Visual Refinement
+- [x] Profile Visual Refinement
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

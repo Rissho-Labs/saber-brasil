@@ -745,3 +745,28 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `REPORT.MD` records the animated navy mesh background and the four sphere chips. `TASKS.md` marks Hero Section Visual Refinement as completed. The application files were already on `main` as `8599b2e` (`feat(home): refine hero mesh background and sphere chips`). This checkpoint only adds the task mark and the report entry so the docs catch up without rewriting that commit.
 - **Compilation Status:** Documentation and git checkpoint. The typecheck and the 20 tests were already green in `FRONTEND-STEP1-HERO-VISUAL-REFINE`.
+
+### [2026-10-19] — `FRONTEND-STEP2-PROFILE-VISUAL-REFINE`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/politicos/score-gauge.tsx` (CREATED)
+  - `src/components/politicos/topic-badges.tsx` (CREATED)
+  - `src/components/ui/dual-score-graphic.tsx` (MODIFIED)
+  - `src/components/politicos/profile-header.tsx` (MODIFIED)
+  - `src/app/politicos/[id]/page.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Politician profile now pairs the 1–5 star Carisma card with an SVG semicircular `ScoreGauge` (0–100) for Índice Ponderado de Gestão (red/amber/emerald arc, pointer, numeric label). Profile header shows green “Em Atividade” when active with no alert, or amber “Sob Investigação” with an external Portal da Transparência link when `badge === INVESTIGADO`. `TopicBadges` renders a four-column gamified grid (#Saúde Diamante, #Educação Prata, #Segurança Ouro, #Economia Bronze) directly under `MetricsSummary`. Risk: topic badges and engagement copy are illustrative static catalog data, not derived from legislative activity tables; the investigation link is a generic public portal, not a case-specific URL.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 20 tests.
+
+### [2026-10-19] — `FRONTEND-CHECKPOINT-PROFILE-VISUAL`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/politicos/score-gauge.tsx` (CREATED)
+  - `src/components/politicos/topic-badges.tsx` (CREATED)
+  - `src/components/ui/dual-score-graphic.tsx` (MODIFIED)
+  - `src/components/politicos/profile-header.tsx` (MODIFIED)
+  - `src/app/politicos/[id]/page.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `REPORT.MD` records `score-gauge.tsx`, `topic-badges.tsx`, and the `dual-score-graphic.tsx` / `profile-header.tsx` updates from the profile visual refine. `TASKS.md` marks Profile Visual Refinement as completed. Application and docs are committed as `feat(politicos): add semicircular score gauge, topic badges, and status alerts`.
+- **Compilation Status:** Documentation and git checkpoint. The typecheck and the 20 tests were already green in `FRONTEND-STEP2-PROFILE-VISUAL-REFINE`.
