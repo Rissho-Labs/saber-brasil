@@ -661,3 +661,39 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `REPORT.MD` records `voting-positions.tsx`, `voter-disclosure.tsx`, `vote-badge.tsx`, and the profile page section. `TASKS.md` marks Politician Profile Voting Integration as completed. Those files are committed as `feat(votacoes): link politician votes to profile pages`.
 - **Compilation Status:** Documentation and git checkpoint. The typecheck and the 15 tests were already green in `FRONTEND-STEP2-POLITICIAN-VOTING-INTEGRATION`.
+
+### [2026-10-19] — `INFRA-CHECKPOINT-GIT-PUSH`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `git push origin main` updated `https://github.com/Rissho-Labs/saber-brasil.git` from `fed5bf8` to `8adec45`. The four local commits were `80eae75` (Vitest and the strict evaluation schema), `87c5aa2` (merge of the remote search and evaluation work), `6bc3161` (legislative hub), and `8adec45` (profile voting links). `HEAD` and `origin/main` are both `8adec45fce8cc7a0b4e960ff4113ef605125add6`. This report line stays local so the pushed history is not rewritten.
+- **Compilation Status:** Git synchronization. No application code changed.
+
+### [2026-10-19] — `FRONTEND-STEP1-PUBLIC-INDICATORS-HUB`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/app/indicadores/page.tsx` (CREATED)
+  - `src/components/indicadores/indicator-card.tsx` (CREATED)
+  - `src/components/indicadores/indicator-compare.tsx` (CREATED)
+  - `src/lib/indicadores/catalog.ts` (CREATED)
+  - `src/lib/indicadores/catalog.test.ts` (CREATED)
+  - `src/components/navbar.tsx` (MODIFIED)
+  - `src/components/home/kpi-stats.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `/indicadores` lists an illustrative catalog with the tabs Todos, Meio Ambiente & Clima, Infraestrutura & Saneamento, Trabalho & Economia, and Gestão Pública & Transparência. Zod rejects an unknown `categoria` and the page then shows Todos. Each card shows the value, the trend against the previous year, the update date, and the badges Fonte Pública Oficial and, when an independent reading exists, Auditoria / Terceiro Setor. “Comparar fontes” opens the official figure beside the third-party figure. Water, inflation, and parliamentary attendance have no third-party row. The navbar links to Indicadores. The home metrics section gained “Veja mais” to `/indicadores`; the featured carousel “Ver mais” still filters `/busca` by sphere. Risk: the numbers are catalog samples, not live IBGE, INPE, DATASUS, or Portal da Transparência feeds.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 6 files and 18 tests. Home “Veja mais” opened `/indicadores` with 8 cards. `?categoria=ambiente` kept queimadas and desmatamento. The queimadas contrast showed INPE 12.400 and MapBiomas 11.900. `?categoria=admin` kept Todos. Água potável showed only Fonte Pública Oficial. At 390px the page scroll width matched the viewport.
+
+### [2026-10-19] — `FRONTEND-CHECKPOINT-PUBLIC-INDICATORS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/app/indicadores/page.tsx` (CREATED)
+  - `src/components/indicadores/indicator-card.tsx` (CREATED)
+  - `src/components/indicadores/indicator-compare.tsx` (CREATED)
+  - `src/lib/indicadores/catalog.ts` (CREATED)
+  - `src/lib/indicadores/catalog.test.ts` (CREATED)
+  - `src/components/navbar.tsx` (MODIFIED)
+  - `src/components/home/kpi-stats.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `REPORT.MD` records `/indicadores`, `indicator-card.tsx`, `indicator-compare.tsx`, and `catalog.ts`. `TASKS.md` marks Public Indicators Hub and Source Contrast as completed. Those files, plus the catalog test, the navbar link, and the home “Veja mais” link, are committed as `feat(indicadores): add public indicators hub with source contrast`.
+- **Compilation Status:** Documentation and git checkpoint. The typecheck and the 18 tests were already green in `FRONTEND-STEP1-PUBLIC-INDICATORS-HUB`.

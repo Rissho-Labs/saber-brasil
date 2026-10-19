@@ -43,5 +43,8 @@
 ## SPRINT 10: Politician Profile Voting Integration
 - [x] Politician Profile Voting Integration
 
+## SPRINT 11: Public Indicators Hub and Source Contrast
+- [x] Public Indicators Hub and Source Contrast
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

@@ -34,9 +34,14 @@ export async function Navbar() {
           </span>
         </Link>
         <div className="flex items-center gap-3">
-          <Link href="/votacoes" className="text-sm font-medium text-foreground hover:underline">
-            Votações
-          </Link>
+          <nav aria-label="Seções" className="flex items-center gap-3">
+            <Link href="/votacoes" className="text-sm font-medium text-foreground hover:underline">
+              Votações
+            </Link>
+            <Link href="/indicadores" className="text-sm font-medium text-foreground hover:underline">
+              Indicadores
+            </Link>
+          </nav>
           <NavbarSession name={name} email={email} avatarUrl={avatarUrl} />
         </div>
       </div>

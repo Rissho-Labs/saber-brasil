@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Vote, CheckCircle2, FileText } from "lucide-react";
 
@@ -31,7 +32,17 @@ const stats = [
 export function KPIStats() {
   return (
     <section aria-labelledby="kpi-heading" className="space-y-4">
-      <h2 id="kpi-heading" className="sr-only">Estatísticas do Monitoramento</h2>
+      <div className="flex items-center justify-between gap-3">
+        <h2 id="kpi-heading" className="text-lg font-semibold tracking-tight">
+          Indicadores do monitoramento
+        </h2>
+        <Link
+          href="/indicadores"
+          className="shrink-0 text-sm font-medium text-primary underline-offset-4 hover:underline"
+        >
+          Veja mais
+        </Link>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat) => {
           const Icon = stat.icon;
