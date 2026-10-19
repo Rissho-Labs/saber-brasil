@@ -498,3 +498,13 @@
   - `REPORT.md` (MODIFIED)
 - **Summary:** `REPORT.md` records `EvaluationModal`, its mount from the politician page through `EvaluationPanel`, and the submit path to POST `/api/avaliacoes`. `TASKS.md` marks the modal UI and that page integration as completed in `e65c2e7`, message `feat(evaluations): mount interactive evaluation modal on politician detail page`. The component files were already in `d245afd`.
 - **Compilation Status:** Documentation and git checkpoint. No new application code.
+
+### [2026-10-19] — `BACKEND-STEP1-SUPABASE-METRICS-AGGREGATION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `supabase/migrations/20261019_recalculate_profile_scores.sql` (CREATED)
+  - `src/app/api/avaliacoes/route.ts` (MODIFIED)
+  - `src/app/api/avaliacoes/route.test.ts` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `recalculate_profile_scores(target_profile_id)` sets `carisma_rating` to the mean of the ten stored scores, or `0.00` when that profile has no evaluations. POST `/api/avaliacoes` calls the RPC after a successful save. An RPC error is logged and the 200/201 response is unchanged. `npx tsc --noEmit` exited 0. `npm run test` passed 9 tests.
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 9 tests. `gestao_score` stays the official index and is not overwritten. There is no column for a separate transparency average or an overall score. The function is `SECURITY DEFINER` with `search_path = public`, and execute is granted to `authenticated` and `service_role`. The SQL file is not applied to the live database until it is run in the Supabase SQL editor.

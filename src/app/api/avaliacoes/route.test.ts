@@ -19,6 +19,12 @@ vi.mock("@/lib/services/evaluations", () => ({
 
 const userId = "22222222-2222-2222-2222-222222222222";
 const profileId = "11111111-1111-1111-1111-111111111111";
+const rpc = vi.fn(
+  async (): Promise<{ data: null; error: { code: string; message: string } | null }> => ({
+    data: null,
+    error: null,
+  }),
+);
 
 const scores = {
   posture: 4,
@@ -51,6 +57,7 @@ function mockSession(user: { id: string } | null, failed = false) {
         error: failed ? { message: "invalid session" } : null,
       })),
     },
+    rpc,
   } as unknown as Awaited<ReturnType<typeof createClient>>);
 }
 
@@ -126,5 +133,29 @@ describe("POST /api/avaliacoes", () => {
 
     const updated = await post(payload);
     expect(updated.status).toBe(200);
+    expect(rpc).toHaveBeenCalledWith("recalculate_profile_scores", {
+      target_profile_id: profileId,
+    });
+  });
+
+  it("keeps the saved evaluation when score aggregation fails", async () => {
+    mockSession({ id: userId });
+    rpc.mockResolvedValueOnce({
+      data: null,
+      error: { code: "PGRST202", message: "function not found" },
+    });
+    vi.mocked(saveUserEvaluation).mockResolvedValue({
+      success: true,
+      updated: true,
+      message: "Avaliação atualizada.",
+      evaluation: {
+        user_id: userId,
+        profile_id: profileId,
+        scores,
+      },
+    });
+
+    const response = await post({ profileId, scores });
+    expect(response.status).toBe(200);
   });
 });

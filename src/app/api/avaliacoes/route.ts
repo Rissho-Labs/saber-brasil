@@ -67,6 +67,24 @@ export async function POST(request: Request) {
       toCompetencyScores(parsed.data.scores)
     );
 
+    try {
+      const { error: scoreError } = await supabase.rpc("recalculate_profile_scores", {
+        target_profile_id: parsed.data.profileId,
+      });
+      if (scoreError) {
+        console.error("recalculate_profile_scores failed", {
+          profileId: parsed.data.profileId,
+          code: scoreError.code,
+          message: scoreError.message,
+        });
+      }
+    } catch (scoreError) {
+      console.error("recalculate_profile_scores failed", {
+        profileId: parsed.data.profileId,
+        message: scoreError instanceof Error ? scoreError.message : "unknown",
+      });
+    }
+
     return NextResponse.json(result, { status: result.updated ? 200 : 201 });
   } catch {
     return NextResponse.json(
