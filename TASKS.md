@@ -28,5 +28,8 @@
 - [x] Politician Evaluation Modal UI: dialog with the politician header and ten scores validated by `politicalEvaluationSchema`
 - [x] Politician Evaluation Modal integration: mount on the profile page and submit to POST `/api/avaliacoes`
 
+## SPRINT 7: Profile metrics recalculation
+- [x] Automated profile metrics recalculation: `recalculate_profile_scores` updates `carisma_rating` and POST `/api/avaliacoes` calls it after a successful save
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

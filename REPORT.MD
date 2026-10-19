@@ -508,3 +508,11 @@
   - `REPORT.md` (MODIFIED)
 - **Summary:** `recalculate_profile_scores(target_profile_id)` sets `carisma_rating` to the mean of the ten stored scores, or `0.00` when that profile has no evaluations. POST `/api/avaliacoes` calls the RPC after a successful save. An RPC error is logged and the 200/201 response is unchanged. `npx tsc --noEmit` exited 0. `npm run test` passed 9 tests.
 - **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 9 tests. `gestao_score` stays the official index and is not overwritten. There is no column for a separate transparency average or an overall score. The function is `SECURITY DEFINER` with `search_path = public`, and execute is granted to `authenticated` and `service_role`. The SQL file is not applied to the live database until it is run in the Supabase SQL editor.
+
+### [2026-10-19] — `BACKEND-CHECKPOINT-SUPABASE-METRICS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** `REPORT.md` records `supabase/migrations/20261019_recalculate_profile_scores.sql` and the `recalculate_profile_scores` call in POST `/api/avaliacoes`. `TASKS.md` marks that automated recalculation as completed. The SQL, route, and route test were already committed in `c05f482`.
+- **Compilation Status:** Documentation and git checkpoint. No new application code.
