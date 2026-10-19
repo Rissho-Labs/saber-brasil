@@ -8,6 +8,8 @@ import { ProfileCard } from "@/components/ui/profile-card";
 import { FeaturedProfilesBySphere } from "@/lib/services/profiles";
 import { SphereType } from "@/types";
 
+const AUTOPLAY_MS = 5000;
+
 const SPHERES: { type: SphereType; label: string; emoji: string }[] = [
   { type: SphereType.POLITICA, label: "Política", emoji: "🏛️" },
   { type: SphereType.JUDICIARIO, label: "Judiciário", emoji: "⚖️" },
@@ -17,8 +19,13 @@ const SPHERES: { type: SphereType; label: string; emoji: string }[] = [
 
 function FeaturedTrack({ profiles }: { profiles: FeaturedProfilesBySphere[SphereType] }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const moveRef = useRef<(direction: -1 | 1) => void>(() => {});
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(profiles.length <= 1);
+  const [pointerInside, setPointerInside] = useState(false);
+  const [focusInside, setFocusInside] = useState(false);
+  const [cycle, setCycle] = useState(0);
+  const paused = pointerInside || focusInside;
 
   function sync() {
     const node = scrollerRef.current;
@@ -57,6 +64,50 @@ function FeaturedTrack({ profiles }: { profiles: FeaturedProfilesBySphere[Sphere
     });
   }
 
+  moveRef.current = move;
+
+  useEffect(() => {
+    if (paused || profiles.length <= 1) {
+      return;
+    }
+
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (media.matches) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      const node = scrollerRef.current;
+      if (!node) {
+        return;
+      }
+
+      const reachedEnd = node.scrollLeft + node.clientWidth >= node.scrollWidth - 2;
+      if (reachedEnd) {
+        node.scrollTo({ left: 0, behavior: "smooth" });
+        return;
+      }
+
+      moveRef.current(1);
+    }, AUTOPLAY_MS);
+
+    return () => window.clearInterval(timer);
+  }, [paused, profiles, cycle]);
+
+  function moveByUser(direction: -1 | 1) {
+    move(direction);
+    setCycle((value) => value + 1);
+  }
+
+  function resumeIfLeft(event: React.FocusEvent<HTMLDivElement>) {
+    const next = event.relatedTarget;
+    if (next instanceof Node && event.currentTarget.contains(next)) {
+      return;
+    }
+
+    setFocusInside(false);
+  }
+
   if (profiles.length === 0) {
     return (
       <p className="text-sm text-muted-foreground">
@@ -66,7 +117,13 @@ function FeaturedTrack({ profiles }: { profiles: FeaturedProfilesBySphere[Sphere
   }
 
   return (
-    <div className="space-y-3">
+    <div
+      className="space-y-3"
+      onMouseEnter={() => setPointerInside(true)}
+      onMouseLeave={() => setPointerInside(false)}
+      onFocus={() => setFocusInside(true)}
+      onBlur={resumeIfLeft}
+    >
       <div className="flex justify-end gap-2">
         <Button
           type="button"
@@ -74,7 +131,7 @@ function FeaturedTrack({ profiles }: { profiles: FeaturedProfilesBySphere[Sphere
           size="icon"
           aria-label="Representantes anteriores"
           className={atStart ? "hidden" : undefined}
-          onClick={() => move(-1)}
+          onClick={() => moveByUser(-1)}
         >
           <ChevronLeft aria-hidden="true" />
           <span className="sr-only">&lt;</span>
@@ -85,7 +142,7 @@ function FeaturedTrack({ profiles }: { profiles: FeaturedProfilesBySphere[Sphere
           size="icon"
           aria-label="Próximos representantes"
           disabled={atEnd}
-          onClick={() => move(1)}
+          onClick={() => moveByUser(1)}
         >
           <ChevronRight aria-hidden="true" />
           <span className="sr-only">&gt;</span>

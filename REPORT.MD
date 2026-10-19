@@ -453,3 +453,11 @@
   - `REPORT.md` (MODIFIED)
 - **Summary:** The active sphere now has one explanatory card directly under the tabs: title, scope, coverage indicators, and the search filter link. The lower “As 4 esferas” block is gone, so metrics and featured representatives follow that card. Switching Política, Judiciário, Academia, and Segurança replaces the card content. `npx tsc --noEmit` and `npm run test` passed (8 tests).
 - **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. On `/` at 435px, the card sits 16px under the tabs and above “Estatísticas do Monitoramento”. Academia and Segurança updated the same card. The featured strip still has its own sphere filter. The GemBadge hydration warning was already present.
+
+### [2026-10-19] — `FRONTEND-STEP3-CAROUSEL-AUTOPLAY`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/featured-carousel.tsx` (MODIFIED)
+  - `REPORT.md` (MODIFIED)
+- **Summary:** The featured representatives track advances one card every 5 seconds and returns to the first card at the end. The interval is cleared on cleanup, while the pointer is over the track, and while focus stays inside it. A manual previous or next click starts the 5-second clock over. Auto-play stays off when the system requests reduced motion. `npx tsc --noEmit` and `npm run test` passed (8 tests).
+- **Compilation Status:** `npx tsc --noEmit` exited 0. `npm run test` passed 8 tests. On `/` at 435px the track moved from 404px to 808px within one interval, and it stayed put for 7 seconds while the next control was focused.
