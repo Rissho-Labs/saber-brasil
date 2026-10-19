@@ -387,3 +387,23 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** The avatar column is centered over its buttons. Email accounts get matching outline buttons for “Alterar senha” and “Alterar e-mail”. The email dialog calls `updateUser({ email })` and tells the person to confirm the message sent to the new address. Supabase’s email-change flow is that confirmation, not the signup 6-digit screen. “Contas conectadas” shows Google as connected or not. Linking uses `linkIdentity` and returns through `/auth/callback`. Unlinking is refused when Google is the only identity, on the button and on the server. Risk: manual linking stays off until it is enabled in the Supabase dashboard, and the callback URL must stay on the redirect allow-list. The signed-in account already has email and Google, so “Desconectar” was enabled and was not clicked. No email change was sent.
 - **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run build`.
+
+### [2026-10-19] — `INFRA-STEP4-AUTH-SESSION-GUARD`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/lib/auth/session-guard.ts` (CREATED)
+  - `src/lib/auth/session-guard.test.ts` (CREATED)
+  - `src/app/api/avaliacoes/route.ts` (MODIFIED)
+  - `package.json` (MODIFIED)
+  - `tsconfig.json` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `requireAuthSession` accepts only an object with a non-empty `user.id` and returns `{ userId, isAuthenticated: true }`. Anything else throws `UnauthorizedError` with code `UNAUTHORIZED`. POST `/api/avaliacoes` uses that result after `getUser()`. The guard does not check the token itself; Supabase still does that. The repo has no smoke or schema test files, so `npm run test` runs the three session-guard cases. DELETE `/api/avaliacoes/[id]` still checks `getUser()` on its own.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit` and `npm run test` (3 passed).
+
+### [2026-10-19] — `INFRA-CHECKPOINT-AUTH-GUARD`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `REPORT.MD` already records `requireAuthSession` and its use on POST `/api/avaliacoes`. `TASKS.md` now marks the session guard and that backend authorization step as completed. Both are included in the commit `feat(auth): require a validated session before saving an evaluation`.
+- **Compilation Status:** Documentation and git checkpoint. No new application code.

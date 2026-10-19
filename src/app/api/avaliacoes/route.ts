@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requestClientIp, verifyTurnstileToken } from "@/lib/auth/verify-turnstile";
+import { requireAuthSession, UnauthorizedError } from "@/lib/auth/session-guard";
 import { createClient } from "@/lib/supabase/server";
 import { saveUserEvaluation } from "@/lib/services/evaluations";
 import { CompetencyScores } from "@/types";
@@ -62,8 +63,14 @@ export async function POST(request: Request) {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
 
-    if (error || !data.user) {
-      return NextResponse.json({ error: "Autenticação obrigatória." }, { status: 401 });
+    let auth;
+    try {
+      auth = requireAuthSession(error ? null : data);
+    } catch (guardError) {
+      if (guardError instanceof UnauthorizedError) {
+        return NextResponse.json({ error: "Autenticação obrigatória." }, { status: 401 });
+      }
+      throw guardError;
     }
 
     let json: unknown;
@@ -91,7 +98,7 @@ export async function POST(request: Request) {
 
     const result = await saveUserEvaluation(
       supabase,
-      data.user.id,
+      auth.userId,
       parsed.data.profileId,
       toCompetencyScores(parsed.data.scores)
     );

@@ -17,5 +17,9 @@
 - [x] Create 10-Question Questionnaire modal with pedagogical icons (`ℹ️`)
 - [x] Create Gem visual component (Diamond, Platinum, Gold, Silver, Bronze) for Top 10 Agendas
 
+## SPRINT 4: Auth session guard
+- [x] Session guard: `requireAuthSession` returns a sanitized user id or throws `UNAUTHORIZED`
+- [x] Backend authorization: POST `/api/avaliacoes` saves an evaluation only after that guard
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.
