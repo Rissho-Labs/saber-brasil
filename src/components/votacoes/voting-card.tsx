@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { VotingSearchItem, VoteTally } from "@/lib/search/catalog";
 import { ProgressTimeline } from "@/components/votacoes/progress-timeline";
+import { VoterDisclosure } from "@/components/votacoes/voter-disclosure";
 
 function formatDate(isoDate: string): string {
   const [year, month, day] = isoDate.split("-");
@@ -82,6 +83,7 @@ export function VotingCard({ item }: { item: VotingSearchItem }) {
         </time>
         <ProgressTimeline currentStage={item.currentStage} stageDates={item.stageDates} />
         <VoteBreakdown votes={item.votes} />
+        <VoterDisclosure participants={item.participants} />
         <a
           href={item.sessionUrl}
           target="_blank"

@@ -40,5 +40,8 @@
 ## SPRINT 9: Legislative Hub & Voting Timeline
 - [x] Legislative Hub & Voting Timeline
 
+## SPRINT 10: Politician Profile Voting Integration
+- [x] Politician Profile Voting Integration
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

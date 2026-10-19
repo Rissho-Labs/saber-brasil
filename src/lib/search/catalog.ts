@@ -23,6 +23,24 @@ export interface VoteTally {
   abstentions: number;
 }
 
+export const CAST_VOTES = ["A favor", "Contra", "Abstenção"] as const;
+
+export type CastVote = (typeof CAST_VOTES)[number];
+
+export interface VotingParticipant {
+  profileId: string;
+  name: string;
+  vote: CastVote;
+}
+
+export interface ProfileVotingPosition {
+  id: string;
+  code: string;
+  title: string;
+  date: string;
+  vote: CastVote;
+}
+
 export interface VotingSearchItem {
   id: string;
   code: string;
@@ -34,6 +52,7 @@ export interface VotingSearchItem {
   currentStage: LegislativeStage;
   stageDates: readonly [string | null, string | null, string | null, string | null];
   votes: VoteTally | null;
+  participants: readonly VotingParticipant[];
   sessionUrl: string;
   sessionHouse: "TV Câmara" | "TV Senado";
 }
@@ -51,6 +70,23 @@ export interface PublicationSearchItem {
 const TV_CAMARA = "https://www.camara.leg.br/tv";
 const TV_SENADO = "https://www.senado.leg.br/tv";
 
+const MARIANA: Omit<VotingParticipant, "vote"> = {
+  profileId: "11111111-1111-1111-1111-111111111111",
+  name: "Mariana Silva",
+};
+const CARLOS: Omit<VotingParticipant, "vote"> = {
+  profileId: "22222222-2222-2222-2222-222222222222",
+  name: "Carlos Eduardo",
+};
+const ANA: Omit<VotingParticipant, "vote"> = {
+  profileId: "33333333-3333-3333-3333-333333333333",
+  name: "Ana Beatriz",
+};
+
+function participant(person: Omit<VotingParticipant, "vote">, vote: CastVote): VotingParticipant {
+  return { ...person, vote };
+}
+
 const VOTINGS: readonly VotingSearchItem[] = [
   {
     id: "voting-pl-1234-2026",
@@ -63,6 +99,7 @@ const VOTINGS: readonly VotingSearchItem[] = [
     currentStage: 1,
     stageDates: ["2026-10-08", null, null, null],
     votes: null,
+    participants: [],
     sessionUrl: TV_CAMARA,
     sessionHouse: "TV Câmara",
   },
@@ -77,6 +114,7 @@ const VOTINGS: readonly VotingSearchItem[] = [
     currentStage: 2,
     stageDates: ["2026-08-12", "2026-09-18", null, null],
     votes: null,
+    participants: [],
     sessionUrl: TV_SENADO,
     sessionHouse: "TV Senado",
   },
@@ -91,6 +129,11 @@ const VOTINGS: readonly VotingSearchItem[] = [
     currentStage: 3,
     stageDates: ["2026-06-02", "2026-08-19", "2026-10-15", null],
     votes: { favor: 46, against: 22, abstentions: 5 },
+    participants: [
+      participant(CARLOS, "A favor"),
+      participant(MARIANA, "Contra"),
+      participant(ANA, "Abstenção"),
+    ],
     sessionUrl: TV_SENADO,
     sessionHouse: "TV Senado",
   },
@@ -105,6 +148,11 @@ const VOTINGS: readonly VotingSearchItem[] = [
     currentStage: 4,
     stageDates: ["2026-03-11", "2026-06-20", "2026-09-02", "2026-10-07"],
     votes: { favor: 312, against: 148, abstentions: 17 },
+    participants: [
+      participant(MARIANA, "A favor"),
+      participant(ANA, "A favor"),
+      participant(CARLOS, "Contra"),
+    ],
     sessionUrl: TV_CAMARA,
     sessionHouse: "TV Câmara",
   },
@@ -119,6 +167,11 @@ const VOTINGS: readonly VotingSearchItem[] = [
     currentStage: 4,
     stageDates: ["2025-11-04", "2026-02-16", "2026-04-09", "2026-05-21"],
     votes: { favor: 98, against: 241, abstentions: 11 },
+    participants: [
+      participant(ANA, "A favor"),
+      participant(CARLOS, "Contra"),
+      participant(MARIANA, "Abstenção"),
+    ],
     sessionUrl: TV_CAMARA,
     sessionHouse: "TV Câmara",
   },
@@ -171,6 +224,25 @@ export function searchVotings(query: string): VotingSearchItem[] {
   return VOTINGS.filter((item) =>
     matches(query, [item.code, item.title, item.description, item.status, item.author]),
   );
+}
+
+export function votingsForProfile(profileId: string): ProfileVotingPosition[] {
+  return VOTINGS.flatMap((item) => {
+    const participant = item.participants.find((person) => person.profileId === profileId);
+    if (!participant) {
+      return [];
+    }
+
+    return [
+      {
+        id: item.id,
+        code: item.code,
+        title: item.title,
+        date: item.date,
+        vote: participant.vote,
+      },
+    ];
+  }).sort((left, right) => right.date.localeCompare(left.date));
 }
 
 export function filterVotingsByStatus(status: VotingStatus | undefined): VotingSearchItem[] {

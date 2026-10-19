@@ -3,6 +3,7 @@ import { ProfileHeader } from "@/components/politicos/profile-header";
 import { MetricsSummary } from "@/components/politicos/metrics-summary";
 import { EvaluationPanel } from "@/components/evaluations/evaluation-panel";
 import { ProjectsList } from "@/components/politicos/projects-list";
+import { VotingPositions } from "@/components/politicos/voting-positions";
 import { getPublicProfileById } from "@/lib/services/profiles";
 import { getProjectsByProfileId } from "@/lib/services/projects";
 
@@ -37,6 +38,8 @@ export default async function PoliticianDetailPage({ params }: PageProps) {
         />
 
         <ProjectsList projects={projects} />
+
+        <VotingPositions profileId={profile.id} />
 
         <EvaluationPanel
           politician={{

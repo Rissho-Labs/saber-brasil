@@ -632,3 +632,32 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `REPORT.MD` records `/votacoes`, `progress-timeline.tsx`, and `voting-card.tsx`. `TASKS.md` marks Legislative Hub & Voting Timeline as completed. Those files, plus the catalog, the search card, and the navbar link, are committed as `feat(votacoes): add legislative hub with timeline and vote breakdown`.
 - **Compilation Status:** Documentation and git checkpoint. The typecheck and the 14 tests were already green in `FRONTEND-STEP1-NEWS-VOTINGS-HUB`.
+
+### [2026-10-19] — `FRONTEND-STEP2-POLITICIAN-VOTING-INTEGRATION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/politicos/voting-positions.tsx` (CREATED)
+  - `src/components/votacoes/voter-disclosure.tsx` (CREATED)
+  - `src/components/votacoes/vote-badge.tsx` (CREATED)
+  - `src/app/politicos/[id]/page.tsx` (MODIFIED)
+  - `src/components/votacoes/voting-card.tsx` (MODIFIED)
+  - `src/lib/search/catalog.ts` (MODIFIED)
+  - `src/lib/search/catalog.test.ts` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** The profile page section “Votações e Posicionamentos” lists the catalog bills for that profile with code, title, date, and the badge A favor, Contra, or Abstenção. The three political seed profiles are the only linked voters. Bills still in committee or debate have no nominal list. On a voted bill, “Ver posicionamentos” expands the names and initial avatars, each linking to `/politicos/[id]`. The plenary bar stays the illustrative total. Searching “mariana” still returns no voting row, so the search test stays intact. Risk: these positions are catalog data, not a roll call from the Câmara or the Senado. A rapporteur name that is not a seed profile stays plain text.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 5 files and 15 tests. The political seed profile listed PEC 3/2026 as Contra, PEC 45/2025 as A favor, and PL 88/2024 as Abstenção. A judiciary profile showed “Nenhuma votação registrada para este perfil.” On PEC 45/2025 the disclosure opened Mariana Silva, Ana Beatriz, and Carlos Eduardo, and the first link opened that profile. Em Pauta kept “Votação ainda não iniciada.”
+
+### [2026-10-19] — `FRONTEND-CHECKPOINT-POLITICIAN-VOTING`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/politicos/voting-positions.tsx` (CREATED)
+  - `src/components/votacoes/voter-disclosure.tsx` (CREATED)
+  - `src/components/votacoes/vote-badge.tsx` (CREATED)
+  - `src/app/politicos/[id]/page.tsx` (MODIFIED)
+  - `src/components/votacoes/voting-card.tsx` (MODIFIED)
+  - `src/lib/search/catalog.ts` (MODIFIED)
+  - `src/lib/search/catalog.test.ts` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `REPORT.MD` records `voting-positions.tsx`, `voter-disclosure.tsx`, `vote-badge.tsx`, and the profile page section. `TASKS.md` marks Politician Profile Voting Integration as completed. Those files are committed as `feat(votacoes): link politician votes to profile pages`.
+- **Compilation Status:** Documentation and git checkpoint. The typecheck and the 15 tests were already green in `FRONTEND-STEP2-POLITICIAN-VOTING-INTEGRATION`.

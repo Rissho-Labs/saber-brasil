@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { filterVotingsByStatus, searchPublications, searchVotings } from "./catalog";
+import { filterVotingsByStatus, searchPublications, searchVotings, votingsForProfile } from "./catalog";
 
 describe("search catalog", () => {
   it("returns the full illustrative catalog when the query is empty", () => {
@@ -23,5 +23,20 @@ describe("search catalog", () => {
   it("returns no rows when nothing matches", () => {
     expect(searchVotings("mariana")).toEqual([]);
     expect(searchPublications("mariana")).toEqual([]);
+  });
+
+  it("lists a politician's votes without putting the name in the search index", () => {
+    expect(searchVotings("mariana")).toEqual([]);
+    expect(
+      votingsForProfile("11111111-1111-1111-1111-111111111111").map((item) => [
+        item.code,
+        item.vote,
+      ]),
+    ).toEqual([
+      ["PEC 3/2026", "Contra"],
+      ["PEC 45/2025", "A favor"],
+      ["PL 88/2024", "Abstenção"],
+    ]);
+    expect(votingsForProfile("44444444-4444-4444-8444-444444444441")).toEqual([]);
   });
 });
