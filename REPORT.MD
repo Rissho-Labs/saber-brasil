@@ -791,3 +791,26 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `REPORT.MD` records `priority-bar.tsx`, voting card header integration, and optional `institutionalWeight` / `citizenWeight` on the search catalog. `TASKS.md` marks Cross-Priority Index & Divergence Alert as completed. Application and docs are committed as `feat(votacoes): add cross-priority index and divergence alert to voting cards`.
 - **Compilation Status:** Documentation and git checkpoint. The typecheck and the 20 tests were already green in `FRONTEND-STEP3-VOTING-CROSS-PRIORITY`.
+
+### [2026-10-19] — `FRONTEND-STEP4-SPHERE-PILLAR-METRICS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/esferas/pillar-metrics.tsx` (CREATED)
+  - `src/lib/esferas/catalog.ts` (MODIFIED)
+  - `src/lib/esferas/catalog.test.ts` (MODIFIED)
+  - `src/app/esferas/[slug]/page.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `/esferas/[slug]` mounts `PillarMetrics` between the institutional header and the representative grid. Each sphere catalog entry now carries domain pillars: Academia (verbas R$ 480M, transparência 95/100, produção 4.8/5), Segurança (criminalidade −12% sparkline, equipamentos R$ 112M, eficiência 87/100), Judiciário (tempo médio de tramitação, produtividade magistrada), Política (execução orçamentária, assiduidade plenária). Cards render sparkline + change badge, allocation progress bars, or mini semicircular gauges. Risk: all pillar values remain illustrative catalog mocks, not live government feeds.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 21 tests.
+
+### [2026-10-19] — `FRONTEND-CHECKPOINT-SPHERE-PILLAR-METRICS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/esferas/pillar-metrics.tsx` (CREATED)
+  - `src/lib/esferas/catalog.ts` (MODIFIED)
+  - `src/lib/esferas/catalog.test.ts` (MODIFIED)
+  - `src/app/esferas/[slug]/page.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `REPORT.MD` records `pillar-metrics.tsx`, the sphere catalog pillar schema, and the catalog test coverage. `TASKS.md` marks Domain Pillar Metrics (Sparklines & Gauges) as completed. Application and docs are committed as `feat(esferas): add pillar metric cards with sparklines and gauges`.
+- **Compilation Status:** Documentation and git checkpoint. The typecheck and the 21 tests were already green in `FRONTEND-STEP4-SPHERE-PILLAR-METRICS`.

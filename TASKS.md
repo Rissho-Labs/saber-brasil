@@ -58,5 +58,8 @@
 ## SPRINT 15: Cross-Priority Index & Divergence Alert
 - [x] Cross-Priority Index & Divergence Alert
 
+## SPRINT 16: Domain Pillar Metrics (Sparklines & Gauges)
+- [x] Domain Pillar Metrics (Sparklines & Gauges)
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

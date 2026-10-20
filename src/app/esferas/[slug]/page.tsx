@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PillarMetrics } from "@/components/esferas/pillar-metrics";
 import { IndicatorCard } from "@/components/indicadores/indicator-card";
 import { ProfileCard } from "@/components/ui/profile-card";
 import { Badge } from "@/components/ui/badge";
@@ -60,6 +61,8 @@ export default async function SpherePage({ params }: SpherePageProps) {
       </section>
 
       <div className="mx-auto max-w-6xl space-y-10 px-4 py-8 sm:px-6 lg:px-8">
+        <PillarMetrics pillars={sphere.pillars} />
+
         <section aria-labelledby="esfera-representantes" className="space-y-4">
           <div className="space-y-1">
             <h2 id="esfera-representantes" className="text-xl font-semibold tracking-tight">
