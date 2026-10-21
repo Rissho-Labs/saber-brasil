@@ -64,5 +64,8 @@
 ## SPRINT 17: Git Push Visual Refinements
 - [x] Git Push Visual Refinements (origin/main sync)
 
+## SPRINT 18: Visual screen catalog
+- [x] `/mocks` scaffold: numbered screen folders and README notes for the visual catalog
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

@@ -822,3 +822,34 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** Pushed local `main` visual-refinement commits to `origin/main`: hero mesh (`8599b2e`), hero docs checkpoint (`130a13e`), profile ScoreGauge/badges (`5eacdb9`), cross-priority voting cards (`ac21a38`), sphere pillar metrics (`668e6d6`), plus this docs sync. Local `main` and `origin/main` point to the same commit; working tree is clean.
 - **Compilation Status:** Remote synchronization checkpoint. No application code changes in this step.
+
+### [2026-10-21] — `INFRA-SETUP-MOCKS-DIRECTORY`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `mocks/README.md` (CREATED)
+  - `mocks/00-design-system/README.md` (CREATED)
+  - `mocks/01-home/README.md` (CREATED)
+  - `mocks/02-busca/README.md` (CREATED)
+  - `mocks/03-politicos/README.md` (CREATED)
+  - `mocks/04-votacoes/README.md` (CREATED)
+  - `mocks/05-indicadores/README.md` (CREATED)
+  - `mocks/06-esferas/README.md` (CREATED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `/mocks` is a visual screen index, not application code. The root README records the folder order and the existing visual rules: sphere borders, dual score, semicircular gauge, and gem tiers. Each numbered folder has a short README for the assets that belong there. `.gitkeep` was not added because every folder already contains a README, which is enough for Git to track it.
+- **Compilation Status:** Documentation only. No TypeScript or test run.
+
+### [2026-10-21] — `INFRA-CHECKPOINT-MOCKS-AND-PUSH`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `mocks/README.md` (CREATED)
+  - `mocks/00-design-system/README.md` (CREATED)
+  - `mocks/01-home/README.md` (CREATED)
+  - `mocks/02-busca/README.md` (CREATED)
+  - `mocks/03-politicos/README.md` (CREATED)
+  - `mocks/04-votacoes/README.md` (CREATED)
+  - `mocks/05-indicadores/README.md` (CREATED)
+  - `mocks/06-esferas/README.md` (CREATED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** `TASKS.md` marks the `/mocks` visual catalog scaffold as completed. The folder notes and this documentation are committed as `chore(mocks): setup visual screen catalog structure and sync remote` and pushed to `origin/main`.
+- **Compilation Status:** Documentation and git checkpoint. No application code.
