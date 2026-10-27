@@ -853,3 +853,28 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** `TASKS.md` marks the `/mocks` visual catalog scaffold as completed. The folder notes and this documentation are committed as `chore(mocks): setup visual screen catalog structure and sync remote` and pushed to `origin/main`.
 - **Compilation Status:** Documentation and git checkpoint. No application code.
+
+### [2026-10-26] — `FRONTEND-HOME-STITCH-VISUAL-REFINE`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/hero-search.tsx` (MODIFIED)
+  - `src/components/home/kpi-stats.tsx` (MODIFIED)
+  - `src/components/home/sphere-selection.tsx` (MODIFIED)
+  - `src/components/home/sphere-modals.tsx` (MODIFIED)
+  - `src/components/home/featured-carousel.tsx` (MODIFIED)
+  - `src/components/home/recent-votings.tsx` (MODIFIED)
+  - `src/app/page.tsx` (MODIFIED)
+  - `src/app/globals.css` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Home components under `src/components/home/` were restyled to match the Stitch `code.html` layout while keeping `SphereSelectionProvider`, `useSphereSelection`, `getFeaturedProfilesBySphere`, and existing props. Hero uses the Stitch navy→forest gradient with pill search and sphere chips. Sphere tabs render as a four-pillar card grid; featured and voting sections use rounded-2xl cards, emerald CTAs, and dual-tone vote bars. Trilhas and notícias from Stitch were not added (no existing components). Risk: KPI section is a visual mapping of the current stats strip, not a 1:1 Stitch block; vote percentages remain illustrative mocks.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 21 tests.
+
+### [2026-10-26] — `FRONTEND-HOME-TRAILS-AND-NEWS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/educational-trails.tsx` (CREATED)
+  - `src/components/home/news-feed.tsx` (CREATED)
+  - `src/app/page.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Extracted Stitch Educational Trails and News Feed into server components with semantic tokens, lucide icons, and Next.js `Link`. Trails show category/module badges and progress meters; news cards use gradient icon covers instead of remote Stitch placeholders (avoids `next/image` remote host config). Mounted on the home page after featured politicians / before KPIs and after recent votings, keeping `max-w-7xl` and `space-y-20`. Risk: content remains static illustrative catalog; trail CTAs deep-link to `/busca` queries, not a real LMS.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 21 tests.

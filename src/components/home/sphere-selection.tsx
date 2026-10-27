@@ -147,11 +147,26 @@ export function SphereTabs() {
     tabRefs.current[nextIndex]?.focus();
   }
 
+  const iconTone = {
+    [SphereType.POLITICA]: "bg-emerald-50 text-emerald-700",
+    [SphereType.JUDICIARIO]: "bg-amber-50 text-amber-700",
+    [SphereType.ACADEMIA]: "bg-blue-50 text-blue-700",
+    [SphereType.SEGURANCA]: "bg-muted text-foreground",
+  } as const;
+
+  const ctaLabel = {
+    [SphereType.POLITICA]: "Explorar mandato & verbas",
+    [SphereType.JUDICIARIO]: "Consultar decisões",
+    [SphereType.ACADEMIA]: "Ver indicadores científicos",
+    [SphereType.SEGURANCA]: "Estatísticas em tempo real",
+  } as const;
+
   return (
     <div
       role="tablist"
       aria-label="Esferas de cobertura"
-      className="grid w-full grid-cols-2 gap-1 rounded-xl border border-border bg-background p-1 shadow-sm sm:grid-cols-4"
+      id="pilares"
+      className="scroll-mt-24 grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
       onKeyDown={onTabListKeyDown}
     >
       {HOME_SPHERES.map((sphere, index) => {
@@ -168,15 +183,31 @@ export function SphereTabs() {
             aria-selected={selected}
             aria-controls={sphere.anchor}
             tabIndex={selected ? 0 : -1}
-            className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-              selected
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-foreground hover:bg-muted"
+            className={`group flex flex-col justify-between rounded-2xl border bg-card p-6 text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+              selected ? "border-emerald-600/50 ring-1 ring-emerald-600/30" : "border-border"
             }`}
             onClick={() => selectSphere(sphere.type)}
           >
-            <span aria-hidden="true">{sphere.emoji}</span>
-            {sphere.label}
+            <div>
+              <div
+                className={`mb-4 flex size-12 items-center justify-center rounded-xl text-2xl transition-transform group-hover:scale-105 ${iconTone[sphere.type]}`}
+                aria-hidden="true"
+              >
+                {sphere.emoji}
+              </div>
+              <h3 className="text-lg font-bold text-foreground transition-colors group-hover:text-emerald-700">
+                {sphere.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {sphere.description}
+              </p>
+            </div>
+            <div className="mt-6 flex items-center justify-between border-t border-border pt-4 text-xs font-semibold text-emerald-700">
+              <span>{ctaLabel[sphere.type]}</span>
+              <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">
+                →
+              </span>
+            </div>
           </button>
         );
       })}

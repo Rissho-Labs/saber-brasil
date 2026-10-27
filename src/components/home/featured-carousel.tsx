@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileCard } from "@/components/ui/profile-card";
 import { SphereCard } from "@/components/home/sphere-modals";
@@ -126,7 +126,7 @@ function FeaturedTrack({ profiles }: { profiles: FeaturedProfilesBySphere[Sphere
           variant="outline"
           size="icon"
           aria-label="Representantes anteriores"
-          className={atStart ? "hidden" : undefined}
+          className={atStart ? "hidden" : "rounded-xl border-border bg-card"}
           onClick={() => moveByUser(-1)}
         >
           <ChevronLeft aria-hidden="true" />
@@ -138,6 +138,7 @@ function FeaturedTrack({ profiles }: { profiles: FeaturedProfilesBySphere[Sphere
           size="icon"
           aria-label="Próximos representantes"
           disabled={atEnd}
+          className="rounded-xl border-border bg-card"
           onClick={() => moveByUser(1)}
         >
           <ChevronRight aria-hidden="true" />
@@ -173,22 +174,50 @@ export function FeaturedCarousel({
   const profiles = profilesBySphere[activeSphere];
 
   return (
-    <section aria-labelledby={`${baseId}-heading`} className="space-y-4">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h2 id={`${baseId}-heading`} className="text-xl font-bold tracking-tight">
+    <section
+      aria-labelledby={`${baseId}-heading`}
+      id="transparencia"
+      className="scroll-mt-24 space-y-8"
+    >
+      <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 sm:flex-row sm:items-end">
+        <div className="space-y-1">
+          <p className="text-xs font-bold tracking-wider text-emerald-700 uppercase">
+            Fiscalização &amp; Votações
+          </p>
+          <h2
+            id={`${baseId}-heading`}
+            className="flex items-center gap-2 text-2xl font-extrabold tracking-tight text-foreground"
+          >
+            <Users className="size-5 text-emerald-700" aria-hidden="true" />
             Representantes em Destaque
           </h2>
           <p className="text-sm text-muted-foreground">
             Até 4 perfis por esfera, ordenados pelo Índice de Gestão.
           </p>
         </div>
-        <Button asChild>
-          <Link href={`/esferas/${sphereSlugForType(activeSphere)}`}>Ver detalhes da esfera</Link>
-        </Button>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">
+            <span className="size-2 rounded-full bg-emerald-500" aria-hidden="true" />
+            Dados sincronizados com a Câmara e Senado
+          </span>
+          <Button asChild className="rounded-lg bg-emerald-700 text-white hover:bg-emerald-800">
+            <Link href={`/esferas/${sphereSlugForType(activeSphere)}`}>
+              Ver detalhes da esfera
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <div className="space-y-4">
+        <div className="mx-auto mb-2 max-w-2xl space-y-2 text-center">
+          <h3 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl">
+            Como você deseja explorar?
+          </h3>
+          <p className="text-sm text-muted-foreground sm:text-base">
+            Acesse os dados públicos organizados por área temática com auditoria contínua e
+            visualizações didáticas.
+          </p>
+        </div>
         <SphereTabs />
         <SphereCard />
       </div>

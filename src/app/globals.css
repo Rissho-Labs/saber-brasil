@@ -129,12 +129,11 @@
   }
 }
 
-/* Home hero mesh — scoped to the search banner, navy + green/gold wash */
+/* Home hero mesh — Stitch navy → forest with amber/emerald washes */
 .hero-mesh {
   background:
-    radial-gradient(120% 80% at 10% 0%, rgba(16, 185, 129, 0.22), transparent 55%),
-    radial-gradient(90% 70% at 90% 20%, rgba(234, 179, 8, 0.16), transparent 50%),
-    linear-gradient(160deg, #071427 0%, #0b1f3a 45%, #0a1628 100%);
+    radial-gradient(circle at 50% 20%, rgba(217, 119, 6, 0.15) 0%, transparent 40%),
+    linear-gradient(145deg, #0d1b2a 0%, #11293b 45%, #0f7b42 100%);
 }
 
 .hero-mesh-layer {
