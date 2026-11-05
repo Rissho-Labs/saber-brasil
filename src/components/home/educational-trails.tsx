@@ -70,9 +70,9 @@ const TRAILS: readonly EducationalTrail[] = [
 ];
 
 const CATEGORY_CLASS: Record<TrailTone, string> = {
-  emerald: "bg-emerald-100 text-emerald-800",
-  amber: "bg-amber-100 text-amber-800",
-  slate: "bg-blue-100 text-blue-800",
+  emerald: "border border-border bg-secondary text-secondary-foreground",
+  amber: "border border-border bg-muted text-muted-foreground",
+  slate: "border border-border bg-accent text-accent-foreground",
 };
 
 const PROGRESS_TEXT_CLASS: Record<TrailTone, string> = {
@@ -96,9 +96,17 @@ function TrailCta({
   label: string;
   variant: EducationalTrail["ctaVariant"];
 }) {
+  const focusClass =
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+
   if (variant === "outline") {
     return (
-      <Button asChild variant="outline" size="sm" className="rounded-lg text-xs font-bold shadow-sm">
+      <Button
+        asChild
+        variant="outline"
+        size="sm"
+        className={cn("rounded-lg text-xs font-bold shadow-sm", focusClass)}
+      >
         <Link href={href}>{label}</Link>
       </Button>
     );
@@ -109,7 +117,10 @@ function TrailCta({
       <Button
         asChild
         size="sm"
-        className="rounded-lg bg-foreground text-xs font-bold text-background shadow-sm hover:bg-foreground/90"
+        className={cn(
+          "rounded-lg bg-foreground text-xs font-bold text-background shadow-sm hover:bg-foreground/90",
+          focusClass,
+        )}
       >
         <Link href={href}>{label}</Link>
       </Button>
@@ -120,7 +131,10 @@ function TrailCta({
     <Button
       asChild
       size="sm"
-      className="rounded-lg bg-emerald-700 text-xs font-bold text-white shadow-sm hover:bg-emerald-800"
+      className={cn(
+        "rounded-lg bg-emerald-700 text-xs font-bold text-white shadow-sm hover:bg-emerald-800",
+        focusClass,
+      )}
     >
       <Link href={href}>{label}</Link>
     </Button>
