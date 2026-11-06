@@ -67,5 +67,29 @@
 ## SPRINT 18: Visual screen catalog
 - [x] `/mocks` scaffold: numbered screen folders and README notes for the visual catalog
 
+## SPRINT 19: Design tokens foundation
+- [x] Design tokens foundation (civic palette, Inter, light/dark CSS variables)
+
+## SPRINT 20: Atomic UI components
+- [x] Atomic UI components (Button, Card, Badge, SearchInput, barrel)
+
+## SPRINT 21: Layout and navigation shell
+- [x] Layout and navigation shell (Navbar, Footer, SEO metadata)
+
+## SPRINT 22: Performance audit (barrels / client leaves)
+- [x] Performance audit: clean barrels, client leaves only, zero `any`
+
+## SPRINT 23: Politician types and mock data
+- [x] Politician TypeScript models and mock data service
+
+## SPRINT 24: Politicians directory listing and search
+- [x] Politicians directory with URL-driven filters and debounced search
+
+## SPRINT 25: Politician profile detail
+- [x] Politician profile detail with header, stats, and activity tabs
+
+## SPRINT 26: Politician module loading/error and perf audit
+- [x] Politician loading skeletons, error boundary, and barrel/TS audit
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

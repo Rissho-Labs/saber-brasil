@@ -158,3 +158,17 @@ export type UserEvaluationInsert = Omit<UserEvaluation, "id" | "updated_at"> & {
   id?: UUID;
   updated_at?: string;
 };
+
+/** UI / mock politician catalog (see `src/types/politician.ts`). */
+export type {
+  BrazilianUF,
+  ExpenseSummary,
+  PoliticalProposal,
+  Politician,
+  PoliticianFilters,
+  PoliticianMetrics,
+  PoliticianRole,
+  ProposalStatus,
+  VotingPosition,
+  VotingRecord,
+} from "@/types/politician";

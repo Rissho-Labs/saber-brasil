@@ -899,3 +899,108 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** Hardened home components against hallucination and non-semantic colors. Hero/spheres/trails/news use `bg-primary`, `text-primary`, `bg-card`, `border-border`, and related tokens while keeping z-index and responsive grids. `RecentVotings` now reads placares from `filterVotingsByStatus`. KPI strip no longer invents live Chamber counts. `useSphereSelection` / provider contracts unchanged; only `sphere-selection.tsx` remains a Client Component.
 - **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 21 tests.
+
+### [2026-11-05] ‚Äî `SABER-A01-DESIGN-TOKENS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `tailwind.config.ts` (MODIFIED)
+  - `src/app/globals.css` (MODIFIED)
+  - `src/lib/utils.ts` (MODIFIED)
+  - `src/app/layout.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Established civic design tokens: primary navy (`--civic-navy` / `#0D1B2A`), secondary/success emerald (`--civic-forest` / `#0F7B42`), warning amber, destructive red, info cyan, plus light/dark foundations. Tailwind v4 `@theme` exposes `bg-success`, `bg-warning`, `bg-civic-navy`, etc. `tailwind.config.ts` mirrors the same CSS variables. Font stack switched to Inter + JetBrains Mono via `next/font` with `display: swap`. Hero mesh now references tokens. `cn()` remains `clsx` + `tailwind-merge`. Risk: site-wide primary color shift from near-black to navy (emerald primary in dark mode) will change shadcn button look across pages.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 21 tests.
+
+### [2026-11-05] ‚Äî `SABER-A02-ATOMIC-COMPONENTS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/ui/button.tsx` (MODIFIED)
+  - `src/components/ui/card.tsx` (MODIFIED)
+  - `src/components/ui/badge.tsx` (MODIFIED)
+  - `src/components/ui/search-input.tsx` (CREATED)
+  - `src/components/ui/index.ts` (CREATED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Extended existing kebab-case UI modules under `src/components/ui/` (Windows cannot host parallel `Button.tsx` / `button.tsx`). Button gained `primary`/`md` aliases, `loading` + `aria-busy`, and typed `ButtonProps`. Card exported typed compound props including `CardFooter`. Badge added `approved` / `rejected` / `abstention` / `party` / `category`. Added client `SearchInput` with debounce, clear control, and focus rings. Barrel `index.ts` re-exports the set. Risk: `asChild` + `loading` falls back to a native button because Radix Slot requires a single child; Slot remains only for Link composition already used across the app.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 21 tests.
+
+### [2026-11-05] ‚Äî `SABER-A03-LAYOUT-NAVIGATION`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/navigation/navbar.tsx` (CREATED)
+  - `src/components/navigation/nav-links.tsx` (CREATED)
+  - `src/components/navigation/footer.tsx` (CREATED)
+  - `src/components/navbar.tsx` (MODIFIED ‚Äî re-export)
+  - `src/app/layout.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Added responsive navigation shell under `src/components/navigation/`. Server `Navbar` keeps Supabase session + branding; client `NavLinks` provides In√≠cio/Pol√≠ticos(`/busca`)/Vota√ß√µes/Indicadores with `usePathname` active states and an accessible mobile drawer. `Footer` lists Dados Abertos / C√¢mara / Senado / Portal da Transpar√™ncia plus civic disclaimer. Root layout integrates Navbar + Footer, Inter/JetBrains Mono, skip link, and Open Graph metadata. Risk: there is no `/politicos` index route yet, so ‚ÄúPol√≠ticos‚Äù points to `/busca`; pages still own their own `<main>` to avoid nested landmarks.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 21 tests.
+
+### [2026-11-05] ‚Äî `SABER-A04-PERFORMANCE-AUDIT`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/navigation/index.ts` (CREATED)
+  - `src/components/ui/index.ts` (MODIFIED)
+  - `src/components/ui/search-input.tsx` (MODIFIED)
+  - `src/app/layout.tsx` (MODIFIED)
+  - `src/components/navbar.tsx` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Added clean relative barrels for `@/components/navigation` and `@/components/ui`. Confirmed `'use client'` on interactive leaves only for the new shell/UI set: `nav-links.tsx` (mobile menu + pathname) and `search-input.tsx` (debounce); `navbar.tsx` / `footer.tsx` / `button|card|badge|input` remain Server Components. Zero `any` in audited UI/navigation/layout files; `SearchInputProps` now uses typed `ComponentProps`. Layout imports `Navbar`/`Footer` from the navigation barrel. Risk: importing `SearchInput` via the UI barrel still creates a client reference edge ‚Äî deep-import `@/components/ui/button` from Server Components when only Button is needed.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 21 tests.
+
+### [2026-11-05] ó `SABER-B01-DATA-TYPES-MOCKS`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/types/politician.ts` (CREATED)
+  - `src/lib/data/politicians.ts` (CREATED)
+  - `src/lib/data/politicians.test.ts` (CREATED)
+  - `src/types/index.ts` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Added strongly typed UI catalog models (`Politician`, `PoliticalProposal`, `ExpenseSummary`, filters, UF) kept separate from Supabase `PublicProfile`. Mock async service exposes `getPoliticians`, `getPoliticianById`, `getPoliticianProposals` (plus expense/party/state helpers) over an illustrative federal roster with microtask `Promise.resolve`. Risk: catalog is illustrative only ó do not treat metrics/expenses as live C‚mara/Senado data.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 8 files and 25 tests.
+
+### [2026-11-05] ó `SABER-B02-LISTING-SEARCH`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/politicians/politician-card.tsx` (CREATED)
+  - `src/components/politicians/politician-filters.tsx` (CREATED)
+  - `src/components/politicians/index.ts` (CREATED)
+  - `src/app/politicos/page.tsx` (CREATED)
+  - `src/components/navigation/nav-links.tsx` (MODIFIED ó PolÌticos ? `/politicos`)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Server-rendered `/politicos` directory filters mock catalog via Zod-validated `searchParams` (`q`/`party`/`state`/`role`). Client `PoliticianFilters` updates the URL with `router.replace` + debounced `SearchInput` (no full reload). `PoliticianCard` links to `/politicos/[id]` with photo fallback initials and metric summaries. Risk: existing `/politicos/[id]` still loads Supabase `PublicProfile` ó mock catalog ids will 404 until a detail sprint bridges catalogs; navbar now points at the new directory.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 8 files and 25 tests.
+
+### [2026-11-05] ó `SABER-B03-PROFILE-DETAIL`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/app/politicos/[id]/page.tsx` (MODIFIED)
+  - `src/components/politicians/politician-header.tsx` (CREATED)
+  - `src/components/politicians/politician-stats.tsx` (CREATED)
+  - `src/components/politicians/politician-activity-tabs.tsx` (CREATED)
+  - `src/components/politicians/index.ts` (MODIFIED)
+  - `src/types/politician.ts` (MODIFIED ó `VotingRecord`)
+  - `src/types/index.ts` (MODIFIED)
+  - `src/lib/data/politicians.ts` (MODIFIED ó voting/expenses coverage)
+  - `src/lib/data/politicians.test.ts` (MODIFIED)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Catalog detail route resolves mock politicians with `generateMetadata`, Zod id validation, and `notFound()`. Header/stats/tabs cover photo+civil name+contacts, presence/activity/alignment metrics, and proposals/votes/expenses. Dual-path keeps Supabase `PublicProfile` UUID pages for busca/esferas. Risk: legislative activity score is derived from proposal count (not a live C‚mara metric); institutional links are generic portals, not individual mandate pages.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 8 files and 26 tests.
+
+### [2026-11-05] ó `SABER-B04-PROFILES-AUDIT-PERF`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/app/politicos/loading.tsx` (CREATED)
+  - `src/app/politicos/[id]/loading.tsx` (MODIFIED ó match catalog header/stats/tabs)
+  - `src/app/politicos/error.tsx` (CREATED)
+  - `src/components/politicians/index.ts` (MODIFIED ó server vs client leaf notes)
+  - `TASKS.md` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Added route skeletons for directory grid and profile detail; client `error.tsx` with `reset` + directory/home fallbacks. Barrel documents server-safe vs client leaves (`PoliticianFilters`, `PoliticianActivityTabs`). Zero `any` in politicians components; `tsc --noEmit` clean. Risk: segment `loading.tsx` covers full navigations/searchParam RSC waits ó filter `useTransition` pending state remains visual-only on the client controls.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 8 files and 26 tests.

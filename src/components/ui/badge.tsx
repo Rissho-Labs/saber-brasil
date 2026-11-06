@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
   {
     variants: {
       variant: {
@@ -13,13 +13,22 @@ const badgeVariants = cva(
           "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive:
           "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
-        outline: "text-foreground",
+        outline: "border-border text-foreground",
+        /** Voting outcome: approved / a favor */
+        approved: "border-transparent bg-success/15 text-success",
+        /** Voting outcome: rejected / contra */
+        rejected: "border-transparent bg-destructive/15 text-destructive",
+        /** Voting outcome: abstention */
+        abstention: "border-transparent bg-muted text-muted-foreground",
+        /** Political party / category chip */
+        party: "border-border bg-card text-foreground",
+        category: "border-transparent bg-accent text-accent-foreground",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 );
 
 export interface BadgeProps
@@ -28,7 +37,7 @@ export interface BadgeProps
 
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+    <div data-slot="badge" className={cn(badgeVariants({ variant }), className)} {...props} />
   );
 }
 
