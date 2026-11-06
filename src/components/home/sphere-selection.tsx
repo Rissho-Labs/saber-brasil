@@ -6,6 +6,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type KeyboardEvent,
   type ReactNode,
 } from "react";
 import { SphereType } from "@/types";
@@ -126,7 +127,7 @@ export function SphereTabs() {
     HOME_SPHERES.findIndex((sphere) => sphere.type === activeSphere),
   );
 
-  function onTabListKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+  function onTabListKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     const lastIndex = HOME_SPHERES.length - 1;
     let nextIndex = activeIndex;
 
@@ -148,17 +149,17 @@ export function SphereTabs() {
   }
 
   const iconTone = {
-    [SphereType.POLITICA]: "bg-emerald-50 text-emerald-700",
-    [SphereType.JUDICIARIO]: "bg-amber-50 text-amber-700",
-    [SphereType.ACADEMIA]: "bg-blue-50 text-blue-700",
+    [SphereType.POLITICA]: "bg-primary/10 text-primary",
+    [SphereType.JUDICIARIO]: "bg-secondary text-secondary-foreground",
+    [SphereType.ACADEMIA]: "bg-accent text-accent-foreground",
     [SphereType.SEGURANCA]: "bg-muted text-foreground",
   } as const;
 
   const ctaLabel = {
     [SphereType.POLITICA]: "Explorar mandato & verbas",
-    [SphereType.JUDICIARIO]: "Consultar decisões",
-    [SphereType.ACADEMIA]: "Ver indicadores científicos",
-    [SphereType.SEGURANCA]: "Estatísticas em tempo real",
+    [SphereType.JUDICIARIO]: "Consultar cobertura judicial",
+    [SphereType.ACADEMIA]: "Ver indicadores acadêmicos",
+    [SphereType.SEGURANCA]: "Ver cobertura da esfera",
   } as const;
 
   return (
@@ -184,7 +185,7 @@ export function SphereTabs() {
             aria-controls={sphere.anchor}
             tabIndex={selected ? 0 : -1}
             className={`group flex flex-col justify-between rounded-2xl border bg-card p-6 text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-              selected ? "border-emerald-600/50 ring-1 ring-emerald-600/30" : "border-border"
+              selected ? "border-primary/50 ring-1 ring-primary/30" : "border-border"
             }`}
             onClick={() => selectSphere(sphere.type)}
           >
@@ -195,14 +196,14 @@ export function SphereTabs() {
               >
                 {sphere.emoji}
               </div>
-              <h3 className="text-lg font-bold text-foreground transition-colors group-hover:text-emerald-700">
+              <h3 className="text-lg font-bold text-foreground transition-colors group-hover:text-primary">
                 {sphere.title}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 {sphere.description}
               </p>
             </div>
-            <div className="mt-6 flex items-center justify-between border-t border-border pt-4 text-xs font-semibold text-emerald-700">
+            <div className="mt-6 flex items-center justify-between border-t border-border pt-4 text-xs font-semibold text-primary">
               <span>{ctaLabel[sphere.type]}</span>
               <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">
                 →

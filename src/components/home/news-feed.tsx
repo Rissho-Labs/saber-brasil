@@ -1,8 +1,15 @@
 import Link from "next/link";
-import { ArrowRight, Clock3, Landmark, LineChart, Newspaper, Users } from "lucide-react";
+import {
+  ArrowRight,
+  Clock3,
+  Landmark,
+  LineChart,
+  Newspaper,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import type { LucideIcon } from "lucide-react";
 
 interface NewsItem {
   id: string;
@@ -17,6 +24,7 @@ interface NewsItem {
   accentClass: string;
 }
 
+/** Editorial samples for the home feed — not a live news API. */
 const NEWS_ITEMS: readonly NewsItem[] = [
   {
     id: "reforma-cesta-basica",
@@ -27,10 +35,10 @@ const NEWS_ITEMS: readonly NewsItem[] = [
     category: "Resumo Didático",
     readTime: "5 min de leitura",
     publishedLabel: "24 de Outubro",
-    source: "Agência Senado",
+    source: "Agência Senado (ilustrativo)",
     imageAlt: "Congresso Nacional em Brasília",
     Icon: Landmark,
-    accentClass: "from-emerald-900 to-slate-950",
+    accentClass: "from-primary to-foreground",
   },
   {
     id: "teto-emendas",
@@ -41,10 +49,10 @@ const NEWS_ITEMS: readonly NewsItem[] = [
     category: "Resumo Didático",
     readTime: "4 min de leitura",
     publishedLabel: "25 de Outubro",
-    source: "Consultoria",
+    source: "Consultoria (ilustrativo)",
     imageAlt: "Comissão e reuniões de debate parlamentar",
     Icon: Users,
-    accentClass: "from-amber-900 to-slate-950",
+    accentClass: "from-secondary-foreground to-foreground",
   },
   {
     id: "painel-orcamento",
@@ -54,11 +62,11 @@ const NEWS_ITEMS: readonly NewsItem[] = [
       "Análise gráfica simples demonstrando a divisão real da arrecadação federal entre saúde pública, previdência social, educação básica e amortização da dívida.",
     category: "Resumo Didático",
     readTime: "6 min de leitura",
-    publishedLabel: "Hoje às 09:15",
-    source: "Dados Abertos",
+    publishedLabel: "Amostra editorial",
+    source: "Dados Abertos (ilustrativo)",
     imageAlt: "Painel de dados econômicos e gráficos de orçamento",
     Icon: LineChart,
-    accentClass: "from-blue-950 to-slate-950",
+    accentClass: "from-muted-foreground to-foreground",
   },
 ];
 
@@ -80,8 +88,8 @@ function NewsCover({
         accentClass,
       )}
     >
-      <Icon className="size-14 text-white/35" aria-hidden="true" />
-      <div className="absolute inset-0 bg-black/10" aria-hidden="true" />
+      <Icon className="size-14 text-primary-foreground/35" aria-hidden="true" />
+      <div className="absolute inset-0 bg-background/10" aria-hidden="true" />
     </div>
   );
 }
@@ -91,24 +99,24 @@ export function NewsFeed() {
     <section aria-labelledby="noticias-heading" id="noticias" className="scroll-mt-24 space-y-8">
       <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 sm:flex-row sm:items-end">
         <div className="space-y-1">
-          <p className="text-xs font-bold tracking-wider text-emerald-700 uppercase">
+          <p className="text-xs font-bold tracking-wider text-primary uppercase">
             Jornalismo Explicativo Imparcial
           </p>
           <h2
             id="noticias-heading"
             className="flex items-center gap-2 text-2xl font-extrabold tracking-tight text-foreground"
           >
-            <Newspaper className="size-5 text-emerald-700" aria-hidden="true" />
+            <Newspaper className="size-5 text-primary" aria-hidden="true" />
             3. Feed de Notícias Descomplicadas
           </h2>
           <p className="text-sm text-muted-foreground">
-            Acontecimentos políticos e econômicos explicados em linguagem simples, precisa e
-            direta.
+            Cards editoriais de amostra. Não há sincronização com Agência Senado ou feeds
+            externos neste ambiente.
           </p>
         </div>
         <Link
           href="/busca"
-          className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-emerald-700 hover:text-emerald-800 sm:mt-0"
+          className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-primary/80 sm:mt-0"
         >
           Ver arquivo completo
           <ArrowRight className="size-3.5" aria-hidden="true" />
@@ -121,14 +129,14 @@ export function NewsFeed() {
             <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:shadow-md">
               <div className="relative overflow-hidden">
                 <NewsCover alt={item.imageAlt} Icon={item.Icon} accentClass={item.accentClass} />
-                <span className="absolute top-3 left-3 rounded border border-white/20 bg-foreground/90 px-2.5 py-1 text-[11px] font-bold tracking-wide text-background uppercase backdrop-blur-md">
+                <span className="absolute top-3 left-3 rounded border border-border bg-foreground/90 px-2.5 py-1 text-[11px] font-bold tracking-wide text-background uppercase backdrop-blur-md">
                   {item.category}
                 </span>
               </div>
-              <Card className="flex flex-1 flex-col border-0 shadow-none">
+              <Card className="flex flex-1 flex-col border-0 bg-card shadow-none">
                 <CardContent className="flex flex-1 flex-col justify-between p-5">
                   <div>
-                    <h3 className="text-base leading-snug font-bold text-foreground transition-colors group-hover:text-emerald-700">
+                    <h3 className="text-base leading-snug font-bold text-foreground transition-colors group-hover:text-primary">
                       {item.title}
                     </h3>
                     <p className="mt-2.5 line-clamp-3 text-sm leading-relaxed text-muted-foreground">

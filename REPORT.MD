@@ -878,3 +878,24 @@
   - `REPORT.MD` (MODIFIED)
 - **Summary:** Extracted Stitch Educational Trails and News Feed into server components with semantic tokens, lucide icons, and Next.js `Link`. Trails show category/module badges and progress meters; news cards use gradient icon covers instead of remote Stitch placeholders (avoids `next/image` remote host config). Mounted on the home page after featured politicians / before KPIs and after recent votings, keeping `max-w-7xl` and `space-y-20`. Risk: content remains static illustrative catalog; trail CTAs deep-link to `/busca` queries, not a real LMS.
 - **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 21 tests.
+
+### [2026-11-05] — `SB-261105-01`
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/politicos/summary-card.tsx` (CREATED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Added Server Component `SummaryCard` for politician layer-1 overview: local `next/image` avatar with initials fallback, “Em Exercício” status chip, dual gestão (0–100) + carisma (1–5 stars), derived plain-language summary, sphere highlight chips, and “Raio-X Completo” Link CTA. Optional `photoUrl` / `summary` / `highlights` props extend `PublicProfile` without schema changes. Risk: remote photo URLs intentionally fall back to initials until `next.config` remotePatterns exist; component is not yet mounted on `/politicos/[id]`.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 21 tests.
+
+### [2026-11-05] — `SB-261105-01` (home semantic harden)
+- **Status:** DONE
+- **Files Created / Modified:**
+  - `src/components/home/hero-search.tsx` (MODIFIED)
+  - `src/components/home/sphere-selection.tsx` (MODIFIED)
+  - `src/components/home/kpi-stats.tsx` (MODIFIED)
+  - `src/components/home/recent-votings.tsx` (MODIFIED)
+  - `src/components/home/educational-trails.tsx` (MODIFIED)
+  - `src/components/home/news-feed.tsx` (MODIFIED)
+  - `REPORT.MD` (MODIFIED)
+- **Summary:** Hardened home components against hallucination and non-semantic colors. Hero/spheres/trails/news use `bg-primary`, `text-primary`, `bg-card`, `border-border`, and related tokens while keeping z-index and responsive grids. `RecentVotings` now reads placares from `filterVotingsByStatus`. KPI strip no longer invents live Chamber counts. `useSphereSelection` / provider contracts unchanged; only `sphere-selection.tsx` remains a Client Component.
+- **Compilation Status:** Validated with zero errors via `npx tsc --noEmit`. `npm run test` passed 7 files and 21 tests.

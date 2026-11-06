@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-type TrailTone = "emerald" | "amber" | "slate";
+type TrailTone = "primary" | "secondary" | "muted";
 
 interface EducationalTrail {
   id: string;
@@ -18,9 +18,10 @@ interface EducationalTrail {
   ctaLabel: string;
   href: string;
   tone: TrailTone;
-  ctaVariant: "primary" | "navy" | "outline";
+  ctaVariant: "primary" | "secondary" | "outline";
 }
 
+/** Illustrative curriculum cards — not a live LMS enrollment feed. */
 const TRAILS: readonly EducationalTrail[] = [
   {
     id: "orcamento-publico",
@@ -34,7 +35,7 @@ const TRAILS: readonly EducationalTrail[] = [
     footerNote: "Restam 2 aulas",
     ctaLabel: "Continuar • 10 min",
     href: "/busca?q=or%C3%A7amento",
-    tone: "emerald",
+    tone: "primary",
     ctaVariant: "primary",
   },
   {
@@ -49,8 +50,8 @@ const TRAILS: readonly EducationalTrail[] = [
     footerNote: "Introdução básica",
     ctaLabel: "Começar • 15 min",
     href: "/busca?q=direitos",
-    tone: "amber",
-    ctaVariant: "navy",
+    tone: "secondary",
+    ctaVariant: "secondary",
   },
   {
     id: "poderes-republica",
@@ -64,27 +65,27 @@ const TRAILS: readonly EducationalTrail[] = [
     footerNote: "Curso introdutório",
     ctaLabel: "Iniciar • 8 min",
     href: "/busca?q=poderes",
-    tone: "slate",
+    tone: "muted",
     ctaVariant: "outline",
   },
 ];
 
 const CATEGORY_CLASS: Record<TrailTone, string> = {
-  emerald: "border border-border bg-secondary text-secondary-foreground",
-  amber: "border border-border bg-muted text-muted-foreground",
-  slate: "border border-border bg-accent text-accent-foreground",
+  primary: "border border-border bg-primary/10 text-primary",
+  secondary: "border border-border bg-secondary text-secondary-foreground",
+  muted: "border border-border bg-muted text-muted-foreground",
 };
 
 const PROGRESS_TEXT_CLASS: Record<TrailTone, string> = {
-  emerald: "text-emerald-700",
-  amber: "text-amber-700",
-  slate: "text-muted-foreground",
+  primary: "text-primary",
+  secondary: "text-secondary-foreground",
+  muted: "text-muted-foreground",
 };
 
 const PROGRESS_BAR_CLASS: Record<TrailTone, string> = {
-  emerald: "bg-emerald-700",
-  amber: "bg-amber-500",
-  slate: "bg-muted-foreground/40",
+  primary: "bg-primary",
+  secondary: "bg-secondary-foreground/70",
+  muted: "bg-muted-foreground/40",
 };
 
 function TrailCta({
@@ -96,46 +97,24 @@ function TrailCta({
   label: string;
   variant: EducationalTrail["ctaVariant"];
 }) {
-  const focusClass =
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
-
   if (variant === "outline") {
     return (
-      <Button
-        asChild
-        variant="outline"
-        size="sm"
-        className={cn("rounded-lg text-xs font-bold shadow-sm", focusClass)}
-      >
+      <Button asChild variant="outline" size="sm" className="rounded-lg text-xs font-bold shadow-sm">
         <Link href={href}>{label}</Link>
       </Button>
     );
   }
 
-  if (variant === "navy") {
+  if (variant === "secondary") {
     return (
-      <Button
-        asChild
-        size="sm"
-        className={cn(
-          "rounded-lg bg-foreground text-xs font-bold text-background shadow-sm hover:bg-foreground/90",
-          focusClass,
-        )}
-      >
+      <Button asChild variant="secondary" size="sm" className="rounded-lg text-xs font-bold shadow-sm">
         <Link href={href}>{label}</Link>
       </Button>
     );
   }
 
   return (
-    <Button
-      asChild
-      size="sm"
-      className={cn(
-        "rounded-lg bg-emerald-700 text-xs font-bold text-white shadow-sm hover:bg-emerald-800",
-        focusClass,
-      )}
-    >
+    <Button asChild size="sm" className="rounded-lg text-xs font-bold shadow-sm">
       <Link href={href}>{label}</Link>
     </Button>
   );
@@ -146,24 +125,24 @@ export function EducationalTrails() {
     <section aria-labelledby="trilhas-heading" id="trilhas" className="scroll-mt-24 space-y-8">
       <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 sm:flex-row sm:items-end">
         <div className="space-y-1">
-          <p className="text-xs font-bold tracking-wider text-emerald-700 uppercase">
+          <p className="text-xs font-bold tracking-wider text-primary uppercase">
             Capacitação Cidadã
           </p>
           <h2
             id="trilhas-heading"
             className="flex items-center gap-2 text-2xl font-extrabold tracking-tight text-foreground"
           >
-            <BookOpen className="size-5 text-emerald-700" aria-hidden="true" />
+            <BookOpen className="size-5 text-primary" aria-hidden="true" />
             1. Trilhas de Conhecimento
           </h2>
           <p className="text-sm text-muted-foreground">
-            Aprenda sobre o funcionamento do Estado e seus direitos com módulos práticos e
-            didáticos.
+            Módulos ilustrativos de alfabetização cívica. Progresso e certificados não são
+            persistidos neste ambiente.
           </p>
         </div>
         <div className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-muted-foreground">
-          <BadgeCheck className="size-4 text-emerald-700" aria-hidden="true" />
-          Certificados Gratuitos Inclusos
+          <BadgeCheck className="size-4 text-primary" aria-hidden="true" />
+          Certificados (ilustrativo)
         </div>
       </div>
 

@@ -1,44 +1,47 @@
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, CheckCircle2, FileText, Users, Vote } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { filterVotingsByStatus } from "@/lib/search/catalog";
+
+const CATALOG_VOTING_COUNT = filterVotingsByStatus(undefined).length;
 
 const stats = [
   {
-    label: "Parlamentares Monitorados",
-    value: "594",
-    description: "513 Deputados + 81 Senadores",
+    label: "Esferas de cobertura",
+    value: "4",
+    description: "Política, Judiciário, Academia e Segurança",
     icon: Users,
-    accent: "bg-emerald-50 text-emerald-700",
+    accent: "bg-primary/10 text-primary",
   },
   {
-    label: "Votações Registradas",
-    value: "1.240+",
-    description: "Dados de amostragem inicial",
+    label: "Tramitações no catálogo",
+    value: String(CATALOG_VOTING_COUNT),
+    description: "Itens ilustrativos do hub /votacoes",
     icon: Vote,
-    accent: "bg-amber-50 text-amber-700",
+    accent: "bg-secondary text-secondary-foreground",
   },
   {
-    label: "Índice de Assiduidade",
-    value: "92%",
-    description: "Média estimada em plenário",
+    label: "Índice de Assiduidade (amostra)",
+    value: "—",
+    description: "Métrica ilustrativa; sem feed oficial neste ambiente",
     icon: CheckCircle2,
-    accent: "bg-blue-50 text-blue-700",
+    accent: "bg-accent text-accent-foreground",
   },
   {
-    label: "Projetos Monitorados",
-    value: "3.450",
-    description: "Propostas legislativas ativas",
+    label: "Projetos no perfil",
+    value: "Supabase",
+    description: "Lista por representante via public_projects",
     icon: FileText,
     accent: "bg-muted text-foreground",
   },
-];
+] as const;
 
 export function KPIStats() {
   return (
     <section aria-labelledby="kpi-heading" id="pilares-metricas" className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-2xl space-y-1">
-          <p className="text-xs font-bold tracking-wider text-emerald-700 uppercase">
+          <p className="text-xs font-bold tracking-wider text-primary uppercase">
             Painel de monitoramento
           </p>
           <h2
@@ -48,12 +51,13 @@ export function KPIStats() {
             Indicadores do monitoramento
           </h2>
           <p className="text-sm text-muted-foreground sm:text-base">
-            Leitura ilustrativa da cobertura inicial de mandatos, votações e proposições.
+            Leitura ilustrativa da cobertura do app. Não são séries oficiais ao vivo da Câmara ou do
+            Senado.
           </p>
         </div>
         <Link
           href="/indicadores"
-          className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-emerald-700 underline-offset-4 hover:underline"
+          className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-primary underline-offset-4 hover:underline"
         >
           Veja mais
           <ArrowRight className="size-4" aria-hidden="true" />
