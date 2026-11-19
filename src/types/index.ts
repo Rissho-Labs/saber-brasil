@@ -172,3 +172,17 @@ export type {
   VotingPosition,
   VotingRecord,
 } from "@/types/politician";
+
+/** Legislative voting catalog (see `src/types/voting.ts`). */
+export type {
+  IndividualVote,
+  IndicatorTrend,
+  PartyVotingBreakdown,
+  PriorityWeight,
+  TransparencyIndicator,
+  VoteChoice,
+  Voting,
+  VotingCategory,
+  VotingFilters,
+  VotingOutcome,
+} from "@/types/voting";
