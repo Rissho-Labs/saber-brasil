@@ -103,5 +103,15 @@
 - [x] SABER-D02: `/comparar` UI with selector, progressive report, and navbar link
 - [x] SABER-D03: Loading skeleton, error boundary, barrel audit, and docs sync
 
+## MODULE E: Profile Digital Presence & Unified Profile Bridge (SABER-E01…E03)
+- [x] SABER-E01: Digital channel types, mock enrichment, and `resolveUnifiedPolitician` bridge
+- [x] SABER-E02: `DigitalPresenceGrid`, biography summary, and compare CTA on `/politicos/[id]`
+- [x] SABER-E03: Profile loading skeleton, barrel/type audit, and docs sync
+
+## MODULE F (NEXT): Trilhas de Educação Política & Match de Votações
+- [ ] SABER-F01: Educational trail TypeScript models and mock catalog
+- [ ] SABER-F02: Trail listing/detail UI with neutral civic pedagogy
+- [ ] SABER-F03: Voting-match experience linking citizen preferences to catalog votes
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

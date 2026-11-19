@@ -5,7 +5,18 @@
 - Module B (Políticos) entregue: tipos, diretório, perfil, loading/error.
 - Module C (Votações & Indicadores) concluído (`SABER-C01` … `SABER-C05`).
 - Module D (Comparador lado a lado) concluído (`SABER-D01` … `SABER-D03`).
-- Testes: `npx tsc --noEmit` sem erros; Vitest suite verde (37 testes).
+- Module E (Presença Digital & Bridge Unificado) concluído (`SABER-E01` … `SABER-E03`).
+- Próximo marco: Module F — Trilhas de Educação Política & Match de Votações.
+- Testes: `npx tsc --noEmit` sem erros; Vitest suite verde (41 testes).
+
+## Module E — Presença Digital & Profile Bridge
+- Tipos: `DigitalChannel`, `DigitalChannelPlatform`, `biographySummary`, `UnifiedProfileView` em `src/types/politician.ts`.
+- Bridge: `src/lib/data/profile-bridge.ts` + `profile-bridge.test.ts` — catálogo primeiro, Supabase com fallback seguro.
+- UI: `DigitalPresenceGrid` (Server) em `src/components/politicians/`; bio + CTA “Comparar parlamentar” no header.
+- Rota: `/politicos/[id]` resolve via `resolveUnifiedPolitician` (catálogo e UUID Supabase).
+- Skeleton: `loading.tsx` cobre bio, grade 3 colunas de canais, stats e abas.
+- Barrel: `src/components/politicians/index.ts` exporta Server (`DigitalPresenceGrid`, card/header/stats) e Client (filters/tabs).
+- Neutro: só links oficiais/catalogados e resumos factuais — sem juízo editorial.
 
 ## Module D — Comparar Políticos
 - Tipos: `src/types/comparison.ts` (`ComparedPolitician`, `ComparedVotingRow`, `ComparisonHighlight`, `ComparisonReport`).
