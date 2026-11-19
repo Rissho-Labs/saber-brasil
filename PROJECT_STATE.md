@@ -6,8 +6,16 @@
 - Module C (Votações & Indicadores) concluído (`SABER-C01` … `SABER-C05`).
 - Module D (Comparador lado a lado) concluído (`SABER-D01` … `SABER-D03`).
 - Module E (Presença Digital & Bridge Unificado) concluído (`SABER-E01` … `SABER-E03`).
-- Próximo marco: Module F — Trilhas de Educação Política & Match de Votações.
-- Testes: `npx tsc --noEmit` sem erros; Vitest suite verde (41 testes).
+- Module F (Trilhas & Match de Votações) concluído (`SABER-F01` … `SABER-F03`).
+- Testes: `npx tsc --noEmit` sem erros; Vitest suite verde (47 testes).
+
+## Module F — Trilhas & Match de Votações
+- Tipos: `src/types/learning.ts` (`EducationalTrail`, `TrailStep`, `CitizenVoteInput`, `VoteMatchResult`).
+- Dados: `src/lib/data/learning.ts` — 3 trilhas neutras + `calculateVoteMatch` (ignora Skip/Absent; ranking por alinhamento).
+- Testes: `learning.test.ts` (catálogo, dedupe, matemática de %, Absent, ordenação).
+- UI: `/aprender` — `TrailDeckReader` + `VoteMatchSimulator` (client); nav **Aprender**.
+- Perf / resiliência: `loading.tsx` e `error.tsx` em `/aprender`; barrel `src/components/aprender/`.
+- Neutro: escolhas só em memória do browser; ranking quantitativo sem rótulos ideológicos.
 
 ## Module E — Presença Digital & Profile Bridge
 - Tipos: `DigitalChannel`, `DigitalChannelPlatform`, `biographySummary`, `UnifiedProfileView` em `src/types/politician.ts`.

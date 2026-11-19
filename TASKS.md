@@ -108,10 +108,10 @@
 - [x] SABER-E02: `DigitalPresenceGrid`, biography summary, and compare CTA on `/politicos/[id]`
 - [x] SABER-E03: Profile loading skeleton, barrel/type audit, and docs sync
 
-## MODULE F (NEXT): Trilhas de Educação Política & Match de Votações
-- [ ] SABER-F01: Educational trail TypeScript models and mock catalog
-- [ ] SABER-F02: Trail listing/detail UI with neutral civic pedagogy
-- [ ] SABER-F03: Voting-match experience linking citizen preferences to catalog votes
+## MODULE F: Trilhas de Educação Política & Match de Votações (SABER-F01…F03)
+- [x] SABER-F01: Educational trail TypeScript models, catalog, and vote-match engine
+- [x] SABER-F02: `/aprender` trails UI, vote-match simulator, and navbar link
+- [x] SABER-F03: Loading skeleton, error boundary, barrel audit, and docs sync
 
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.
