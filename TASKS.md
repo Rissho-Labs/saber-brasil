@@ -118,5 +118,15 @@
 - [x] SABER-G02: Home page hub UI consuming `getHomeHubOverview()`
 - [x] SABER-G03: `/busca` unification, error boundary, barrel audit, and docs sync
 
+## MODULE H: Open Data Adapters (SABER-H01…H03)
+- [x] SABER-H01: Câmara/Senado open-data connectors with Zod normalizers
+- [x] SABER-H02: Open-data sync pipeline and protected `/api/cron/sync-open-data`
+- [x] SABER-H03: Live snapshot bridge into politicians/votings providers + docs
+
+## MODULE I (NEXT): Evolução das 4 Esferas Institucionais
+- [ ] SABER-I01: Sphere domain models and enriched catalog content
+- [ ] SABER-I02: Sphere page UI depth (pillars, indicators, navigation)
+- [ ] SABER-I03: Sphere module audit, loading/error, and docs sync
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

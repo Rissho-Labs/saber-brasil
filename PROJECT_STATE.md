@@ -8,7 +8,16 @@
 - Module E (Presença Digital & Bridge Unificado) concluído (`SABER-E01` … `SABER-E03`).
 - Module F (Trilhas & Match de Votações) concluído (`SABER-F01` … `SABER-F03`).
 - Module G (Home Search Hub) concluído (`SABER-G01` … `SABER-G03`).
-- Testes: `npx tsc --noEmit` sem erros; Vitest suite verde (51 testes).
+- Module H (Open Data Adapters) concluído (`SABER-H01` … `SABER-H03`).
+- Próximo marco: Module I — Evolução das 4 Esferas Institucionais.
+- Testes: `npx tsc --noEmit` sem erros; Vitest suite verde (67 testes).
+
+## Module H — Open Data Adapters
+- Tipos: `src/types/open-data.ts` (`OpenDataSource`, `OpenDataFetchResult`, `OpenDataSyncSummary`).
+- Adapters: Câmara (deputados + votações) e Senado (senadores) com Zod + timeout 5s.
+- Sync: `runOpenDataSyncPipeline` + cache em memória; cron `GET/POST /api/cron/sync-open-data` (Bearer `CRON_SECRET`).
+- Bridge: `SABER_USE_LIVE_OPEN_DATA=true` mescla snapshot em `getPoliticians` / `getVotings` (catálogo local vence em colisão de id).
+- Env: `CRON_SECRET`, `SABER_USE_LIVE_OPEN_DATA`, `SUPABASE_SERVICE_ROLE_KEY` (opcional) em `.env.example`.
 
 ## Module G — Home Search Hub
 - Tipos: `src/types/home-hub.ts` (`UnifiedSearch*`, `HomeHubOverview`).

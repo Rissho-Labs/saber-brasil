@@ -1,3 +1,4 @@
+import { getCachedOpenDataSnapshot } from "@/lib/open-data/sync-service";
 import type {
   IndividualVote,
   PartyVotingBreakdown,
@@ -9,10 +10,47 @@ import type {
 /**
  * Illustrative Câmara/Senado voting catalog — not a live open-data feed.
  * Async helpers resolve on the next microtask to mimic lightweight API I/O.
+ * Optional live merge when `SABER_USE_LIVE_OPEN_DATA=true` and a sync snapshot exists.
  */
 
 function resolveAsync<T>(value: T): Promise<T> {
   return Promise.resolve(value);
+}
+
+function isLiveOpenDataEnabled(): boolean {
+  return process.env.SABER_USE_LIVE_OPEN_DATA === "true";
+}
+
+/** Local curated rows win on id collision; live-only ids append after. */
+function mergeVotingsCatalogFirst(
+  local: readonly Voting[],
+  live: readonly Voting[],
+): Voting[] {
+  const seen = new Set(local.map((item) => item.id));
+  const merged = [...local];
+
+  for (const item of live) {
+    if (seen.has(item.id)) {
+      continue;
+    }
+    seen.add(item.id);
+    merged.push(item);
+  }
+
+  return merged;
+}
+
+function resolveVotingCatalog(): Voting[] {
+  if (!isLiveOpenDataEnabled()) {
+    return [...VOTINGS];
+  }
+
+  const live = getCachedOpenDataSnapshot()?.votings ?? [];
+  if (live.length === 0) {
+    return [...VOTINGS];
+  }
+
+  return mergeVotingsCatalogFirst(VOTINGS, live);
 }
 
 function fold(value: string): string {
@@ -424,7 +462,8 @@ const TRANSPARENCY_INDICATORS: readonly TransparencyIndicator[] = [
 ];
 
 export async function getVotings(filters?: VotingFilters): Promise<Voting[]> {
-  const rows = VOTINGS.filter((voting) => {
+  const catalog = resolveVotingCatalog();
+  const rows = catalog.filter((voting) => {
     if (filters?.category && voting.category !== filters.category) {
       return false;
     }
@@ -441,7 +480,7 @@ export async function getVotings(filters?: VotingFilters): Promise<Voting[]> {
 }
 
 export async function getVotingById(id: string): Promise<Voting | null> {
-  const voting = VOTINGS.find((item) => item.id === id) ?? null;
+  const voting = resolveVotingCatalog().find((item) => item.id === id) ?? null;
   return resolveAsync(voting);
 }
 

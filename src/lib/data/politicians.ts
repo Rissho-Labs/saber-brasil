@@ -1,3 +1,4 @@
+import { getCachedOpenDataSnapshot } from "@/lib/open-data/sync-service";
 import type {
   BrazilianUF,
   DigitalChannel,
@@ -12,10 +13,47 @@ import type {
 /**
  * Illustrative federal roster — not a live Câmara/Senado feed.
  * Async helpers resolve on the next microtask to mimic lightweight API I/O.
+ * Optional live merge when `SABER_USE_LIVE_OPEN_DATA=true` and a sync snapshot exists.
  */
 
 function resolveAsync<T>(value: T): Promise<T> {
   return Promise.resolve(value);
+}
+
+function isLiveOpenDataEnabled(): boolean {
+  return process.env.SABER_USE_LIVE_OPEN_DATA === "true";
+}
+
+/** Local curated rows win on id collision; live-only ids append after. */
+function mergePoliticiansCatalogFirst(
+  local: readonly Politician[],
+  live: readonly Politician[],
+): Politician[] {
+  const seen = new Set(local.map((item) => item.id));
+  const merged = [...local];
+
+  for (const item of live) {
+    if (seen.has(item.id)) {
+      continue;
+    }
+    seen.add(item.id);
+    merged.push(item);
+  }
+
+  return merged;
+}
+
+function resolvePoliticianCatalog(): Politician[] {
+  if (!isLiveOpenDataEnabled()) {
+    return [...POLITICIANS];
+  }
+
+  const live = getCachedOpenDataSnapshot()?.politicians ?? [];
+  if (live.length === 0) {
+    return [...POLITICIANS];
+  }
+
+  return mergePoliticiansCatalogFirst(POLITICIANS, live);
 }
 
 function chamberPortal(role: PoliticianRole): DigitalChannel {
@@ -627,12 +665,12 @@ function applyFilters(
 
 /** List politicians with optional party / UF / role / text filters. */
 export async function getPoliticians(filters?: PoliticianFilters): Promise<Politician[]> {
-  return resolveAsync(applyFilters(POLITICIANS, filters));
+  return resolveAsync(applyFilters(resolvePoliticianCatalog(), filters));
 }
 
-/** Fetch a single politician by catalog id. */
+/** Fetch a single politician by catalog id (or live open-data id when enabled). */
 export async function getPoliticianById(id: string): Promise<Politician | null> {
-  const match = POLITICIANS.find((item) => item.id === id) ?? null;
+  const match = resolvePoliticianCatalog().find((item) => item.id === id) ?? null;
   return resolveAsync(match);
 }
 
