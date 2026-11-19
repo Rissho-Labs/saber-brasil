@@ -1,27 +1,26 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { z } from "zod";
-import { IndicatorCard } from "@/components/indicadores/indicator-card";
+import { IndicatorCard, SpendingSummaryChart } from "@/components/indicators";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  filterIndicators,
-  INDICATOR_CATEGORIES,
-  type IndicatorCategoryId,
-} from "@/lib/indicadores/catalog";
+import { getTransparencyIndicators } from "@/lib/data/votings";
 import { cn } from "@/lib/utils";
+import type { TransparencyIndicator } from "@/types/voting";
+
+export const metadata: Metadata = {
+  title: "Indicadores de Transparência | SABER Brasil",
+  description:
+    "Painel ilustrativo de transparência legislativa: assiduidade, emendas publicadas, votações nominais e distribuição da cota parlamentar.",
+};
 
 interface IndicadoresPageProps {
   searchParams: Promise<{
+    category?: string | string[];
     categoria?: string | string[];
   }>;
 }
 
-const categorySchema = z.enum([
-  "todos",
-  "ambiente",
-  "infraestrutura",
-  "trabalho",
-  "gestao",
-]);
+const categoryFilterSchema = z.string().trim().min(1).max(80);
 
 function firstParam(value: string | string[] | undefined): string {
   if (Array.isArray(value)) {
@@ -31,59 +30,162 @@ function firstParam(value: string | string[] | undefined): string {
   return value?.trim() ?? "";
 }
 
+function averagePercent(indicators: readonly TransparencyIndicator[]): number | null {
+  const rows = indicators.filter((item) => item.unit === "%");
+  if (rows.length === 0) {
+    return null;
+  }
+  const sum = rows.reduce((acc, item) => acc + item.score, 0);
+  return Math.round((sum / rows.length) * 10) / 10;
+}
+
+function findById(
+  indicators: readonly TransparencyIndicator[],
+  id: string,
+): TransparencyIndicator | undefined {
+  return indicators.find((item) => item.id === id);
+}
+
 export default async function IndicadoresPage({ searchParams }: IndicadoresPageProps) {
   const params = await searchParams;
-  const parsed = categorySchema.safeParse(firstParam(params.categoria));
-  const category: IndicatorCategoryId = parsed.success ? parsed.data : "todos";
-  const items = filterIndicators(category);
+  const rawCategory = firstParam(params.category) || firstParam(params.categoria);
+  const categoryParsed = categoryFilterSchema.safeParse(rawCategory);
+  const category = categoryParsed.success ? categoryParsed.data : undefined;
+
+  const allIndicators = await getTransparencyIndicators();
+  const categories = [...new Set(allIndicators.map((item) => item.category))].sort((a, b) =>
+    a.localeCompare(b, "pt-BR"),
+  );
+  const indicators = category
+    ? allIndicators.filter((item) => item.category === category)
+    : allIndicators;
+
+  const generalIndex = averagePercent(allIndicators);
+  const attendance = findById(allIndicators, "ind-assiduidade-media");
+  /** Illustrative semester volume — not a live Câmara/Senado feed. */
+  const proposalsAnalyzed = 1_240;
+
+  const resultLabel =
+    indicators.length === 1 ? "1 indicador" : `${indicators.length} indicadores`;
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background text-foreground">
       <section className="border-b border-border bg-muted/40 px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl space-y-4">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Indicadores públicos e impacto social
-          </h1>
-          <p className="max-w-3xl text-sm text-muted-foreground">
-            Catálogo ilustrativo. Os valores não são lidos ao vivo do IBGE, do INPE, do DATASUS,
-            do Portal da Transparência nem das auditorias citadas.
-          </p>
-          <nav aria-label="Filtrar por categoria" className="flex flex-wrap gap-2">
-            {INDICATOR_CATEGORIES.map((option) => (
+        <div className="mx-auto max-w-7xl space-y-6">
+          <div className="space-y-2">
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              Indicadores de transparência
+            </h1>
+            <p className="max-w-3xl text-sm text-muted-foreground">
+              Leitura ilustrativa de assiduidade, publicação de emendas, tramitação e abertura de
+              votações nominais. Os valores não são lidos ao vivo do Portal da Transparência, da
+              Câmara ou do Senado.
+            </p>
+          </div>
+
+          <nav aria-label="Filtrar indicadores por categoria" className="flex flex-wrap gap-2">
+            <Link
+              href="/indicadores"
+              aria-current={category ? undefined : "page"}
+              className={cn(
+                buttonVariants({ variant: category ? "outline" : "default", size: "sm" }),
+              )}
+            >
+              Todos
+            </Link>
+            {categories.map((item) => (
               <Link
-                key={option.id}
-                href={option.id === "todos" ? "/indicadores" : `/indicadores?categoria=${option.id}`}
-                aria-current={category === option.id ? "page" : undefined}
+                key={item}
+                href={`/indicadores?category=${encodeURIComponent(item)}`}
+                aria-current={category === item ? "page" : undefined}
                 className={cn(
                   buttonVariants({
-                    variant: category === option.id ? "default" : "outline",
+                    variant: category === item ? "default" : "outline",
                     size: "sm",
                   }),
                 )}
               >
-                {option.label}
+                {item}
               </Link>
             ))}
           </nav>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl space-y-4 px-4 py-8 sm:px-6 lg:px-8">
-        <h2 className="text-sm font-medium text-muted-foreground">
-          {items.length === 1 ? "1 indicador" : `${items.length} indicadores`}
-        </h2>
-        {items.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Nenhum indicador nesta categoria.</p>
-        ) : (
-          <ul className="grid gap-4 lg:grid-cols-2">
-            {items.map((item) => (
-              <li key={item.id}>
-                <IndicatorCard item={item} />
-              </li>
-            ))}
+      <div className="mx-auto max-w-7xl space-y-10 px-4 py-8 sm:px-6 lg:px-8">
+        <section aria-labelledby="kpi-strip-heading" className="space-y-4">
+          <h2 id="kpi-strip-heading" className="sr-only">
+            Resumo dos principais indicadores
+          </h2>
+          <ul className="grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-3">
+            <li className="rounded-xl border border-border bg-card p-5 shadow-sm">
+              <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                Índice Geral de Transparência
+              </p>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-foreground">
+                {generalIndex !== null ? `${generalIndex}%` : "—"}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Média dos indicadores percentuais do catálogo
+              </p>
+            </li>
+            <li className="rounded-xl border border-border bg-card p-5 shadow-sm">
+              <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                Assiduidade Média em Plenário
+              </p>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-foreground">
+                {attendance ? `${attendance.score}%` : "—"}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Presença nominal nas sessões deliberativas
+              </p>
+            </li>
+            <li className="rounded-xl border border-border bg-card p-5 shadow-sm">
+              <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                Proposições Analisadas
+              </p>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-foreground">
+                {proposalsAnalyzed.toLocaleString("pt-BR")}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Volume ilustrativo de proposições revisadas no semestre
+              </p>
+            </li>
           </ul>
-        )}
-      </section>
+        </section>
+
+        <section aria-labelledby="indicators-grid-heading" className="space-y-4">
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 id="indicators-grid-heading" className="text-lg font-semibold tracking-tight">
+              Indicadores
+            </h2>
+            <p className="text-sm text-muted-foreground" aria-live="polite">
+              {resultLabel}
+            </p>
+          </div>
+          {indicators.length === 0 ? (
+            <p className="rounded-lg border border-dashed border-border bg-muted/30 px-4 py-10 text-center text-sm text-muted-foreground">
+              Nenhum indicador nesta categoria.{" "}
+              <Link
+                href="/indicadores"
+                className="font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                Ver todos
+              </Link>
+            </p>
+          ) : (
+            <ul className="grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2">
+              {indicators.map((indicator) => (
+                <li key={indicator.id}>
+                  <IndicatorCard indicator={indicator} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <SpendingSummaryChart />
+      </div>
     </main>
   );
 }

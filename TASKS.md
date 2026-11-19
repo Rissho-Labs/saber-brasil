@@ -91,5 +91,12 @@
 ## SPRINT 26: Politician module loading/error and perf audit
 - [x] Politician loading skeletons, error boundary, and barrel/TS audit
 
+## MODULE C: Votings & Indicators (SABER-C01…C05)
+- [x] SABER-C01: Voting TypeScript models and async mock data services
+- [x] SABER-C02: `/votacoes` listing with URL filters and accessible cards
+- [x] SABER-C03: `/votacoes/[id]` detail with party and individual breakdowns
+- [x] SABER-C04: `/indicadores` transparency dashboard and spending chart
+- [x] SABER-C05: Loading skeletons, error boundaries, barrel audit, and docs sync
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.
