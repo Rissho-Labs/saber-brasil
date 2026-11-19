@@ -4,7 +4,17 @@
 - Home (`src/app/page.tsx`) refatorada com o layout do Google Stitch.
 - Module B (Políticos) entregue: tipos, diretório, perfil, loading/error.
 - Module C (Votações & Indicadores) concluído (`SABER-C01` … `SABER-C05`).
-- Testes: `npx tsc --noEmit` sem erros; Vitest suite verde (32 testes).
+- Module D (Comparador lado a lado) concluído (`SABER-D01` … `SABER-D03`).
+- Testes: `npx tsc --noEmit` sem erros; Vitest suite verde (37 testes).
+
+## Module D — Comparar Políticos
+- Tipos: `src/types/comparison.ts` (`ComparedPolitician`, `ComparedVotingRow`, `ComparisonHighlight`, `ComparisonReport`).
+- Motor: `src/lib/data/comparison.ts` + `comparison.test.ts` (dedupe, cap 4, matriz de votos, destaques neutros).
+- UI: `src/components/comparar/` — seletor (client), overview e voting matrix (server).
+- Rota: `/comparar?ids=id1,id2,…` com presets guiados quando há menos de 2 selecionados.
+- Nav: item **Comparar** em `src/components/navigation/nav-links.tsx`.
+- Perf / resiliência: `loading.tsx` e `error.tsx` em `/comparar`.
+- Neutro por desenho: só métricas quantitativas e posições nominais do catálogo.
 
 ## Module C — Votações & Indicadores
 - Tipos: `src/types/voting.ts` (`Voting`, `IndividualVote`, `PartyVotingBreakdown`, `TransparencyIndicator`).

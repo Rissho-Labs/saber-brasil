@@ -98,5 +98,10 @@
 - [x] SABER-C04: `/indicadores` transparency dashboard and spending chart
 - [x] SABER-C05: Loading skeletons, error boundaries, barrel audit, and docs sync
 
+## MODULE D: Side-by-Side Politician Comparator (SABER-D01…D03)
+- [x] SABER-D01: Comparison TypeScript models and objective aggregation engine
+- [x] SABER-D02: `/comparar` UI with selector, progressive report, and navbar link
+- [x] SABER-D03: Loading skeleton, error boundary, barrel audit, and docs sync
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.
