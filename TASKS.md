@@ -113,5 +113,10 @@
 - [x] SABER-F02: `/aprender` trails UI, vote-match simulator, and navbar link
 - [x] SABER-F03: Loading skeleton, error boundary, barrel audit, and docs sync
 
+## MODULE G: Home Search Hub (SABER-G01…G03)
+- [x] SABER-G01: Unified search types and home-hub data aggregator
+- [x] SABER-G02: Home page hub UI consuming `getHomeHubOverview()`
+- [x] SABER-G03: `/busca` unification, error boundary, barrel audit, and docs sync
+
 ---
 **AI Instruction:** Execute ONLY one unchecked task at a time. After completing and testing without errors, mark the box `[x]`.

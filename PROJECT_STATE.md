@@ -7,7 +7,16 @@
 - Module D (Comparador lado a lado) concluído (`SABER-D01` … `SABER-D03`).
 - Module E (Presença Digital & Bridge Unificado) concluído (`SABER-E01` … `SABER-E03`).
 - Module F (Trilhas & Match de Votações) concluído (`SABER-F01` … `SABER-F03`).
-- Testes: `npx tsc --noEmit` sem erros; Vitest suite verde (47 testes).
+- Module G (Home Search Hub) concluído (`SABER-G01` … `SABER-G03`).
+- Testes: `npx tsc --noEmit` sem erros; Vitest suite verde (51 testes).
+
+## Module G — Home Search Hub
+- Tipos: `src/types/home-hub.ts` (`UnifiedSearch*`, `HomeHubOverview`).
+- Motor: `src/lib/search/unified-hub.ts` + testes (KPIs, fold diacrítico, filtros, hrefs).
+- Home: `/` consome `getHomeHubOverview()` (`HubHero`, KPIs, esferas, votações, políticos, trilhas).
+- Busca: `/busca` consome `searchUnifiedHub()` (`UnifiedSearchBar` + `UnifiedSearchResults`).
+- Perf / resiliência: `error.tsx` em `/busca`; barrel `src/components/busca/`.
+- Legado preservado: `src/lib/search/catalog.ts`, filtros/cards antigos em `src/components/busca/*`.
 
 ## Module F — Trilhas & Match de Votações
 - Tipos: `src/types/learning.ts` (`EducationalTrail`, `TrailStep`, `CitizenVoteInput`, `VoteMatchResult`).

@@ -1,177 +1,113 @@
+import type { Metadata } from "next";
 import { z } from "zod";
-import type { ReactNode } from "react";
-import { SearchCategoryTabs, type SearchCategory } from "@/components/busca/search-category-tabs";
-import { SearchFilters } from "@/components/busca/search-filters";
-import { PublicationResultCard, VotingResultCard } from "@/components/busca/search-result-cards";
-import { Badge } from "@/components/ui/badge";
-import { ProfileCard } from "@/components/ui/profile-card";
-import { searchPublications, searchVotings } from "@/lib/search/catalog";
-import { getPublicProfiles } from "@/lib/services/profiles";
-import { MandateStatus, mandateStatusFromProfile, SphereType, type PublicProfile } from "@/types";
+import { UnifiedSearchBar, UnifiedSearchResults } from "@/components/busca";
+import { searchUnifiedHub } from "@/lib/search/unified-hub";
+import type { UnifiedSearchCategory } from "@/types/home-hub";
 
 interface SearchPageProps {
   searchParams: Promise<{
     q?: string | string[];
-    sphere?: string | string[];
-    status?: string | string[];
     categoria?: string | string[];
   }>;
 }
 
-const sphereSchema = z.enum(SphereType);
-const mandateSchema = z.enum(MandateStatus);
-const categorySchema = z.enum(["todos", "politicos", "votacoes", "publicacoes"]);
+const categorySchema = z.enum([
+  "all",
+  "politicians",
+  "votings",
+  "trails",
+  "spheres",
+  // Portuguese aliases (legacy-friendly)
+  "todas",
+  "todos",
+  "politicos",
+  "votacoes",
+  "trilhas",
+  "esferas",
+]);
+
+const CATEGORY_ALIAS: Record<string, UnifiedSearchCategory> = {
+  all: "all",
+  todas: "all",
+  todos: "all",
+  politicians: "politicians",
+  politicos: "politicians",
+  votings: "votings",
+  votacoes: "votings",
+  trails: "trails",
+  trilhas: "trails",
+  spheres: "spheres",
+  esferas: "spheres",
+};
 
 function firstParam(value: string | string[] | undefined): string {
   if (Array.isArray(value)) {
     return value[0]?.trim() ?? "";
   }
-
   return value?.trim() ?? "";
 }
 
-function shows(category: SearchCategory, panel: Exclude<SearchCategory, "todos">): boolean {
-  return category === "todos" || category === panel;
+function parseCategory(raw: string): UnifiedSearchCategory {
+  const parsed = categorySchema.safeParse(raw.toLocaleLowerCase("pt-BR"));
+  if (!parsed.success) {
+    return "all";
+  }
+  return CATEGORY_ALIAS[parsed.data] ?? "all";
+}
+
+export async function generateMetadata({
+  searchParams,
+}: SearchPageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const query = firstParam(params.q).slice(0, 120);
+
+  if (query) {
+    return {
+      title: `Busca: ${query} | SABER Brasil`,
+      description: `Resultados unificados do hub SABER Brasil para “${query}”.`,
+    };
+  }
+
+  return {
+    title: "Busca Unificada | SABER Brasil",
+    description:
+      "Busque políticos, votações nominais, trilhas didáticas e esferas institucionais em um só lugar.",
+  };
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
   const query = firstParam(params.q).slice(0, 120);
-  const sphereParsed = sphereSchema.safeParse(firstParam(params.sphere));
-  const statusParsed = mandateSchema.safeParse(firstParam(params.status));
-  const categoryParsed = categorySchema.safeParse(firstParam(params.categoria));
-  const sphere = sphereParsed.success ? sphereParsed.data : undefined;
-  const status = statusParsed.success ? statusParsed.data : undefined;
-  const category: SearchCategory = categoryParsed.success ? categoryParsed.data : "todos";
-  const profiles = await getPublicProfiles(query || undefined);
-  const politicians = profiles.filter((profile) => {
-    if (sphere && profile.sphere !== sphere) {
-      return false;
-    }
+  const category = parseCategory(firstParam(params.categoria));
 
-    if (status && mandateStatusFromProfile(profile.status) !== status) {
-      return false;
-    }
+  const response = await searchUnifiedHub({ query, category });
 
-    return true;
-  });
-  const votings = searchVotings(query);
-  const publications = searchPublications(query);
-
-  const heading = query ? `Resultados da busca para: ${query}` : "Resultados da busca";
+  const heading = query
+    ? `Resultados da busca para: ${query}`
+    : "Busca unificada do hub";
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background text-foreground">
       <section className="border-b border-border bg-muted/40 px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl space-y-4">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{heading}</h1>
-          <p className="text-sm text-muted-foreground">
-            Filtre por nome, categoria, esfera institucional e situação do mandato.
-          </p>
-          <SearchFilters query={query} sphere={sphere} status={status} category={category} />
-          <SearchCategoryTabs category={category} query={query} sphere={sphere} status={status} />
+        <div className="mx-auto max-w-7xl space-y-4">
+          <div className="space-y-2">
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{heading}</h1>
+            <p className="max-w-3xl text-sm text-muted-foreground">
+              Resultados objetivos do catálogo — políticos, votações, trilhas e esferas — sem
+              rótulos ideológicos.
+            </p>
+          </div>
+          <UnifiedSearchBar
+            initialQuery={response.query}
+            activeCategory={response.category}
+            countsByCategory={response.countsByCategory}
+          />
         </div>
       </section>
 
-      <div
-        id={`search-panel-${category}`}
-        role="tabpanel"
-        aria-labelledby={`search-tab-${category}`}
-        className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"
-      >
-        {shows(category, "politicos") ? (
-          <ResultSection title="Políticos & Representantes" count={politicians.length}>
-            <PoliticianResults profiles={politicians} />
-          </ResultSection>
-        ) : null}
-        {shows(category, "votacoes") ? (
-          <ResultSection
-            title="Votações & Pautas"
-            count={votings.length}
-            note="Catálogo ilustrativo. Não há tabela de votações na base."
-          >
-            {votings.length === 0 ? (
-              <EmptyResults />
-            ) : (
-              <ul className="grid list-none gap-3 p-0">
-                {votings.map((item) => (
-                  <li key={item.id}>
-                    <VotingResultCard item={item} />
-                  </li>
-                ))}
-              </ul>
-            )}
-          </ResultSection>
-        ) : null}
-        {shows(category, "publicacoes") ? (
-          <ResultSection
-            title="Publicações & Documentos"
-            count={publications.length}
-            note="Catálogo ilustrativo. Não há tabela de publicações na base."
-          >
-            {publications.length === 0 ? (
-              <EmptyResults />
-            ) : (
-              <ul className="grid list-none gap-3 p-0">
-                {publications.map((item) => (
-                  <li key={item.id}>
-                    <PublicationResultCard item={item} />
-                  </li>
-                ))}
-              </ul>
-            )}
-          </ResultSection>
-        ) : null}
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <UnifiedSearchResults items={response.items} query={response.query} />
       </div>
     </main>
-  );
-}
-
-function ResultSection({
-  title,
-  count,
-  note,
-  children,
-}: {
-  title: string;
-  count: number;
-  note?: string;
-  children: ReactNode;
-}) {
-  return (
-    <section className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
-      <div className="flex flex-wrap items-center gap-2">
-        <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
-        <Badge variant="secondary" aria-label={count === 1 ? "1 resultado" : `${count} resultados`}>
-          {count}
-        </Badge>
-      </div>
-      {note ? <p className="text-xs text-muted-foreground">{note}</p> : null}
-      {children}
-    </section>
-  );
-}
-
-function PoliticianResults({ profiles }: { profiles: PublicProfile[] }) {
-  if (profiles.length === 0) {
-    return <EmptyResults />;
-  }
-
-  return (
-    <ul className="grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2">
-      {profiles.map((profile) => (
-        <li key={profile.id}>
-          <ProfileCard profile={profile} />
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function EmptyResults() {
-  return (
-    <p role="status" className="text-sm text-muted-foreground">
-      Nenhum resultado encontrado
-    </p>
   );
 }
