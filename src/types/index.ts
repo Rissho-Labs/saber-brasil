@@ -162,13 +162,17 @@ export type UserEvaluationInsert = Omit<UserEvaluation, "id" | "updated_at"> & {
 /** UI / mock politician catalog (see `src/types/politician.ts`). */
 export type {
   BrazilianUF,
+  DigitalChannel,
+  DigitalChannelPlatform,
   ExpenseSummary,
   PoliticalProposal,
   Politician,
   PoliticianFilters,
   PoliticianMetrics,
   PoliticianRole,
+  ProfileSourceOrigin,
   ProposalStatus,
+  UnifiedProfileView,
   VotingPosition,
   VotingRecord,
 } from "@/types/politician";
@@ -186,3 +190,12 @@ export type {
   VotingFilters,
   VotingOutcome,
 } from "@/types/voting";
+
+/** Side-by-side parliamentarian comparison (see `src/types/comparison.ts`). */
+export type {
+  ComparedPolitician,
+  ComparedVoteCell,
+  ComparedVotingRow,
+  ComparisonHighlight,
+  ComparisonReport,
+} from "@/types/comparison";

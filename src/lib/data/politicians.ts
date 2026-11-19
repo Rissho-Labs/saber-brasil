@@ -1,9 +1,11 @@
 import type {
   BrazilianUF,
+  DigitalChannel,
   ExpenseSummary,
   PoliticalProposal,
   Politician,
   PoliticianFilters,
+  PoliticianRole,
   VotingRecord,
 } from "@/types/politician";
 
@@ -14,6 +16,24 @@ import type {
 
 function resolveAsync<T>(value: T): Promise<T> {
   return Promise.resolve(value);
+}
+
+function chamberPortal(role: PoliticianRole): DigitalChannel {
+  if (role === "senador") {
+    return {
+      platform: "official_portal",
+      label: "Portal do Senado",
+      url: "https://www12.senado.leg.br/",
+      verified: true,
+    };
+  }
+
+  return {
+    platform: "official_portal",
+    label: "Portal da Câmara",
+    url: "https://www.camara.leg.br/",
+    verified: true,
+  };
 }
 
 const POLITICIANS: readonly Politician[] = [
@@ -32,6 +52,30 @@ const POLITICIANS: readonly Politician[] = [
       proposalsCount: 42,
       votingAlignmentPercentage: 88,
     },
+    biographySummary:
+      "Deputada federal por São Paulo. Atua em proposições de transparência orçamentária e publicação de emendas.",
+    digitalChannels: [
+      chamberPortal("deputado"),
+      {
+        platform: "website",
+        label: "Site oficial",
+        url: "https://www.camara.leg.br/",
+        verified: true,
+      },
+      {
+        platform: "instagram",
+        label: "Instagram Oficial",
+        handle: "@depbeatrizrocha",
+        url: "https://www.instagram.com/",
+        verified: true,
+      },
+      {
+        platform: "youtube",
+        label: "Canal no YouTube",
+        url: "https://www.youtube.com/",
+        verified: false,
+      },
+    ],
   },
   {
     id: "pol-dep-alex-silva",
@@ -48,6 +92,30 @@ const POLITICIANS: readonly Politician[] = [
       proposalsCount: 31,
       votingAlignmentPercentage: 81,
     },
+    biographySummary:
+      "Deputado federal por Minas Gerais. Acompanha temas de fiscalização de contratos e dados abertos.",
+    digitalChannels: [
+      chamberPortal("deputado"),
+      {
+        platform: "x",
+        label: "Perfil no X",
+        handle: "@DepAlexSilva",
+        url: "https://x.com/",
+        verified: true,
+      },
+      {
+        platform: "facebook",
+        label: "Página no Facebook",
+        url: "https://www.facebook.com/",
+        verified: false,
+      },
+      {
+        platform: "youtube",
+        label: "Canal no YouTube",
+        url: "https://www.youtube.com/",
+        verified: false,
+      },
+    ],
   },
   {
     id: "pol-dep-mariana-nunes",
@@ -64,6 +132,31 @@ const POLITICIANS: readonly Politician[] = [
       proposalsCount: 55,
       votingAlignmentPercentage: 93,
     },
+    biographySummary:
+      "Deputada federal pela Bahia. Concentra proposições em educação pública e políticas de saúde.",
+    digitalChannels: [
+      chamberPortal("deputado"),
+      {
+        platform: "instagram",
+        label: "Instagram Oficial",
+        handle: "@dep.mariananunes",
+        url: "https://www.instagram.com/",
+        verified: true,
+      },
+      {
+        platform: "tiktok",
+        label: "TikTok Oficial",
+        handle: "@mariananunesdep",
+        url: "https://www.tiktok.com/",
+        verified: false,
+      },
+      {
+        platform: "podcast",
+        label: "Podcast do mandato",
+        url: "https://open.spotify.com/",
+        verified: false,
+      },
+    ],
   },
   {
     id: "pol-dep-ricardo-mota",
@@ -80,6 +173,30 @@ const POLITICIANS: readonly Politician[] = [
       proposalsCount: 19,
       votingAlignmentPercentage: 79,
     },
+    biographySummary:
+      "Deputado federal pelo Rio de Janeiro. Registra proposições ligadas a segurança portuária e logística.",
+    digitalChannels: [
+      chamberPortal("deputado"),
+      {
+        platform: "website",
+        label: "Site oficial",
+        url: "https://www.camara.leg.br/",
+        verified: true,
+      },
+      {
+        platform: "youtube",
+        label: "Canal no YouTube",
+        url: "https://www.youtube.com/",
+        verified: false,
+      },
+      {
+        platform: "x",
+        label: "Perfil no X",
+        handle: "@RicardoMotaDep",
+        url: "https://x.com/",
+        verified: false,
+      },
+    ],
   },
   {
     id: "pol-sen-clara-monteiro",
@@ -96,6 +213,30 @@ const POLITICIANS: readonly Politician[] = [
       proposalsCount: 14,
       votingAlignmentPercentage: 85,
     },
+    biographySummary:
+      "Senadora pelo Rio Grande do Sul. Relatora de matérias sobre transparência das sessões e energia renovável.",
+    digitalChannels: [
+      chamberPortal("senador"),
+      {
+        platform: "instagram",
+        label: "Instagram Oficial",
+        handle: "@senclaramonteiro",
+        url: "https://www.instagram.com/",
+        verified: true,
+      },
+      {
+        platform: "spotify",
+        label: "Spotify — áudios do mandato",
+        url: "https://open.spotify.com/",
+        verified: false,
+      },
+      {
+        platform: "website",
+        label: "Site oficial",
+        url: "https://www12.senado.leg.br/",
+        verified: true,
+      },
+    ],
   },
   {
     id: "pol-sen-paulo-nunes",
@@ -112,6 +253,30 @@ const POLITICIANS: readonly Politician[] = [
       proposalsCount: 11,
       votingAlignmentPercentage: 76,
     },
+    biographySummary:
+      "Senador pelo Paraná. Autoria de propostas sobre dados abertos de votações nominais e limites de sigilo.",
+    digitalChannels: [
+      chamberPortal("senador"),
+      {
+        platform: "youtube",
+        label: "Canal no YouTube",
+        url: "https://www.youtube.com/",
+        verified: true,
+      },
+      {
+        platform: "x",
+        label: "Perfil no X",
+        handle: "@SenPauloNunes",
+        url: "https://x.com/",
+        verified: true,
+      },
+      {
+        platform: "facebook",
+        label: "Página no Facebook",
+        url: "https://www.facebook.com/",
+        verified: false,
+      },
+    ],
   },
   {
     id: "pol-sen-helena-dias",
@@ -128,6 +293,30 @@ const POLITICIANS: readonly Politician[] = [
       proposalsCount: 17,
       votingAlignmentPercentage: 90,
     },
+    biographySummary:
+      "Senadora pelo Ceará. Trabalha proposições de saúde pública e acompanhamento de indicadores sociais.",
+    digitalChannels: [
+      chamberPortal("senador"),
+      {
+        platform: "instagram",
+        label: "Instagram Oficial",
+        handle: "@senhelenadias",
+        url: "https://www.instagram.com/",
+        verified: true,
+      },
+      {
+        platform: "podcast",
+        label: "Podcast do gabinete",
+        url: "https://open.spotify.com/",
+        verified: false,
+      },
+      {
+        platform: "website",
+        label: "Site oficial",
+        url: "https://www12.senado.leg.br/",
+        verified: true,
+      },
+    ],
   },
   {
     id: "pol-dep-joao-freitas",
@@ -144,8 +333,32 @@ const POLITICIANS: readonly Politician[] = [
       proposalsCount: 27,
       votingAlignmentPercentage: 84,
     },
+    biographySummary:
+      "Deputado federal por Goiás. Proposições voltadas a crédito rural e agro familiar no catálogo ilustrativo.",
+    digitalChannels: [
+      chamberPortal("deputado"),
+      {
+        platform: "facebook",
+        label: "Página no Facebook",
+        url: "https://www.facebook.com/",
+        verified: false,
+      },
+      {
+        platform: "instagram",
+        label: "Instagram Oficial",
+        handle: "@depjoaofreitas",
+        url: "https://www.instagram.com/",
+        verified: false,
+      },
+      {
+        platform: "youtube",
+        label: "Canal no YouTube",
+        url: "https://www.youtube.com/",
+        verified: false,
+      },
+    ],
   },
-] as const;
+];
 
 const PROPOSALS_BY_POLITICIAN: Readonly<Record<string, readonly PoliticalProposal[]>> = {
   "pol-dep-beatriz-rocha": [
